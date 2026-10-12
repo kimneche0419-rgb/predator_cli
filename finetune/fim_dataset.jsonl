@@ -1,0 +1,1200 @@
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for x in nums if x > 0]<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|>import os\n\nfiles =<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|>def add(a, b):<|fim_suffix|><|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|>for i, item in enumerate(items):<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|><|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|>for i, item in enumerate(items):<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0<|fim_suffix|><|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|>pthread_mutex_lock(&m);<|fim_suffix|>\n<|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|>pthread_mutex_lock(&m);<|fim_suffix|>\n<|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\"><|fim_suffix|></head>\n<body></body>\n</html>\n<|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|>size_t len =<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>size_t len = strlen(src);<|fim_suffix|><|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0; i < n; i++) {<|fim_suffix|><|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|>#include <stdio.h><|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|><|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|><|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>if __name__ =<|fim_suffix|><|fim_middle|>", "completion": "\n    main()\n"}
+{"prompt": "<|fim_prefix|>def fib(n):\n<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|>size_t len =<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>int cmp(const void <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|><table>\n  <thead>\n    <tr><|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>def read_json(path):\n    import json<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|>char *s = malloc(len + 1);<|fim_suffix|><|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|><ul clas<|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>size_t len =<|fim_suffix|><|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>def find<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>struct point {<|fim_suffix|>};\n<|fim_middle|>", "completion": "\n    int x, y;\n"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|><video <|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|><|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>char *s = malloc(len + 1);<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float *a, const float *b, int n) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|><div class=\"card\"><|fim_suffix|></div>\n<|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|><div clas<|fim_suffix|><|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, si<|fim_suffix|><|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.j<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|><|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|><|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>def clamp(x, lo, hi):<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\"><|fim_suffix|></head>\n<body></body>\n</html>\n<|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|><video <|fim_suffix|><|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|>for i, item in enumerate(items):<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|>static inline uint32_<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    x ^= x >> 16; x *= 0x7feb352dU;\n    x ^= x >> 15; x *= 0x846ca68bU;\n    return x ^ (x >> 16);\n"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|><div class=\"card\"><|fim_suffix|></div>\n<|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.price for x in cart)<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|><style>\n<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\"><|fim_suffix|><|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.<|fim_suffix|><|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|><section id=\"main\">\n  <header><|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>static inline uint32_<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    x ^= x >> 16; x *= 0x7feb352dU;\n    x ^= x >> 15; x *= 0x846ca68bU;\n    return x ^ (x >> 16);\n"}
+{"prompt": "<|fim_prefix|><a href=\"https<|fim_suffix|><|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|><ul class=\"menu\"><|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>size_t len = strlen(src);<|fim_suffix|><|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>def read_json(path):\n    import json<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|><ul clas<|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.pri<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|>for i, item in e<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|><section id=\"main\">\n  <header><|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>static inline uint32_t hash32(uint32_t x) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    x ^= x >> 16; x *= 0x7feb352dU;\n    x ^= x >> 15; x *= 0x846ca68bU;\n    return x ^ (x >> 16);\n"}
+{"prompt": "<|fim_prefix|>import os\n\nfiles =<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|>def fib(n):\n    if n < 2:<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|>for i, item in e<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|><|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>int cmp(const void *a, const void *b) {<|fim_suffix|><|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>int cmp(const void <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|>if __name__ == '__main__':<|fim_suffix|><|fim_middle|>", "completion": "\n    main()\n"}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\"><|fim_suffix|></head>\n<body></body>\n</html>\n<|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float *a, const float *b, int n) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|><div clas<|fim_suffix|></div>\n<|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|><video controls<|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|><section id=\"ma<|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>#include <stdio.h>\n\nint main(void) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>def clamp(x, lo, hi):<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|>while (*p) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|>def read_json(path):\n    import json<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for x in nums if x > 0]<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|><form action=\"/sub<|fim_suffix|><|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|>if __name__ =<|fim_suffix|><|fim_middle|>", "completion": "\n    main()\n"}
+{"prompt": "<|fim_prefix|><video <|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|><table>\n  <th<|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>def read_json(path<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>char *s = malloc(len + 1);<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float *a, const float *b, int n) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|>if (p == NULL) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|>class Stack:\n    d<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|><form action=\"/sub<|fim_suffix|><|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v in pairs.items():<|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|>for i, item in e<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|>size_t len =<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fope<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.pri<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|><|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>if (p == NULL) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|>while (*p) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|>size_t len =<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>char *s = mal<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|><form action=\"/submit\" method=\"post\"><|fim_suffix|><|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j <|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>def add<|fim_suffix|><|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|>size_t len =<|fim_suffix|><|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>size_t len =<|fim_suffix|><|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h>\n\nint main(void) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for x in nums if x > 0]<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|>def fib(n):\n<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>def fib(n):\n<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.pri<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|><section id=\"ma<|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\"><|fim_suffix|></head>\n<body></body>\n</html>\n<|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h>\n\nint main(void) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|>for i, item in e<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|><div class=\"card\"><|fim_suffix|></div>\n<|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|>if (p == NULL) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|><ul class=\"menu\"><|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>pthread_mut<|fim_suffix|>\n<|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|>struct point {<|fim_suffix|>};\n<|fim_middle|>", "completion": "\n    int x, y;\n"}
+{"prompt": "<|fim_prefix|><form action=\"/submit\" method=\"post\"><|fim_suffix|></form>\n<|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>def clamp(x, lo, hi):<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for x in nums if x > 0]<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|>int add(int a, int b) {<|fim_suffix|><|fim_middle|>", "completion": "\n    return a + b;\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h>\n\nint main(void) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>char *s = mal<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|><style>\n<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>int add(int a, int b) {<|fim_suffix|><|fim_middle|>", "completion": "\n    return a + b;\n"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>def fib(n):\n    if n < 2:<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|>char *s = malloc(len + 1);<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>int add(int a, int b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return a + b;\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|><video <|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float *a, const float *b, int n) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for x in nums if x > 0]<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|>if __name__ == '__main__':<|fim_suffix|><|fim_middle|>", "completion": "\n    main()\n"}
+{"prompt": "<|fim_prefix|>pthread_mut<|fim_suffix|>\n<|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|>int add(int a, int b) {<|fim_suffix|><|fim_middle|>", "completion": "\n    return a + b;\n"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0; i < n; i++) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|>if (p ==<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|><video <|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|>with open('out.<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|>with open('out.<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|>size_t len =<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for x in nums if x > 0]<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|>int cmp(const void *a, const void *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h>\n\nint main(void) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>while <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|><style>\n<|fim_suffix|><|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>int cmp(const void *a, const void *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|>char *s = mal<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\"><|fim_suffix|></head>\n<body></body>\n</html>\n<|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|>if __name__ =<|fim_suffix|><|fim_middle|>", "completion": "\n    main()\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.j<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|><script>\n  document.<|fim_suffix|><|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h>\n\nint main(void) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>if (p == NULL) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|>if __name__ == '__main__':<|fim_suffix|><|fim_middle|>", "completion": "\n    main()\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>char *s = malloc(len + 1);<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|>import os\n\nfiles =<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|><style>\n<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|><ul class=\"menu\"><|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|><|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|><form action=\"/submit\" method=\"post\"><|fim_suffix|><|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|>for i, item in enumerate(items):<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|><form action=\"/submit\" method=\"post\"><|fim_suffix|><|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|>def read_json(path<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>if (p ==<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|><form action=\"/sub<|fim_suffix|></form>\n<|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h><|fim_suffix|><|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>size_t len = strlen(src);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>def fib(n):\n<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fope<|fim_suffix|><|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|><|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>if __name__ == '__main__':<|fim_suffix|><|fim_middle|>", "completion": "\n    main()\n"}
+{"prompt": "<|fim_prefix|>def add(a, b):<|fim_suffix|>\n\ndef sub(a, b):\n    return a - b\n<|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|>import os\n\nfiles =<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|>if __name__ == '__main__':<|fim_suffix|><|fim_middle|>", "completion": "\n    main()\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h><|fim_suffix|><|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>def add(a, b):<|fim_suffix|>\n\ndef sub(a, b):\n    return a - b\n<|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, si<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|><a href=\"https<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|><|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>static inline uint32_t hash32(uint32_t x) {<|fim_suffix|><|fim_middle|>", "completion": "\n    x ^= x >> 16; x *= 0x7feb352dU;\n    x ^= x >> 15; x *= 0x846ca68bU;\n    return x ^ (x >> 16);\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>char *s = malloc(len + 1);<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|><ul class=\"menu\"><|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.j<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>size_t len = strlen(src);<|fim_suffix|><|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>def clamp(<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|><video controls<|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float *a, const float *b, int n) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|><video controls<|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|><section id=\"main\">\n  <header><|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v in pairs.items():<|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|>pthread_mut<|fim_suffix|><|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|>int add(int a, int b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return a + b;\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float *a, const float *b, int n) {<|fim_suffix|><|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|>if (p ==<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|><video <|fim_suffix|><|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|>if __name__ =<|fim_suffix|><|fim_middle|>", "completion": "\n    main()\n"}
+{"prompt": "<|fim_prefix|>def add<|fim_suffix|>\n\ndef sub(a, b):\n    return a - b\n<|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|>if (p ==<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|><video controls<|fim_suffix|><|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v in pairs.items():<|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.j<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0; i < n; i++) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|><div class=\"card\"><|fim_suffix|></div>\n<|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|><a href=\"https<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>class Stack:\n    d<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|><ul clas<|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>def fib(n):\n<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for x in nums if x > 0]<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fope<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|><|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|><section id=\"main\">\n  <header><|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>class Stack:\n    d<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v <|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|><div clas<|fim_suffix|></div>\n<|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|>def clamp(x, lo, hi):<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>if __name__ =<|fim_suffix|><|fim_middle|>", "completion": "\n    main()\n"}
+{"prompt": "<|fim_prefix|>pthread_mut<|fim_suffix|>\n<|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|><style>\n<|fim_suffix|><|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h><|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|>def clamp(x, lo, hi):<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.pri<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|><video controls<|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|><a href=\"https<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|><|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, si<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|><form action=\"/submit\" method=\"post\"><|fim_suffix|></form>\n<|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>total = sum(x.pri<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|>def read_json(path):\n    import json<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|>if __name__ == '__main__':<|fim_suffix|><|fim_middle|>", "completion": "\n    main()\n"}
+{"prompt": "<|fim_prefix|><div clas<|fim_suffix|></div>\n<|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|>int cmp(const void *a, const void *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|>import os\n\nfiles =<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|><|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|><style>\n<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|><|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.price for x in cart)<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|><|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>static inline uint32_t hash32(uint32_t x) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    x ^= x >> 16; x *= 0x7feb352dU;\n    x ^= x >> 15; x *= 0x846ca68bU;\n    return x ^ (x >> 16);\n"}
+{"prompt": "<|fim_prefix|>import os<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|><style>\n<|fim_suffix|><|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.pri<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|>if (p ==<|fim_suffix|><|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|>while <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|><|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v in pairs.items():<|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|>pthread_mutex_lock(&m);<|fim_suffix|><|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0; i < n; i++) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>size_t len = strlen(src);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>def read_json(path<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h><|fim_suffix|><|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|><|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|><style>\n<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|>import os<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|>int add(int<|fim_suffix|><|fim_middle|>", "completion": "\n    return a + b;\n"}
+{"prompt": "<|fim_prefix|>with open('out.<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|><ul class=\"menu\"><|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>char *s = malloc(len + 1);<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>struct point {<|fim_suffix|>};\n<|fim_middle|>", "completion": "\n    int x, y;\n"}
+{"prompt": "<|fim_prefix|>import os\n\nfiles =<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|><|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>int cmp(const void <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|><div clas<|fim_suffix|></div>\n<|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h>\n\nint main(void) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>import os\n\nfiles =<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|>int cmp(const void *a, const void *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|>while <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>with open('out.<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>for i, item in e<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\"><|fim_suffix|></head>\n<body></body>\n</html>\n<|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|>char *s = mal<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|><ul clas<|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>void swap(int<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|>class Stack:\n    d<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|><table>\n  <thead>\n    <tr><|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>if (p == NULL) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|>class Stack:\n    def __init__(self):<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|>pthread_mut<|fim_suffix|>\n<|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|>if __name__ == '__main__':<|fim_suffix|><|fim_middle|>", "completion": "\n    main()\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.pri<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|><a href=\"https<|fim_suffix|><|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>char *s = malloc(len + 1);<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v in pairs.items():<|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j <|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|><table>\n  <thead>\n    <tr><|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|><table>\n  <thead>\n    <tr><|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|><section id=\"main\">\n  <header><|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>int cmp(const void <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j <|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|><|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|><img src=\"photo.j<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|><section id=\"main\">\n  <header><|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|><|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|>def fib(n):\n<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.price for x in cart)<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|>size_t len =<|fim_suffix|><|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>char *s = malloc(len + 1);<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>def read_json(path<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>def read_json(path<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|>int cmp(const void *a, const void *b) {<|fim_suffix|><|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.pri<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|>def fib(n):\n<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float <|fim_suffix|><|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|>class Stack:\n    def __init__(self):<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|><table>\n  <th<|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>pthread_mutex_lock(&m);<|fim_suffix|>\n<|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0; i < n; i++) {<|fim_suffix|><|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j <|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|><a href=\"https<|fim_suffix|><|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>def find<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|><ul class=\"menu\"><|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|><ul clas<|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|><ul class=\"menu\"><|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>struct point {<|fim_suffix|><|fim_middle|>", "completion": "\n    int x, y;\n"}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\"><|fim_suffix|></head>\n<body></body>\n</html>\n<|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|><input ty<|fim_suffix|><|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|><a href=\"https<|fim_suffix|><|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>while <|fim_suffix|><|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|><video <|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|><ul clas<|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>class Stack:\n    def __init__(self):<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|>int add(int a, int b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return a + b;\n"}
+{"prompt": "<|fim_prefix|>while <|fim_suffix|><|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|>int cmp(const void *a, const void *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h><|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h><|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|><|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>for i, item in e<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|>def read_json(path):\n    import json<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|>while (*p) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|>#include <stdio.h><|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|><table>\n  <th<|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|><ul clas<|fim_suffix|><|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>if (p == NULL) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v <|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|><|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|>static inline uint32_<|fim_suffix|><|fim_middle|>", "completion": "\n    x ^= x >> 16; x *= 0x7feb352dU;\n    x ^= x >> 15; x *= 0x846ca68bU;\n    return x ^ (x >> 16);\n"}
+{"prompt": "<|fim_prefix|>if __name__ =<|fim_suffix|><|fim_middle|>", "completion": "\n    main()\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.pri<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|>def find<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|><table>\n  <th<|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>int add(int a, int b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return a + b;\n"}
+{"prompt": "<|fim_prefix|>def read_json(path):\n    import json<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|>while (*p) {<|fim_suffix|><|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|>import os<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|><table>\n  <th<|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>total = sum(x.pri<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|>def read_json(path):\n    import json<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|>char *s = malloc(len + 1);<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|>def fib(n):\n    if n < 2:<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|><style>\n<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h><|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>while (*p) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j <|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|><|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0; i < n; i++) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|><section id=\"main\">\n  <header><|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|><table>\n  <th<|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|><|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float *a, const float *b, int n) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|><style>\n<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>int cmp(const void <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|><ul clas<|fim_suffix|><|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\"><|fim_suffix|></head>\n<body></body>\n</html>\n<|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float *a, const float *b, int n) {<|fim_suffix|><|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|>char *s = mal<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h><|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>def find<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|><div clas<|fim_suffix|><|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|><video controls<|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|><ul class=\"menu\"><|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.pri<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|>with open('out.<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>if (p == NULL) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|><script>\n  document.<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|><video controls<|fim_suffix|><|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|>struct <|fim_suffix|><|fim_middle|>", "completion": "\n    int x, y;\n"}
+{"prompt": "<|fim_prefix|>size_t len =<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>static inline uint32_t hash32(uint32_t x) {<|fim_suffix|><|fim_middle|>", "completion": "\n    x ^= x >> 16; x *= 0x7feb352dU;\n    x ^= x >> 15; x *= 0x846ca68bU;\n    return x ^ (x >> 16);\n"}
+{"prompt": "<|fim_prefix|>static inline uint32_t hash32(uint32_t x) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    x ^= x >> 16; x *= 0x7feb352dU;\n    x ^= x >> 15; x *= 0x846ca68bU;\n    return x ^ (x >> 16);\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|>char *s = mal<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>size_t len =<|fim_suffix|><|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fope<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|>while <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|><video controls<|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|><section id=\"ma<|fim_suffix|><|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\"><|fim_suffix|></head>\n<body></body>\n</html>\n<|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|>import os\n\nfiles =<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|><a href=\"https<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>import os<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.j<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>for i, item in e<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|><div clas<|fim_suffix|></div>\n<|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|><table>\n  <thead>\n    <tr><|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>int add(int a, int b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return a + b;\n"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for x in nums if x > 0]<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|><ul clas<|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for x in nums if x > 0]<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|>pthread_mut<|fim_suffix|>\n<|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.j<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>if __name__ == '__main__':<|fim_suffix|><|fim_middle|>", "completion": "\n    main()\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>total = sum(x.price for x in cart)<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|>for i, item in enumerate(items):<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|><ul clas<|fim_suffix|><|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>def fib(n):\n    if n < 2:<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|>def clamp(x, lo, hi):<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|><section id=\"ma<|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|><|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>char *s = malloc(len + 1);<|fim_suffix|><|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\"><|fim_suffix|></head>\n<body></body>\n</html>\n<|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, si<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>def add<|fim_suffix|>\n\ndef sub(a, b):\n    return a - b\n<|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|><|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h>\n\nint main(void) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float *a, const float *b, int n) {<|fim_suffix|><|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|>struct <|fim_suffix|>};\n<|fim_middle|>", "completion": "\n    int x, y;\n"}
+{"prompt": "<|fim_prefix|>void swap(int<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|>def add(a, b):<|fim_suffix|>\n\ndef sub(a, b):\n    return a - b\n<|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|>int cmp(const void *a, const void *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|><section id=\"ma<|fim_suffix|><|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|><video controls<|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0; i < n; i++) {<|fim_suffix|><|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|><script>\n  document.<|fim_suffix|><|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>while (*p) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|>size_t len = strlen(src);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>pthread_mut<|fim_suffix|>\n<|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|><ul clas<|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|><|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|>def clamp(x, lo, hi):<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>def read_json(path):\n    import json<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|><div class=\"card\"><|fim_suffix|></div>\n<|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|>import os\n\nfiles =<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\"><|fim_suffix|></head>\n<body></body>\n</html>\n<|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|>while (*p) {<|fim_suffix|><|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|>static inline uint32_t hash32(uint32_t x) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    x ^= x >> 16; x *= 0x7feb352dU;\n    x ^= x >> 15; x *= 0x846ca68bU;\n    return x ^ (x >> 16);\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>struct point {<|fim_suffix|>};\n<|fim_middle|>", "completion": "\n    int x, y;\n"}
+{"prompt": "<|fim_prefix|><a href=\"https<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>total = sum(x.pri<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|><|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>def add(a, b):<|fim_suffix|>\n\ndef sub(a, b):\n    return a - b\n<|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|><section id=\"main\">\n  <header><|fim_suffix|><|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>def read_json(path<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|><section id=\"ma<|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, si<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|><table>\n  <th<|fim_suffix|><|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>int cmp(const void *a, const void *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|><input ty<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|>pthread_mut<|fim_suffix|>\n<|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|><div class=\"card\"><|fim_suffix|><|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|>char *s = mal<|fim_suffix|><|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|><table>\n  <thead>\n    <tr><|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|><table>\n  <thead>\n    <tr><|fim_suffix|><|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|><ul class=\"menu\"><|fim_suffix|><|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fope<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|>class Stack:\n    d<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h>\n\nint main(void) {<|fim_suffix|><|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>size_t len =<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>void swap(int<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|>pthread_mutex_lock(&m);<|fim_suffix|>\n<|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|>def add<|fim_suffix|>\n\ndef sub(a, b):\n    return a - b\n<|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|><ul clas<|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>with open('out.<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\"><|fim_suffix|></head>\n<body></body>\n</html>\n<|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|>size_t len =<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|><table>\n  <th<|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|><ul class=\"menu\"><|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, si<|fim_suffix|><|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>int add(int a, int b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return a + b;\n"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for x in nums if x > 0]<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>import os\n\nfiles =<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|><video <|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>int add(int<|fim_suffix|><|fim_middle|>", "completion": "\n    return a + b;\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float *a, const float *b, int n) {<|fim_suffix|><|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|><video <|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|><form action=\"/submit\" method=\"post\"><|fim_suffix|></form>\n<|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|>void swap(int<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|>def read_json(path<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|>char *s = malloc(len + 1);<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|><ul clas<|fim_suffix|><|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|><form action=\"/submit\" method=\"post\"><|fim_suffix|><|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|>def find<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>if (p == NULL) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|>while (*p) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|><ul clas<|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|><div clas<|fim_suffix|></div>\n<|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|><form action=\"/sub<|fim_suffix|></form>\n<|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|>size_t len = strlen(src);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>int add(int a, int b) {<|fim_suffix|><|fim_middle|>", "completion": "\n    return a + b;\n"}
+{"prompt": "<|fim_prefix|><ul class=\"menu\"><|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>def clamp(<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|>static inline uint32_<|fim_suffix|><|fim_middle|>", "completion": "\n    x ^= x >> 16; x *= 0x7feb352dU;\n    x ^= x >> 15; x *= 0x846ca68bU;\n    return x ^ (x >> 16);\n"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|><|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|><div clas<|fim_suffix|></div>\n<|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|>def add(a, b):<|fim_suffix|><|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\"><|fim_suffix|></head>\n<body></body>\n</html>\n<|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, si<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>if __name__ == '__main__':<|fim_suffix|><|fim_middle|>", "completion": "\n    main()\n"}
+{"prompt": "<|fim_prefix|>import os\n\nfiles =<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|><style>\n<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, si<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>def add(a, b):<|fim_suffix|>\n\ndef sub(a, b):\n    return a - b\n<|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|>size_t len = strlen(src);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|><ul class=\"menu\"><|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>size_t len = strlen(src);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>int cmp(const void *a, const void *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|><video controls<|fim_suffix|><|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|><|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>def find<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j <|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0; i < n; i++) {<|fim_suffix|><|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|>static inline uint32_<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    x ^= x >> 16; x *= 0x7feb352dU;\n    x ^= x >> 15; x *= 0x846ca68bU;\n    return x ^ (x >> 16);\n"}
+{"prompt": "<|fim_prefix|>int add(int<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return a + b;\n"}
+{"prompt": "<|fim_prefix|>static inline uint32_<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    x ^= x >> 16; x *= 0x7feb352dU;\n    x ^= x >> 15; x *= 0x846ca68bU;\n    return x ^ (x >> 16);\n"}
+{"prompt": "<|fim_prefix|>def find<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>def fib(n):\n<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|><section id=\"main\">\n  <header><|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>pthread_mutex_lock(&m);<|fim_suffix|><|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|><style>\n<|fim_suffix|><|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|><|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>size_t len = strlen(src);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>def clamp(x, lo, hi):<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|><|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|>def read_json(path):\n    import json<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|><|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|><|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|><table>\n  <thead>\n    <tr><|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.j<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|><a href=\"https<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>if (p ==<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|><ul class=\"menu\"><|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h><|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|><table>\n  <th<|fim_suffix|><|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|><ul class=\"menu\"><|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v in pairs.items():<|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|>while <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|>if (p == NULL) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|>for i, item in enumerate(items):<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|>def clamp(x, lo, hi):<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.j<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|><div class=\"card\"><|fim_suffix|></div>\n<|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j <|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|><|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|>def fib(n):\n    if n < 2:<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>def clamp(x, lo, hi):<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|>for i, item in e<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|>import os\n\nfiles =<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|>pthread_mutex_lock(&m);<|fim_suffix|>\n<|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|><form action=\"/sub<|fim_suffix|></form>\n<|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|>def read_json(path):\n    import json<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|><table>\n  <thead>\n    <tr><|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|><video controls<|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|><div class=\"card\"><|fim_suffix|></div>\n<|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|><ul class=\"menu\"><|fim_suffix|><|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j <|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>if __name__ =<|fim_suffix|><|fim_middle|>", "completion": "\n    main()\n"}
+{"prompt": "<|fim_prefix|>pthread_mut<|fim_suffix|><|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|>def find<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.price for x in cart)<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.price for x in cart)<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|>while <|fim_suffix|><|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|>import os<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|>void swap(int<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|>while (*p) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|><ul class=\"menu\"><|fim_suffix|><|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|><input ty<|fim_suffix|><|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|><table>\n  <th<|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>def add(a, b):<|fim_suffix|>\n\ndef sub(a, b):\n    return a - b\n<|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|><table>\n  <th<|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|><div class=\"card\"><|fim_suffix|></div>\n<|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|><video <|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|>def fib(n):\n<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|>import os\n\nfiles =<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|>pthread_mutex_lock(&m);<|fim_suffix|><|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|>size_t len = strlen(src);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|><video controls<|fim_suffix|><|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|>if (p == NULL) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|><video <|fim_suffix|><|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|><form action=\"/sub<|fim_suffix|><|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|><form action=\"/submit\" method=\"post\"><|fim_suffix|><|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|><video controls<|fim_suffix|><|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.j<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|><|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for x in nums if x > 0]<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|>if __name__ =<|fim_suffix|><|fim_middle|>", "completion": "\n    main()\n"}
+{"prompt": "<|fim_prefix|>pthread_mutex_lock(&m);<|fim_suffix|>\n<|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|><a href=\"https<|fim_suffix|><|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>for i, item in enumerate(items):<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|>for i, item in enumerate(items):<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|><video controls<|fim_suffix|><|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|><table>\n  <th<|fim_suffix|><|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|><|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\"><|fim_suffix|></head>\n<body></body>\n</html>\n<|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v <|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float *a, const float *b, int n) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|><table>\n  <th<|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>void swap(int<|fim_suffix|><|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|><section id=\"ma<|fim_suffix|><|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>with open('out.<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|><section id=\"main\">\n  <header><|fim_suffix|><|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|>while (*p) {<|fim_suffix|><|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|>def fib(n):\n    if n < 2:<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|><video <|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for x in nums if x > 0]<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|><section id=\"ma<|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float *a, const float *b, int n) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|>int add(int a, int b) {<|fim_suffix|><|fim_middle|>", "completion": "\n    return a + b;\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, si<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float <|fim_suffix|><|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h><|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>for i, item in enumerate(items):<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|>with open('out.<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v in pairs.items():<|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|><input ty<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|><table>\n  <th<|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|><section id=\"ma<|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|><section id=\"main\">\n  <header><|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\"><|fim_suffix|><|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0; i < n; i++) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v in pairs.items():<|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\"><|fim_suffix|><|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v <|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|>int cmp(const void <|fim_suffix|><|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|>pthread_mutex_lock(&m);<|fim_suffix|><|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|><|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>char *s = mal<|fim_suffix|><|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|><video <|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>if __name__ =<|fim_suffix|><|fim_middle|>", "completion": "\n    main()\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0; i < n; i++) {<|fim_suffix|><|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|><video <|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>def clamp(x, lo, hi):<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|>class Stack:\n    def __init__(self):<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h><|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>int add(int<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return a + b;\n"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|>class Stack:\n    def __init__(self):<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>size_t len = strlen(src);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>size_t len =<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\"><|fim_suffix|></head>\n<body></body>\n</html>\n<|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|>def clamp(x, lo, hi):<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for x in nums if x > 0]<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j <|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>size_t len =<|fim_suffix|><|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>pthread_mut<|fim_suffix|>\n<|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>char *s = mal<|fim_suffix|><|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>size_t len = strlen(src);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>int add(int<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return a + b;\n"}
+{"prompt": "<|fim_prefix|>if (p ==<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|>int cmp(const void *a, const void *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|><|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|><|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>for (int i = 0<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|><section id=\"ma<|fim_suffix|><|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|><video <|fim_suffix|><|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|>def clamp(<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|><input ty<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|>struct point {<|fim_suffix|>};\n<|fim_middle|>", "completion": "\n    int x, y;\n"}
+{"prompt": "<|fim_prefix|>def read_json(path<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|><|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|><ul clas<|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>import os\n\nfiles =<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|>def clamp(x, lo, hi):<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|>static inline uint32_<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    x ^= x >> 16; x *= 0x7feb352dU;\n    x ^= x >> 15; x *= 0x846ca68bU;\n    return x ^ (x >> 16);\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|><form action=\"/submit\" method=\"post\"><|fim_suffix|></form>\n<|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|><a href=\"https<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>def read_json(path<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j <|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>char *s = mal<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>int add(int<|fim_suffix|><|fim_middle|>", "completion": "\n    return a + b;\n"}
+{"prompt": "<|fim_prefix|><div clas<|fim_suffix|></div>\n<|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h><|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.price for x in cart)<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|><|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|><ul clas<|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|><section id=\"main\">\n  <header><|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>size_t len =<|fim_suffix|><|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|><|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j <|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>def clamp(<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|>def add(a, b):<|fim_suffix|><|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|>class Stack:\n    def __init__(self):<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|>static inline uint32_<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    x ^= x >> 16; x *= 0x7feb352dU;\n    x ^= x >> 15; x *= 0x846ca68bU;\n    return x ^ (x >> 16);\n"}
+{"prompt": "<|fim_prefix|>size_t len = strlen(src);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>char *s = malloc(len + 1);<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>size_t len = strlen(src);<|fim_suffix|><|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|><table>\n  <thead>\n    <tr><|fim_suffix|><|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float *a, const float *b, int n) {<|fim_suffix|><|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|>class Stack:\n    d<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>class Stack:\n    def __init__(self):<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>int cmp(const void *a, const void *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|>if (p == NULL) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|>def add(a, b):<|fim_suffix|>\n\ndef sub(a, b):\n    return a - b\n<|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>while <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|><ul clas<|fim_suffix|><|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>class Stack:\n    d<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v in pairs.items():<|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, si<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>def add(a, b):<|fim_suffix|><|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0; i < n; i++) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|>struct point {<|fim_suffix|>};\n<|fim_middle|>", "completion": "\n    int x, y;\n"}
+{"prompt": "<|fim_prefix|>char *s = mal<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>class Stack:\n    d<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>class Stack:\n    def __init__(self):<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|>int add(int a, int b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return a + b;\n"}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|><table>\n  <thead>\n    <tr><|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>class Stack:\n    d<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v <|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|><table>\n  <th<|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|><div clas<|fim_suffix|><|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j <|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>if (p ==<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\"><|fim_suffix|></head>\n<body></body>\n</html>\n<|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fope<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h>\n\nint main(void) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>def fib(n):\n<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|>void swap(int<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.pri<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|>import os\n\nfiles =<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|>while <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|><|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|><|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fope<|fim_suffix|><|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|>struct point {<|fim_suffix|><|fim_middle|>", "completion": "\n    int x, y;\n"}
+{"prompt": "<|fim_prefix|>def add(a, b):<|fim_suffix|><|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|><input ty<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|><ul clas<|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|><table>\n  <thead>\n    <tr><|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|><table>\n  <thead>\n    <tr><|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>class Stack:\n    def __init__(self):<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|><section id=\"main\">\n  <header><|fim_suffix|><|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>if (p == NULL) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|>char *s = malloc(len + 1);<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|><input ty<|fim_suffix|><|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|>char *s = malloc(len + 1);<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.pri<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|><video controls<|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|>def read_json(path):\n    import json<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|>def add<|fim_suffix|><|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>char *s = malloc(len + 1);<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, si<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>import os<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|>int cmp(const void <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|>void swap(int<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|><|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>struct <|fim_suffix|><|fim_middle|>", "completion": "\n    int x, y;\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v <|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|>size_t len =<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|><form action=\"/sub<|fim_suffix|><|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|>def fib(n):\n    if n < 2:<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|>class Stack:\n    d<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|><video controls<|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v <|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.pri<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|>for i, item in enumerate(items):<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v in pairs.items():<|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|><form action=\"/submit\" method=\"post\"><|fim_suffix|><|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>int add(int<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return a + b;\n"}
+{"prompt": "<|fim_prefix|>size_t len = strlen(src);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\"><|fim_suffix|></head>\n<body></body>\n</html>\n<|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0; i < n; i++) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|>def find<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>def fib(n):\n    if n < 2:<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|><|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|>struct point {<|fim_suffix|>};\n<|fim_middle|>", "completion": "\n    int x, y;\n"}
+{"prompt": "<|fim_prefix|>char *s = malloc(len + 1);<|fim_suffix|><|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|>def read_json(path):\n    import json<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.j<|fim_suffix|><|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>def add(a, b):<|fim_suffix|><|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>def find<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v in pairs.items():<|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|>def fib(n):\n    if n < 2:<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v <|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|><table>\n  <th<|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|><img src=\"photo.j<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>#include <stdio.h><|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>def fib(n):\n    if n < 2:<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|>static inline uint32_<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    x ^= x >> 16; x *= 0x7feb352dU;\n    x ^= x >> 15; x *= 0x846ca68bU;\n    return x ^ (x >> 16);\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|><|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|><script>\n  document.<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h><|fim_suffix|><|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|><table>\n  <th<|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>char *s = mal<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>char *s = mal<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>pthread_mutex_lock(&m);<|fim_suffix|>\n<|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|>struct point {<|fim_suffix|>};\n<|fim_middle|>", "completion": "\n    int x, y;\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|>char *s = mal<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|>import os<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|><video controls<|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|>pthread_mutex_lock(&m);<|fim_suffix|><|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|><form action=\"/sub<|fim_suffix|><|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.price for x in cart)<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>def add(a, b):<|fim_suffix|>\n\ndef sub(a, b):\n    return a - b\n<|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|>def clamp(x, lo, hi):<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|>if (p ==<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|>def fib(n):\n    if n < 2:<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|>size_t len =<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, si<|fim_suffix|><|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.j<|fim_suffix|><|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|><section id=\"main\">\n  <header><|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>with open('out.<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|>def read_json(path):\n    import json<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|>int cmp(const void <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float *a, const float *b, int n) {<|fim_suffix|><|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|><video controls<|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|>def clamp(<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|><input ty<|fim_suffix|><|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|><section id=\"main\">\n  <header><|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>def add(a, b):<|fim_suffix|>\n\ndef sub(a, b):\n    return a - b\n<|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, si<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|><table>\n  <thead>\n    <tr><|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>import os\n\nfiles =<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|>static inline uint32_<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    x ^= x >> 16; x *= 0x7feb352dU;\n    x ^= x >> 15; x *= 0x846ca68bU;\n    return x ^ (x >> 16);\n"}
+{"prompt": "<|fim_prefix|>int cmp(const void <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|>while (*p) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|>def clamp(x, lo, hi):<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|>def fib(n):\n<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|>static inline uint32_<|fim_suffix|><|fim_middle|>", "completion": "\n    x ^= x >> 16; x *= 0x7feb352dU;\n    x ^= x >> 15; x *= 0x846ca68bU;\n    return x ^ (x >> 16);\n"}
+{"prompt": "<|fim_prefix|>if __name__ == '__main__':<|fim_suffix|><|fim_middle|>", "completion": "\n    main()\n"}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v <|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|><form action=\"/submit\" method=\"post\"><|fim_suffix|></form>\n<|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|>def fib(n):\n<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|><|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|><div class=\"card\"><|fim_suffix|></div>\n<|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|>import os\n\nfiles =<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|>if (p ==<|fim_suffix|><|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|><video <|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|>class Stack:\n    d<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h>\n\nint main(void) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|><style>\n<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0; i < n; i++) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|><video controls<|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.pri<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>import os\n\nfiles =<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|>class Stack:\n    def __init__(self):<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.price for x in cart)<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|>struct <|fim_suffix|>};\n<|fim_middle|>", "completion": "\n    int x, y;\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.j<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>pthread_mutex_lock(&m);<|fim_suffix|>\n<|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|>struct point {<|fim_suffix|><|fim_middle|>", "completion": "\n    int x, y;\n"}
+{"prompt": "<|fim_prefix|>def add(a, b):<|fim_suffix|><|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.price for x in cart)<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|><video controls<|fim_suffix|>\n<|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|><a href=\"https<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>def find_max(xs):<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>static inline uint32_t hash32(uint32_t x) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    x ^= x >> 16; x *= 0x7feb352dU;\n    x ^= x >> 15; x *= 0x846ca68bU;\n    return x ^ (x >> 16);\n"}
+{"prompt": "<|fim_prefix|>size_t len = strlen(src);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|><table>\n  <thead>\n    <tr><|fim_suffix|><|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>struct point {<|fim_suffix|><|fim_middle|>", "completion": "\n    int x, y;\n"}
+{"prompt": "<|fim_prefix|>for i, item in enumerate(items):<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\"><|fim_suffix|><|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|>def add<|fim_suffix|>\n\ndef sub(a, b):\n    return a - b\n<|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|><input ty<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>def fib(n):\n    if n < 2:<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|><|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>if (p == NULL) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|><|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>while (*p) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|><|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|><a href=\"https<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>struct point {<|fim_suffix|>};\n<|fim_middle|>", "completion": "\n    int x, y;\n"}
+{"prompt": "<|fim_prefix|>def read_json(path):\n    import json<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|>while (*p) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|><img src=\"photo.j<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>#include <stdio.h><|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>while <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|>import os\n\nfiles =<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|>class Stack:\n    d<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|>for i, item in enumerate(items):<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|>def clamp(x, lo, hi):<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|><section id=\"ma<|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>def clamp(<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|><script>\n  document.<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>void swap(int<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|><!DOCTYPE html>\n<html lang=\"en\"><|fim_suffix|></head>\n<body></body>\n</html>\n<|fim_middle|>", "completion": "\n  <title>Page</title>\n"}
+{"prompt": "<|fim_prefix|><form action=\"/submit\" method=\"post\"><|fim_suffix|></form>\n<|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|>char *s = mal<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|><input ty<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|>if (p == NULL) {<|fim_suffix|><|fim_middle|>", "completion": "\n        fprintf(stderr, \"out of memory\\n\");\n        return -1;\n    "}
+{"prompt": "<|fim_prefix|><section id=\"main\">\n  <header><|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>def clamp(<|fim_suffix|><|fim_middle|>", "completion": "\n    return max(lo, min(hi, x))\n"}
+{"prompt": "<|fim_prefix|>int add(int a, int b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return a + b;\n"}
+{"prompt": "<|fim_prefix|>def read_json(path):\n    import json<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|>class Stack:\n    d<|fim_suffix|><|fim_middle|>", "completion": "\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h>\n\nint main(void) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>def fib(n):\n<|fim_suffix|><|fim_middle|>", "completion": "\n        return n\n    return fib(n - 1) + fib(n - 2)\n"}
+{"prompt": "<|fim_prefix|>size_t len =<|fim_suffix|>\n<|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|>size_t len = strlen(src);<|fim_suffix|><|fim_middle|>", "completion": "\nchar *dst = strdup(src);\nprintf(\"%zu\\n\", len);\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.j<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>pthread_mut<|fim_suffix|>\n<|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|><div class=\"card\"><|fim_suffix|></div>\n<|fim_middle|>", "completion": "\n  <h2>Title</h2>\n  <p>Body text</p>\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.price for x in cart)<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for x in nums if x > 0]<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|><ul class=\"menu\"><|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>result = [x * 2 for x in nums if x > 0]<|fim_suffix|><|fim_middle|>", "completion": "\nprint(result)\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.price for x in cart)<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|>for (int i = 0<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        sum += a[i];\n    "}
+{"prompt": "<|fim_prefix|>static inline uint32_t hash32(uint32_t x) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    x ^= x >> 16; x *= 0x7feb352dU;\n    x ^= x >> 15; x *= 0x846ca68bU;\n    return x ^ (x >> 16);\n"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|><|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>char *s = malloc(len + 1);<|fim_suffix|>\n<|fim_middle|>", "completion": "\n    if (!s) return NULL;\n    memcpy(s, src, len);\n    s[len] = '\\0';\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.jpg\" alt=\"A photo\"<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|><input ty<|fim_suffix|><|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|><section id=\"main\">\n  <header><|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>def add(a, b):<|fim_suffix|>\n\ndef sub(a, b):\n    return a - b\n<|fim_middle|>", "completion": "\n    return a + b\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.j<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>while (*p) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|><input ty<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|>for i, item in e<|fim_suffix|><|fim_middle|>", "completion": "\n        print(i, item)\n"}
+{"prompt": "<|fim_prefix|>FILE *f = fopen(path, \"rb\");<|fim_suffix|><|fim_middle|>", "completion": "\n    if (!f) return -1;\n    fread(buf, 1, sizeof buf, f);\n    fclose(f);\n"}
+{"prompt": "<|fim_prefix|>def read_json(path<|fim_suffix|><|fim_middle|>", "completion": "\n    with open(path) as f:\n        return json.load(f)\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|><section id=\"main\">\n  <header><|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>struct point {<|fim_suffix|>};\n<|fim_middle|>", "completion": "\n    int x, y;\n"}
+{"prompt": "<|fim_prefix|><table>\n  <th<|fim_suffix|></tr>\n  </thead>\n</table>\n<|fim_middle|>", "completion": "<th>Name</th><th>Value</th>"}
+{"prompt": "<|fim_prefix|>static inline uint32_t hash32(uint32_t x) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    x ^= x >> 16; x *= 0x7feb352dU;\n    x ^= x >> 15; x *= 0x846ca68bU;\n    return x ^ (x >> 16);\n"}
+{"prompt": "<|fim_prefix|><a href=\"https://example.com\"<|fim_suffix|>\n<|fim_middle|>", "completion": " target=\"_blank\" rel=\"noopener\">Example</a>"}
+{"prompt": "<|fim_prefix|>int cmp(const void *a, const void *b) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|><section id=\"ma<|fim_suffix|></header>\n</section>\n<|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|><form action=\"/sub<|fim_suffix|><|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float *a, const float *b, int n) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|><style>\n  .btn {<|fim_suffix|></style>\n<|fim_middle|>", "completion": "\n    padding: 8px 16px;\n    border-radius: 4px;\n    background: #06f;\n    color: #fff;\n  }\n"}
+{"prompt": "<|fim_prefix|><form action=\"/sub<|fim_suffix|></form>\n<|fim_middle|>", "completion": "\n  <input type=\"text\" name=\"q\" required>\n  <button type=\"submit\">Go</button>\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|><|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|>def find<|fim_suffix|><|fim_middle|>", "completion": "\n    best = xs[0]\n    for x in xs:\n        if x > best:\n            best = x\n    return best\n"}
+{"prompt": "<|fim_prefix|>#include <stdio.h><|fim_suffix|><|fim_middle|>", "completion": "\n    printf(\"hello\\n\");\n    return 0;\n"}
+{"prompt": "<|fim_prefix|>pthread_mut<|fim_suffix|>\n<|fim_middle|>", "completion": "\ncount++;\npthread_mutex_unlock(&m);\n"}
+{"prompt": "<|fim_prefix|>if __name__ =<|fim_suffix|><|fim_middle|>", "completion": "\n    main()\n"}
+{"prompt": "<|fim_prefix|><input type=\"email\"<|fim_suffix|>\n<|fim_middle|>", "completion": " name=\"email\" placeholder=\"you@example.com\">"}
+{"prompt": "<|fim_prefix|><script>\n  document.querySelector('#go')<|fim_suffix|></script>\n<|fim_middle|>", "completion": "\n    .addEventListener('click', () => alert('hi'));\n"}
+{"prompt": "<|fim_prefix|><section id=\"ma<|fim_suffix|><|fim_middle|>", "completion": "<h1>Welcome</h1>"}
+{"prompt": "<|fim_prefix|>int cmp(const void *a, const void *b) {<|fim_suffix|><|fim_middle|>", "completion": "\n    return *(const int *)a - *(const int *)b;\n"}
+{"prompt": "<|fim_prefix|>total = sum(x.price for x in cart)<|fim_suffix|><|fim_middle|>", "completion": "\nprint(f'total: {total}')\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float *a, const float *b, int n) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v <|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float *a, const float *b, int n) {<|fim_suffix|><|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|><video <|fim_suffix|><|fim_middle|>", "completion": " poster=\"cover.jpg\">\n  <source src=\"movie.mp4\" type=\"video/mp4\">\n</video>\n"}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}
+{"prompt": "<|fim_prefix|>import os\n\nfiles =<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|>void swap(int *a, int *b) {<|fim_suffix|><|fim_middle|>", "completion": "\n    int t = *a; *a = *b; *b = t;\n"}
+{"prompt": "<|fim_prefix|>import os<|fim_suffix|><|fim_middle|>", "completion": " [f for f in os.listdir('.') if f.endswith('.py')]\nprint(len(files))\n"}
+{"prompt": "<|fim_prefix|><img src=\"photo.j<|fim_suffix|>\n<|fim_middle|>", "completion": " width=\"640\" height=\"480\">"}
+{"prompt": "<|fim_prefix|>qsort(arr, n, si<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>try:\n    f = open(path)\nexcept IOError as e:<|fim_suffix|><|fim_middle|>", "completion": "\n    print('error:', e)\n"}
+{"prompt": "<|fim_prefix|><ul class=\"menu\"><|fim_suffix|><|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|><ul class=\"menu\"><|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>double vec_dot(const float *a, const float *b, int n) {<|fim_suffix|>}\n<|fim_middle|>", "completion": "\n    double s = 0;\n    for (int i = 0; i < n; i++) s += a[i] * b[i];\n    return s;\n"}
+{"prompt": "<|fim_prefix|><ul class=\"menu\"><|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|><ul clas<|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|><ul clas<|fim_suffix|></ul>\n<|fim_middle|>", "completion": "\n  <li><a href=\"/\">Home</a></li>\n  <li><a href=\"/about\">About</a></li>\n"}
+{"prompt": "<|fim_prefix|>while <|fim_suffix|>}\n<|fim_middle|>", "completion": "\n        if (*p == '\\n') break;\n        p++;\n    "}
+{"prompt": "<|fim_prefix|>qsort(arr, n, sizeof(int), cmp);<|fim_suffix|>\n<|fim_middle|>", "completion": "\nfor (int i = 0; i < n; i++) printf(\"%d\\n\", arr[i]);\n"}
+{"prompt": "<|fim_prefix|>d = {}\nfor k, v <|fim_suffix|><|fim_middle|>", "completion": "\n    d[k.lower()] = v\nprint(d)\n"}
+{"prompt": "<|fim_prefix|>def merge(a, b):\n    out = []\n    i = j = 0\n    while i < len(a) and j < len(b):<|fim_suffix|><|fim_middle|>", "completion": "\n        if a[i] < b[j]:\n            out.append(a[i]); i += 1\n        else:\n            out.append(b[j]); j += 1\n    return out + a[i:] + b[j:]\n"}
+{"prompt": "<|fim_prefix|>with open('out.txt', 'w') as f:<|fim_suffix|><|fim_middle|>", "completion": "\n    f.write('hello\\n')\n"}

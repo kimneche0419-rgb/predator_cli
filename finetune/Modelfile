@@ -1,0 +1,7 @@
+FROM ./lvc-coder-fim-q8.gguf
+TEMPLATE """{{- if .Prompt }}<|fim_prefix|>{{ .Prompt }}<|fim_suffix|>{{ .Suffix }}<|fim_middle|>{{ end }}"""
+PARAMETER stop "<|endoftext|>"
+PARAMETER stop "<|fim_pad|>"
+PARAMETER temperature 0.2
+PARAMETER top_p 0.9
+PARAMETER num_predict 64

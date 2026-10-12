@@ -1,0 +1,20 @@
+# Docker 기반 Ollama (옵션)
+#
+# 주의: macOS의 Docker는 VM 위에서 동작하므로 Metal GPU를 사용할 수 없습니다.
+# 네이티브 Ollama(launchd 상시 구동 중, 포트 11434)가 GPU 가속을 받으므로
+# 기본 사용은 네이티브를 권장합니다. 이 컨테이너는 11435 포트로 병행 구동 가능.
+#
+# 시작: docker compose up -d
+# 모델 받기: docker compose exec ollama ollama pull qwen2.5-coder:1.5b
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama-docker
+    ports:
+      - "11435:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    restart: unless-stopped   # 상시 작동 (Docker Desktop 실행 중)
+
+volumes:
+  ollama_models:

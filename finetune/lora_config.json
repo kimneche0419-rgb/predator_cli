@@ -1,0 +1,27 @@
+{
+    "model": "mlx-community/Qwen2.5-Coder-1.5B-4bit",
+    "data": "finetune/data",
+    "adapter_path": "finetune/adapters",
+    "fine_tune_type": "lora",
+    "mask_prompt": true,
+    "num_layers": 16,
+    "lora_parameters": {
+        "rank": 8,
+        "dropout": 0.0,
+        "scale": 16.0
+    },
+    "batch_size": 1,
+    "grad_accumulation_steps": 4,
+    "grad_checkpoint": true,
+    "iters": 3000,
+    "learning_rate": 0.0001,
+    "max_seq_length": 1024,
+    "optimizer": "adam",
+    "seed": 0,
+    "save_every": 500,
+    "steps_per_eval": 250,
+    "steps_per_report": 10,
+    "val_batches": 25,
+    "test": false,
+    "train": true
+}

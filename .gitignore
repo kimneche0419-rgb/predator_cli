@@ -1,0 +1,37 @@
+# build outputs
+lvc
+lvcli
+LVC.app/
+*.o
+/tmp/
+
+# vendored heavy deps (setup: see README / finetune/README.md)
+vendor/llama.cpp/
+
+# finetune heavy artifacts — all regenerable:
+#   corpus:  python3 finetune/fetch_corpus.py
+#   data:    python3 finetune/mine_github_dataset.py
+#   eval dl: eval_fim.py auto-downloads HumanEval-Infilling
+finetune/corpus/
+finetune/data/
+finetune/eval/data/
+finetune/eval/runs/
+finetune/out/
+finetune/adapters*/
+finetune/merged*/
+finetune/*.gguf
+finetune/train_21k.log
+finetune/__pycache__/
+**/__pycache__/
+
+# local runtime state
+.lvc/
+*.lvc-tmp.*
+
+# OS/editor noise
+.DS_Store
+
+# personal screenshots
+540
+스크린샷*.png
+*.webp
