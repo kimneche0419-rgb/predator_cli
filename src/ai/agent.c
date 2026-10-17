@@ -774,14 +774,60 @@ static const char *jarg_str(const jval *args, const char *key) {
     return (v && v->t == J_STR) ? v->str : NULL;
 }
 
-static char *tool_exec(const char *base, const char *name, const char *args_json) {
+static char *tool_exec(const char *base, const char *name, const char *args_json,
+                       char **skill_dirs, int skill_dirs_n) {
     jval *args = json_parse(args_json ? args_json : "");
     if (!args || args->t != J_OBJ) {
         jval_free(args);
         return xstrdup("error: tool arguments must be a JSON object");
     }
     char *res = NULL;
-    if (strcmp(name, "run_shell") == 0) {
+    if (strcmp(name, "read_skill") == 0) {
+        const char *nm = jarg_str(args, "name");
+        if (!nm || !*nm)
+            res = xstrdup("error: read_skill requires string 'name'");
+        else {
+            bool found = false;
+            for (int i = 0; i < skill_dirs_n && !found; i++) {
+                const char *cands[3] = { nm, NULL, NULL };
+                char with_md[512], with_dir[512];
+                snprintf(with_md, sizeof with_md, "%s.md", nm);
+                snprintf(with_dir, sizeof with_dir, "%s/SKILL.md", nm);
+                cands[1] = with_md;
+                cands[2] = with_dir;
+                for (int t = 0; t < 3 && !found; t++) {
+                    char fullc[PATH_MAX];
+                    if (!resolve_path(skill_dirs[i], cands[t], fullc,
+                                      sizeof fullc))
+                        continue;
+                    FILE *f = fopen(fullc, "r");
+                    if (!f) continue;
+                    found = true;
+                    sbuf sb;
+                    sbuf_init(&sb);
+                    sapp(&sb, nm);
+                    sapp(&sb, "\n");
+                    char chunk[2048];
+                    size_t total = 0, n;
+                    while (total < READ_FILE_MAX &&
+                           (n = fread(chunk, 1,
+                                      sizeof chunk < READ_FILE_MAX - total
+                                          ? sizeof chunk
+                                          : READ_FILE_MAX - total,
+                                      f)) > 0) {
+                        sbuf_append(&sb, chunk, n);
+                        total += n;
+                    }
+                    fclose(f);
+                    res = xstrdup(sbuf_cstr(&sb));
+                    sbuf_free(&sb);
+                }
+            }
+            if (!found)
+                res = tool_result_error(
+                    "error: skill '%s' not found in registered skill dirs", nm);
+        }
+    } else if (strcmp(name, "run_shell") == 0) {
         const char *cmd = jarg_str(args, "cmd");
         if (!cmd) res = xstrdup("error: run_shell requires string 'cmd'");
         else res = tool_run_shell(base, cmd);
@@ -845,7 +891,13 @@ static const char *g_tools_json =
     "stdout+stderr (30s timeout, truncated at 4096 bytes)\","
     "\"parameters\":{\"type\":\"object\",\"properties\":{"
     "\"cmd\":{\"type\":\"string\",\"description\":\"shell command\"}},"
-    "\"required\":[\"cmd\"]}}}"
+    "\"required\":[\"cmd\"]}}},"
+    "{\"type\":\"function\",\"function\":{\"name\":\"read_skill\","
+    "\"description\":\"Load the full instructions of an installed skill by name. "
+    "When a listed skill matches the task, MUST call this before acting on it.\","
+    "\"parameters\":{\"type\":\"object\",\"properties\":{"
+    "\"name\":{\"type\":\"string\",\"description\":\"skill name\"}},"
+    "\"required\":[\"name\"]}}}"
     "]";
 
 /* ---- libcurl global refcount (mirrors ollama.c) ---- */
@@ -930,6 +982,8 @@ struct lvc_agent_session {
     size_t nmsgs;
     int tools_enabled;
     sbuf system;        /* raw system prompt text (injected at request time) */
+    char *skills_dirs[4];
+    int skills_dirs_n;
 };
 
 lvc_agent_session *lvc_agent_session_create(void) {
@@ -951,6 +1005,13 @@ void lvc_agent_session_set_system(lvc_agent_session *s, const char *text) {
 
 void lvc_agent_session_set_tools(lvc_agent_session *s, int enabled) {
     if (s) s->tools_enabled = enabled ? 1 : 0;
+}
+
+void lvc_agent_session_add_skills_dir(lvc_agent_session *s, const char *dir) {
+    if (!s || !dir || !*dir || s->skills_dirs_n >= 4) return;
+    for (int i = 0; i < s->skills_dirs_n; i++)
+        if (!strcmp(s->skills_dirs[i], dir)) return; /* dedup */
+    s->skills_dirs[s->skills_dirs_n++] = strdup(dir);
 }
 
 int lvc_agent_session_save(const lvc_agent_session *s, const char *path) {
@@ -999,6 +1060,7 @@ void lvc_agent_session_free(lvc_agent_session *s) {
     if (!s) return;
     sbuf_free(&s->msgs);
     sbuf_free(&s->system);
+    for (int i = 0; i < s->skills_dirs_n; i++) free(s->skills_dirs[i]);
     free(s);
 }
 
@@ -1241,7 +1303,8 @@ round_request:;
                 force_final = 1;
                 free(sig);
             } else {
-                res = tool_exec(base, cs.calls[i].name, cs.calls[i].args);
+                res = tool_exec(base, cs.calls[i].name, cs.calls[i].args,
+                                sess->skills_dirs, sess->skills_dirs_n);
                 if (!res) res = xstrdup("error: out of memory");
                 free(prev_sig);
                 prev_sig = last_sig;

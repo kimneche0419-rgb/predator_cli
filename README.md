@@ -11,7 +11,13 @@ make install PREFIX=~/.local/bin
 # 2. 실행 / run / 运行  (anywhere)
 predator_cli                            # 대화형 REPL / interactive / 交互模式
 predator_cli "이 코드베이스 구조 설명해줘"     # 원샷 / one-shot / 单次任务
+predator_cli -r ~/.predator/last_session.jsonl  # 세션 복원 / resume / 恢复会话
 ```
+
+**프로젝트 메모리 & 스킬 / Project memory & skills / 项目记忆与技能**
+- `CLAUDE.md`/`AGENTS.md`(작업 디렉터리 또는 상위) → 매 세전 시스템 프롬프트에 자동 주입
+- 스킬: `.predator/skills/*.md` (프로젝트) 또는 `~/.predator/skills/` — 시스템 프롬프트에 카탈로그가 실리고 모델이 `read_skill`로 로드
+- REPL: `/skills` `/memory` `/reload` `/tools` `/model` `↑↓` 히스토리
 
 사전 준비 / Prerequisite / 前提: Ollama 실행 중 + `ollama pull qwen2.5-coder:3b`
 

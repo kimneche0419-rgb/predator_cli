@@ -83,4 +83,8 @@ int lvc_agent_list_models(const char *host, char ***out_names,
                           size_t *out_count);
 void lvc_agent_free_models(char **names, size_t count);
 
+/* register a directory the read_skill tool may load skills from
+ * (up to 4 dirs; e.g. project .predator/skills and ~/.predator/skills) */
+void lvc_agent_session_add_skills_dir(lvc_agent_session *s, const char *dir);
+
 #endif

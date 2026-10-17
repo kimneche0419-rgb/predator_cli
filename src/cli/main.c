@@ -8,6 +8,7 @@
  * read_file, edit_file, run_shell) are sandboxed to the working directory.
  */
 #include "../ai/agent.h"
+#include <dirent.h>
 #include <pthread.h>
 #include <signal.h>
 #include <sys/stat.h>
@@ -17,15 +18,9 @@
 #include <string.h>
 #include <unistd.h>
 
-static const char *PERSONA =
-    "당신은 터미널 코딩 에이전트입니다. 작업 전 도구(list_dir/read_file)로 "
-    "작업 공간을 먼저 확인하고, edit_file/run_shell로 실행합니다. "
-    "설명은 간결한 한국어, 코드는 깔끔하게.\n"
-    "규칙: 인사·일반 질문·상담에는 도구를 절대 쓰지 말고 바로 답변한다. "
-    "파일 수정은 edit_file만 사용한다(run_shell 리다이렉션으로 파일을 "
-    "통째로 쓰지 않는다). 사용자가 수정을 요청하지 않으면 read 이상 하지 않는다.";
-
-/* omp (oh-my-pi) system-prompt.md style: terse RFC2119 rule sections */
+/* omp (oh-my-pi) system-prompt.md style: terse RFC2119 rule sections.
+ * Appended at runtime: § Workspace, § Project instructions (CLAUDE.md),
+ * § Skills catalog. */
 static const char *SYSTEM_PROMPT =
     "§ Role\n"
     "You are predator_cli, a terminal coding agent on the user's macOS machine.\n"
@@ -44,6 +39,152 @@ static void on_sigint(int sig) { (void)sig; _exit(130); }
 
 static char g_model_buf[256]; /* /model selection storage */
 static char g_cwd_buf[1024];  /* /cwd selection storage */
+static char g_mem_src[1024] = ""; /* project memory source path */
+
+/* ---- project memory (Claude Code CLAUDE.md convention) ---- */
+
+static char *read_file_capped(const char *path, size_t cap) {
+    FILE *f = fopen(path, "r");
+    if (!f) return NULL;
+    char *out = malloc(cap + 1);
+    if (!out) { fclose(f); return NULL; }
+    size_t n = fread(out, 1, cap, f);
+    fclose(f);
+    out[n] = 0;
+    return out;
+}
+
+/* nearest AGENTS.md/CLAUDE.md walking up from cwd, plus ~/.claude/CLAUDE.md.
+ * returns malloc'd combined text or NULL; source path in g_mem_src. */
+static char *find_project_memory(const char *cwd) {
+    char cur[4096];
+    if (!realpath(cwd, cur)) snprintf(cur, sizeof cur, "%s", cwd);
+    char out[12288];
+    size_t w = 0;
+    out[0] = 0;
+    g_mem_src[0] = 0;
+    for (int depth = 0; depth < 8; depth++) {
+        for (int t = 0; t < 2; t++) {
+            char path[4200];
+            snprintf(path, sizeof path, "%s/%s", cur,
+                     t == 0 ? "AGENTS.md" : "CLAUDE.md");
+            char *body = read_file_capped(path, 6144);
+            if (body) {
+                w += (size_t)snprintf(out + w, sizeof out - w,
+                                      "[%s]\n%s\n", path, body);
+                if (!g_mem_src[0])
+                    snprintf(g_mem_src, sizeof g_mem_src, "%s", path);
+                free(body);
+            }
+        }
+        if (w > 8000) break;
+        char *slash = strrchr(cur, '/');
+        if (!slash || slash == cur) break;
+        *slash = 0;
+    }
+    const char *home = getenv("HOME");
+    if (home && *home) {
+        char path[4200];
+        snprintf(path, sizeof path, "%s/.claude/CLAUDE.md", home);
+        char *body = read_file_capped(path, 4096);
+        if (body) {
+            w += (size_t)snprintf(out + w, sizeof out - w,
+                                  "[~/.claude/CLAUDE.md]\n%s\n", body);
+            snprintf(g_mem_src, sizeof g_mem_src, "%s", path);
+            free(body);
+        }
+    }
+    return w ? strdup(out) : NULL;
+}
+
+/* ---- omp-style skills: scan .predator/skills dirs, build the catalog ---- */
+
+static void scan_skills(const char *cwd, lvc_agent_session *sess,
+                        char *cat, size_t catsz) {
+    const char *home = getenv("HOME");
+    char dirs[4][4096];
+    int dn = 0;
+    if (cwd && *cwd) {
+        snprintf(dirs[dn], sizeof dirs[dn], "%s/.predator/skills", cwd);
+        if (access(dirs[dn], R_OK) == 0) dn++;
+    }
+    if (home && *home && dn < 4) {
+        snprintf(dirs[dn], sizeof dirs[dn], "%s/.predator/skills", home);
+        if (access(dirs[dn], R_OK) == 0 &&
+            (dn == 0 || strcmp(dirs[dn], dirs[0]) != 0))
+            dn++;
+    }
+    cat[0] = 0;
+    size_t cw = 0;
+    for (int i = 0; i < dn; i++) {
+        lvc_agent_session_add_skills_dir(sess, dirs[i]);
+        DIR *d = opendir(dirs[i]);
+        if (!d) continue;
+        struct dirent *e;
+        while ((e = readdir(d))) {
+            if (e->d_name[0] == '.') continue;
+            char cpath[4200], content_path[4200];
+            snprintf(cpath, sizeof cpath, "%s/%s", dirs[i], e->d_name);
+            struct stat st;
+            if (stat(cpath, &st) == 0 && S_ISDIR(st.st_mode))
+                snprintf(content_path, sizeof content_path,
+                         "%s/SKILL.md", cpath);
+            else
+                snprintf(content_path, sizeof content_path, "%s", cpath);
+            char name[256];
+            snprintf(name, sizeof name, "%s", e->d_name);
+            char *md = strstr(name, ".md");
+            if (md && !md[3]) *md = 0;
+            char desc[160] = "(no description)";
+            FILE *f = fopen(content_path, "r");
+            if (!f) continue;
+            char l[256];
+            while (fgets(l, sizeof l, f)) {
+                char *p = l;
+                while (*p == ' ' || *p == '#') p++;
+                if (*p && *p != '\n') {
+                    size_t dl = strlen(p);
+                    while (dl && (p[dl - 1] == '\n' || p[dl - 1] == '\r'))
+                        p[--dl] = 0;
+                    if (dl > 140) dl = 140;
+                    snprintf(desc, sizeof desc, "%.*s", (int)dl, p);
+                    break;
+                }
+            }
+            fclose(f);
+            if (cw + strlen(name) + strlen(desc) + 8 < catsz)
+                cw += (size_t)snprintf(cat + cw, catsz - cw,
+                                       "- %s: %s\n", name, desc);
+        }
+        closedir(d);
+    }
+}
+
+/* omp system-prompt.md structure: base rules + § Workspace + § Project
+ * instructions (CLAUDE.md) + § Skills catalog */
+static void rebuild_system(const char *cwd, lvc_agent_session *sess) {
+    char *buf = NULL;
+    size_t sz = 0;
+    FILE *f = open_memstream(&buf, &sz);
+    if (!f) return;
+    fputs(SYSTEM_PROMPT, f);
+    fprintf(f, "\n§ Workspace\n%s\n", cwd);
+    char *mem = find_project_memory(cwd);
+    if (mem)
+        fprintf(f,
+            "\n§ Project instructions (CLAUDE.md/AGENTS.md — MUST follow)\n%s\n",
+            mem);
+    char cat[8192];
+    scan_skills(cwd, sess, cat, sizeof cat);
+    if (*cat)
+        fprintf(f,
+            "\n§ Skills\nMatching skill → MUST call read_skill before using it.\n%s",
+            cat);
+    fclose(f);
+    lvc_agent_session_set_system(sess, buf);
+    free(buf);
+    free(mem);
+}
 
 /* ---- raw-mode line editor + arrow-key picker (no external deps) ---- */
 
@@ -569,17 +710,6 @@ static int casual_input(const char *s) {
     return strpbrk(s, "./\\`0123456789") == NULL;
 }
 
-/* goal = persona + task on a fresh session, raw input afterwards */
-static char *build_goal(const char *input, int fresh, const char *cwd) {
-    size_t n = strlen(input);
-    if (!fresh) return strdup(input);
-    char *g = malloc(strlen(PERSONA) + n + strlen(cwd) + 64);
-    if (!g) return NULL;
-    sprintf(g, "%s\n작업 공간: %s (도구 path는 이 디렉터리 기준 상대경로 권장)\n\n과제: %s",
-            PERSONA, cwd, input);
-    return g;
-}
-
 static void banner(const char *model, const char *host, const char *cwd) {
     if (!ui_color) {
         fprintf(stderr, "predator_cli — model %s @ %s, cwd %s (/help)\n",
@@ -650,7 +780,7 @@ int main(int argc, char **argv) {
 
     lvc_agent_session *sess = lvc_agent_session_create();
     if (!sess) return 1;
-    lvc_agent_session_set_system(sess, SYSTEM_PROMPT);
+    rebuild_system(cwd, sess);
     int rc = 0;
 
     if (resume_path) {
@@ -662,7 +792,7 @@ int main(int argc, char **argv) {
     }
 
     if (oneshot) {
-        char *goal = build_goal(oneshot, 1, cwd);
+        char *goal = strdup(oneshot);
         if (!goal) return 1;
         lvc_agent_session_set_tools(sess, !casual_input(oneshot));
         spin_start();
@@ -675,7 +805,6 @@ int main(int argc, char **argv) {
 
     banner(model, host, cwd);
     pred_hist hist = {0};
-    int first = 1; /* re-seed the persona after a fresh/cleared session */
     int tty_in = isatty(0);
     for (;;) {
         char *line;
@@ -698,10 +827,10 @@ int main(int argc, char **argv) {
             }
             else if (!strcmp(line, "/help"))
                 fprintf(stderr,
-                    "/model [name|#] /cwd dir /reset /stat /tools /resume [file] /quit\n");
+                    "/model [name|#] /cwd dir /reset /stat /tools /skills /memory /reload /resume [file] /quit\n");
             else if (!strcmp(line, "/reset")) {
                 lvc_agent_session_clear(sess);
-                first = 1;
+                rebuild_system(cwd, sess);
                 fprintf(stderr, "[session cleared]\n");
             } else if (!strcmp(line, "/stat")) {
                 fprintf(stderr, "[messages: %zu]\n",
@@ -756,7 +885,31 @@ int main(int argc, char **argv) {
                     "  list_dir(path)            list a directory\n"
                     "  read_file(path)           read a file (8 KB cap)\n"
                     "  edit_file(path,old,new)   replace old_string with new_string\n"
-                    "  run_shell(cmd)            shell command (30 s timeout)\n");
+                    "  run_shell(cmd)            shell command (30 s timeout)\n"
+                    "  read_skill(name)          load an installed skill (/skills)\n");
+            } else if (!strcmp(line, "/skills")) {
+                char cat[8192];
+                scan_skills(cwd, sess, cat, sizeof cat);
+                if (*cat)
+                    fprintf(stderr, "skills:\n%s", cat);
+                else
+                    fprintf(stderr,
+                        "no skills — put *.md in .predator/skills/ (project) or "
+                        "~/.predator/skills/\n");
+            } else if (!strcmp(line, "/memory")) {
+                char *mem = find_project_memory(cwd);
+                if (mem) {
+                    fprintf(stderr, "project memory [%s]:\n%.*s\n",
+                            g_mem_src, 600, mem);
+                    free(mem);
+                } else
+                    fprintf(stderr,
+                        "no project memory — CLAUDE.md/AGENTS.md를 작업 디렉터리에 "
+                        "만들면 매 세션 자동 주입된다\n");
+            } else if (!strcmp(line, "/reload")) {
+                rebuild_system(cwd, sess);
+                fprintf(stderr, "[reloaded: memory %s, skills scanned]\n",
+                        g_mem_src[0] ? g_mem_src : "(none)");
             } else if (!strncmp(line, "/resume", 7) &&
                        (line[7] == 0 || line[7] == ' ')) {
                 const char *p = line[7] ? line + 8 : NULL;
@@ -780,9 +933,8 @@ int main(int argc, char **argv) {
                 fprintf(stderr, "unknown command %s (/help)\n", line);
             continue;
         }
-        char *goal = build_goal(line, first, cwd);
+        char *goal = strdup(line);
         if (!goal) continue;
-        first = 0;
         lvc_agent_session_set_tools(sess, !casual_input(line));
         spin_start();
         if (lvc_agent_run_session(sess, host, model, goal, cwd,
