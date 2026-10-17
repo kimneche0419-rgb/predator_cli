@@ -737,7 +737,10 @@ static char *tool_edit_file(const char *full, const char *disp,
     char *at = old_s[0] ? strstr(body, old_s) : NULL;
     if (!at) {
         sbuf_free(&content);
-        return tool_result_error("error: old_string not found in '%s'", disp);
+        return tool_result_error(
+            "error: old_string not found in '%s' — 대상을 덮어쓰려 run_shell "
+            "리다이렉션을 쓰지 마라. 먼저 read_file로 정확한 내용을 확인한 뒤 "
+            "old_string을 그대로 복사해 다시 시도하라.", disp);
     }
     size_t pre = (size_t)(at - body);
     size_t old_len = strlen(old_s);

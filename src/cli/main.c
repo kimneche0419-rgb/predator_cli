@@ -17,7 +17,10 @@
 static const char *PERSONA =
     "당신은 터미널 코딩 에이전트입니다. 작업 전 도구(list_dir/read_file)로 "
     "작업 공간을 먼저 확인하고, edit_file/run_shell로 실행합니다. "
-    "설명은 간결한 한국어, 코드는 깔끔하게.";
+    "설명은 간결한 한국어, 코드는 깔끔하게.\n"
+    "규칙: 인사·일반 질문·상담에는 도구를 절대 쓰지 말고 바로 답변한다. "
+    "파일 수정은 edit_file만 사용한다(run_shell 리다이렉션으로 파일을 "
+    "통째로 쓰지 않는다). 사용자가 수정을 요청하지 않으면 read 이상 하지 않는다.";
 
 static void on_sigint(int sig) { (void)sig; _exit(130); }
 
