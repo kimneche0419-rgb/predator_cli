@@ -1,5 +1,22 @@
 # predator_cli — terminal coding agent (Claude Code-style, local Ollama)
 
+## Quick Start / 快速开始 / 빠른 시작
+
+```bash
+# 1. 설치 / install / 安装  (one-time)
+git clone https://github.com/kimneche0419-rgb/predator_cli.git
+cd predator_cli
+make install PREFIX=~/.local/bin
+
+# 2. 실행 / run / 运行  (anywhere)
+predator_cli                            # 대화형 REPL / interactive / 交互模式
+predator_cli "이 코드베이스 구조 설명해줘"     # 원샷 / one-shot / 单次任务
+```
+
+사전 준비 / Prerequisite / 前提: Ollama 실행 중 + `ollama pull qwen2.5-coder:3b`
+
+자세한 사용법 / Details / 详细用法: 아래 언어별 섹션 참고
+
 [English](#english) · [中文](#中文) · [한국어](#한국어)
 
 ---
