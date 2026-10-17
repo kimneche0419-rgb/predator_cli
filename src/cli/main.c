@@ -330,35 +330,34 @@ static char *pred_readline(const char *prompt, pred_hist *h) {
 static char *pred_picker(char **items, size_t n, const char *title) {
     if (!isatty(0) || !ui_color || n == 0) return NULL;
     size_t idx = 0;
+    size_t printed = 0; /* total rendered lines (title + items) */
     pred_raw(1);
-    fprintf(stderr, "%s%s%s\n", C_ACCENT, title, C_RESET);
     for (;;) {
-        for (size_t i = 0; i < n; i++) {
-            fprintf(stderr, "\033[K%s%s%s %s%s\n", i == idx ? C_ACCENT : C_DIM,
+        if (printed) fprintf(stderr, "\033[%zuA\r", printed);
+        fprintf(stderr, "\033[K%s%s%s\n", C_ACCENT, title, C_RESET);
+        for (size_t i = 0; i < n; i++)
+            fprintf(stderr, "\033[K%s%s%s %s%s\n",
+                    i == idx ? C_ACCENT : C_DIM,
                     i == idx ? "❯ " : "  ", C_RESET, items[i],
                     i == idx ? "  ←" : "");
-        }
+        printed = n + 1;
         fflush(stderr);
         char ch;
         int k = read_key(&ch);
-        if (k == K_UP || k == K_NONE) { /* redraw one line up */
-            if (idx == 0) { /* no move: reprint */ }
-            else idx--;
+        if (k == K_UP) {
+            if (idx > 0) idx--;
         } else if (k == K_DOWN) {
             if (idx + 1 < n) idx++;
         } else if (k == K_ENTER) {
             pred_raw(0);
             return strdup(items[idx]);
-        } else if (k == K_ESC || k == K_CTRL_C || k == K_CHAR) {
-            if (k != K_CHAR || ch == 'q') {
-                pred_raw(0);
-                fprintf(stderr, "\033[%zuA\r\033[K%s%s%s\n", n, C_DIM,
-                        "(cancelled)", C_RESET);
-                return NULL;
-            }
+        } else if (k == K_ESC || k == K_CTRL_C ||
+                   (k == K_CHAR && ch == 'q')) {
+            pred_raw(0);
+            fprintf(stderr, "\033[%zuA\r\033[K%s(cancelled)%s\n", printed,
+                    C_DIM, C_RESET);
+            return NULL;
         }
-        /* rewind to the top of the list and redraw */
-        fprintf(stderr, "\033[%zuA\r", n);
     }
 }
 
@@ -583,31 +582,42 @@ static char *build_goal(const char *input, int fresh, const char *cwd) {
 
 static void banner(const char *model, const char *host, const char *cwd) {
     if (!ui_color) {
-        fprintf(stderr, "lvcli — model %s @ %s, cwd %s (/help)\n",
+        fprintf(stderr, "predator_cli — model %s @ %s, cwd %s (/help)\n",
                 model, host, cwd);
         return;
     }
     char l1[256], l2[512];
     snprintf(l1, sizeof l1, "✻ predator_cli");
     snprintf(l2, sizeof l2, "%s · %s", model, cwd);
-    size_t w = strlen(l1) > strlen(l2) ? strlen(l1) : strlen(l2);
-    if (w > 50) w = 50;
-    if (strlen(l2) > w) l2[w] = 0;
-    char edge[96], pad[96];
-    snprintf(edge, sizeof edge, "╭%.*s╮", (int)(w + 2),
-             "────────────────────────────────────────────────────────");
-    memset(pad, ' ', sizeof pad - 1);
+    size_t w1 = line_width(l1, strlen(l1));
+    size_t w2 = line_width(l2, strlen(l2));
+    size_t w = (w1 > w2 ? w1 : w2);
+    if (w > 60) w = 60;
+    char edge[256];
+    size_t ew = 0;
+    while (ew / 3 < w + 4 && ew + 4 < sizeof edge) {
+        memcpy(edge + ew, "─", 3);
+        ew += 3;
+    }
+    edge[ew] = 0;
+    char pad1[96], pad2[96];
+    size_t p1 = w + 2 > w1 ? w + 2 - w1 : 0;
+    size_t p2 = w + 2 > w2 ? w + 2 - w2 : 0;
+    if (p1 > 90) p1 = 90;
+    if (p2 > 90) p2 = 90;
+    memset(pad1, ' ', p1);
+    pad1[p1] = 0;
+    memset(pad2, ' ', p2);
+    pad2[p2] = 0;
     fprintf(stderr,
-            "%s%s%s\n"
-            "%s│%s %s%s%s%.*s%s%s│%s\n"
-            "%s│%s %s%s%s%.*s%s%s│%s\n"
-            "%s%s%s\n"
+            "%s╭%s╮%s\n"
+            "%s│ %s%s%s│%s\n"
+            "%s│ %s%s%s│%s\n"
+            "%s╰%s╯%s\n"
             "  %s/help%s for commands · ctrl-c to exit\n",
             C_ACCENT, edge, C_RESET,
-            C_ACCENT, C_RESET, C_BOLD, l1, C_RESET,
-            (int)(w - strlen(l1) + 1), pad, C_ACCENT, C_RESET, C_RESET,
-            C_ACCENT, C_RESET, C_DIM, l2, C_RESET,
-            (int)(w - strlen(l2) + 1), pad, C_ACCENT, C_RESET, C_RESET,
+            C_ACCENT, C_BOLD, l1, pad1, C_RESET,
+            C_ACCENT, C_DIM, l2, pad2, C_RESET,
             C_ACCENT, edge, C_RESET,
             C_DIM, C_RESET);
 }

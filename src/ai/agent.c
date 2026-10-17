@@ -1042,6 +1042,9 @@ int lvc_agent_run_session(lvc_agent_session *sess, const char *host,
     char *last_res = NULL;  /* its result, for repeat answers */
     int force_final = 0;    /* set on repeat: next round runs without tools */
     for (int round = 0; round < LVC_AGENT_MAX_TOOL_ROUNDS; round++) {
+        int tools_off = force_final || !sess->tools_enabled;
+        int retried = 0;
+round_request:;
         sbuf body;
         sbuf_init(&body);
         bool built = sapp(&body, "{\"model\":") && json_escape(&body, model) &&
@@ -1054,9 +1057,8 @@ int lvc_agent_run_session(lvc_agent_session *sess, const char *host,
                      sbuf_append(&body,
                                  msgs->data ? msgs->data : "", msgs->len) &&
                      sapp(&body, "],\"stream\":true,\"tools\":") &&
-                     (force_final || !sess->tools_enabled
-                          ? sapp(&body, "[]")
-                          : sapp(&body, g_tools_json)) &&
+                     (tools_off ? sapp(&body, "[]")
+                                : sapp(&body, g_tools_json)) &&
                      sapp(&body, ",\"options\":{\"temperature\":0.2,"
                                  "\"repeat_penalty\":1.15}}");
         if (!built) {
@@ -1100,6 +1102,16 @@ int lvc_agent_run_session(lvc_agent_session *sess, const char *host,
             cb(user, LVC_AGENT_ERROR, curl_easy_strerror(cr));
             stream_free(&cs);
             goto out;
+        }
+        if (http_code == 400 && !tools_off && !retried) {
+            /* model rejected the tools payload (templates without tool
+             * support) — retry once without tools; the fallback parser
+             * understands fenced tool calls in plain text */
+            retried = 1;
+            tools_off = 1;
+            sbuf_free(&body);
+            stream_free(&cs);
+            goto round_request;
         }
         if (http_code != 200) {
             char eb[64];
