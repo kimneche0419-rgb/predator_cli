@@ -19,14 +19,6 @@
     }                                                                     \
 } while (0)
 
-/* must match FALLBACK_TEXT in tests/mock_ollama_chat.py */
-static const char FALLBACK_TEXT[] =
-    "I cannot edit files outside the workspace.\n"
-    "```json\n"
-    "{\"tool\": \"edit_file\", \"args\": {\"path\": \"/etc/passwd\", "
-    "\"old_string\": \"root\", \"new_string\": \"pwn\"}}\n"
-    "```\n";
-
 #define MAX_EV 128
 static struct { lvc_agent_event ev; char text[8192]; } g_ev[MAX_EV];
 static size_t g_nev;
@@ -101,16 +93,16 @@ int main(void) {
                            dir, on_event, NULL);
     CHECK(rc == 0);
 
-    /* full event sequence: 3 scripted native rounds, fallback round, escape
-     * round, final answer streamed as tokens then DONE */
+    /* full event sequence: 3 scripted native rounds, fallback round (its
+     * text is buffered, never streamed), escape round, then the final
+     * answer emitted as one buffered TOKEN and DONE */
     static const lvc_agent_event exp[] = {
         LVC_AGENT_TOOL_CALL, LVC_AGENT_TOOL_RESULT,   /* run_shell */
         LVC_AGENT_TOOL_CALL, LVC_AGENT_TOOL_RESULT,   /* edit_file */
         LVC_AGENT_TOOL_CALL, LVC_AGENT_TOOL_RESULT,   /* read_file */
-        LVC_AGENT_TOKEN, LVC_AGENT_TOKEN,             /* fallback text */
         LVC_AGENT_TOOL_CALL, LVC_AGENT_TOOL_RESULT,   /* fenced /etc/passwd */
         LVC_AGENT_TOOL_CALL, LVC_AGENT_TOOL_RESULT,   /* ../outside.txt */
-        LVC_AGENT_TOKEN, LVC_AGENT_TOKEN,             /* final answer */
+        LVC_AGENT_TOKEN,                              /* final answer */
         LVC_AGENT_DONE,
     };
     CHECK(g_nev == sizeof exp / sizeof exp[0]);
@@ -127,15 +119,15 @@ int main(void) {
     CHECK(strncmp(g_ev[4].text, "read_file: ", 11) == 0);
     CHECK(strcmp(g_ev[5].text, "hello agent") == 0);
 
+    CHECK(strncmp(g_ev[6].text, "edit_file: ", 11) == 0);
+    CHECK(strstr(g_ev[6].text, "/etc/passwd") != NULL);
+    CHECK(strstr(g_ev[7].text, "escapes workspace") != NULL);
+
     CHECK(strncmp(g_ev[8].text, "edit_file: ", 11) == 0);
-    CHECK(strstr(g_ev[8].text, "/etc/passwd") != NULL);
+    CHECK(strstr(g_ev[8].text, "../outside.txt") != NULL);
     CHECK(strstr(g_ev[9].text, "escapes workspace") != NULL);
 
-    CHECK(strncmp(g_ev[10].text, "edit_file: ", 11) == 0);
-    CHECK(strstr(g_ev[10].text, "../outside.txt") != NULL);
-    CHECK(strstr(g_ev[11].text, "escapes workspace") != NULL);
-
-    /* token stream: fallback text + final answer, then DONE last */
+    /* the final answer arrives as one buffered TOKEN */
     char toks[16384];
     size_t tl = 0;
     for (size_t i = 0; i < g_nev; i++) {
@@ -147,8 +139,7 @@ int main(void) {
     }
     toks[tl] = 0;
     char want[16384];
-    CHECK(snprintf(want, sizeof want, "%sDone: created.txt now says hello agent.",
-                   FALLBACK_TEXT) >= 0);
+    CHECK(snprintf(want, sizeof want, "Done: created.txt now says hello agent.") >= 0);
     CHECK(strcmp(toks, want) == 0);
     CHECK(g_ev[g_nev - 1].ev == LVC_AGENT_DONE);
     CHECK(strcmp(g_ev[g_nev - 1].text, "") == 0);

@@ -26,6 +26,9 @@ static const char *PERSONA =
 
 static void on_sigint(int sig) { (void)sig; _exit(130); }
 
+static char g_model_buf[256]; /* /model selection storage */
+static char g_cwd_buf[1024];  /* /cwd selection storage */
+
 /* ---- Claude Code-style UI ---- */
 
 static int ui_color = 0;          /* ANSI enabled */
@@ -244,6 +247,12 @@ static void usage(const char *prog) {
             prog);
 }
 
+/* greetings and short chat don't need the tool loop */
+static int casual_input(const char *s) {
+    if (strlen(s) > 12) return 0;
+    return strpbrk(s, "./\\`0123456789") == NULL;
+}
+
 /* goal = persona + task on a fresh session, raw input afterwards */
 static char *build_goal(const char *input, int fresh, const char *cwd) {
     size_t n = strlen(input);
@@ -315,6 +324,7 @@ int main(int argc, char **argv) {
     if (oneshot) {
         char *goal = build_goal(oneshot, 1, cwd);
         if (!goal) return 1;
+        lvc_agent_session_set_tools(sess, !casual_input(oneshot));
         spin_start();
         rc = lvc_agent_run_session(sess, host, model, goal, cwd,
                                    on_event, NULL) == 0 ? 0 : 1;
@@ -346,23 +356,59 @@ int main(int argc, char **argv) {
                 lvc_agent_session_clear(sess);
                 first = 1;
                 fprintf(stderr, "[session cleared]\n");
-            } else if (!strcmp(line, "/stat"))
+            } else if (!strcmp(line, "/stat")) {
                 fprintf(stderr, "[messages: %zu]\n",
                         lvc_agent_session_len(sess));
-            else if (!strncmp(line, "/model ", 7)) {
-                model = line + 7;
-                fprintf(stderr, "[model: %s]\n", model);
-            } else if (!strcmp(line, "/model"))
-                fprintf(stderr, "[model: %s]\n", model);
-            else if (!strncmp(line, "/cwd ", 5))
-                cwd = line + 5; /* takes effect on the next turn */
-            else
+            } else if (!strcmp(line, "/model") || !strncmp(line, "/model ", 7)) {
+                const char *arg = line[7] ? line + 7 : NULL;
+                if (!arg) { /* list installed models */
+                    char **names = NULL;
+                    size_t cnt = 0;
+                    if (lvc_agent_list_models(host, &names, &cnt) == 0 && cnt) {
+                        fprintf(stderr, "installed models:\n");
+                        for (size_t i = 0; i < cnt; i++)
+                            fprintf(stderr, "  %zu. %s%s\n", i + 1, names[i],
+                                    strcmp(names[i], model)
+                                        ? ""
+                                        : "  ← current");
+                        lvc_agent_free_models(names, cnt);
+                        fprintf(stderr, "switch: /model <name> or /model <#>\n");
+                    } else {
+                        fprintf(stderr,
+                            "[cannot list models — is Ollama running at %s?]\n",
+                            host);
+                    }
+                } else {
+                    char *end = NULL;
+                    long num = strtol(arg, &end, 10);
+                    if (end && *end == 0 && num > 0) {
+                        char **names = NULL;
+                        size_t cnt = 0;
+                        if (lvc_agent_list_models(host, &names, &cnt) == 0 &&
+                            num <= (long)cnt) {
+                            snprintf(g_model_buf, sizeof g_model_buf, "%s",
+                                     names[num - 1]);
+                            model = g_model_buf;
+                        } else
+                            fprintf(stderr, "[no model #%ld]\n", num);
+                        if (names) lvc_agent_free_models(names, cnt);
+                    } else {
+                        snprintf(g_model_buf, sizeof g_model_buf, "%s", arg);
+                        model = g_model_buf;
+                    }
+                    fprintf(stderr, "[model: %s]\n", model);
+                }
+            } else if (!strncmp(line, "/cwd ", 5)) {
+                snprintf(g_cwd_buf, sizeof g_cwd_buf, "%s", line + 5);
+                cwd = g_cwd_buf; /* takes effect on the next turn */
+            } else
                 fprintf(stderr, "unknown command %s (/help)\n", line);
             continue;
         }
         char *goal = build_goal(line, first, cwd);
         if (!goal) continue;
         first = 0;
+        lvc_agent_session_set_tools(sess, !casual_input(line));
         spin_start();
         if (lvc_agent_run_session(sess, host, model, goal, cwd,
                                   on_event, NULL) != 0)

@@ -492,7 +492,8 @@ static void process_line(chat_stream *cs, const char *line) {
     if (msg && msg->t == J_OBJ) {
         const jval *content = jobj_get(msg, "content");
         if (content && content->t == J_STR && content->str[0]) {
-            cs->cb(cs->user, LVC_AGENT_TOKEN, content->str);
+            /* buffered: streamed only when the round turns out to be a
+             * plain answer (fallback tool-call json is never shown) */
             if (!sbuf_append(&cs->text, content->str, strlen(content->str)))
                 cs->err = true;
         }
@@ -864,16 +865,79 @@ static void curl_unref(void) {
     g_curl_refs--;
 }
 
+static size_t sbuf_write(char *d, size_t sz, size_t nm, void *user) {
+    sbuf *sb = user;
+    return sbuf_append(sb, d, sz * nm) ? sz * nm : 0;
+}
+
+/* GET /api/tags — installed model names */
+int lvc_agent_list_models(const char *host, char ***out_names,
+                          size_t *out_count) {
+    *out_names = NULL;
+    *out_count = 0;
+    if (!host) return -1;
+    if (curl_ref() != 0) return -1;
+    int rc = -1;
+    CURL *c = curl_easy_init();
+    sbuf body;
+    sbuf_init(&body);
+    if (!c) { curl_unref(); return -1; }
+    char url[512];
+    snprintf(url, sizeof url, "http://%s/api/tags", host);
+    curl_easy_setopt(c, CURLOPT_URL, url);
+    curl_easy_setopt(c, CURLOPT_WRITEFUNCTION, sbuf_write);
+    curl_easy_setopt(c, CURLOPT_WRITEDATA, &body);
+    curl_easy_setopt(c, CURLOPT_CONNECTTIMEOUT, 3L);
+    curl_easy_setopt(c, CURLOPT_TIMEOUT, 15L);
+    CURLcode cr = curl_easy_perform(c);
+    long http_code = 0;
+    curl_easy_getinfo(c, CURLINFO_RESPONSE_CODE, &http_code);
+    curl_easy_cleanup(c);
+    if (cr != CURLE_OK || http_code != 200) goto out;
+
+    jval *root = json_parse(sbuf_cstr(&body));
+    if (!root) goto out;
+    const jval *models = jobj_get(root, "models");
+    if (!models || models->t != J_ARR) { jval_free(root); goto out; }
+    char **names = malloc((models->nitems ? models->nitems : 1) * sizeof(char *));
+    if (!names) { jval_free(root); goto out; }
+    size_t w = 0;
+    for (size_t i = 0; i < models->nitems; i++) {
+        const jval *item = models->items[i];
+        const jval *nm = item ? jobj_get(item, "name") : NULL;
+        if (nm && nm->t == J_STR) names[w++] = xstrdup(nm->str);
+    }
+    jval_free(root);
+    *out_names = names;
+    *out_count = w;
+    rc = 0;
+out:
+    sbuf_free(&body);
+    curl_unref();
+    return rc;
+}
+
+void lvc_agent_free_models(char **names, size_t count) {
+    if (!names) return;
+    for (size_t i = 0; i < count; i++) free(names[i]);
+    free(names);
+}
+
 /* ---- the loop ---- */
 
-struct lvc_agent_session { sbuf msgs; size_t nmsgs; };
+struct lvc_agent_session { sbuf msgs; size_t nmsgs; int tools_enabled; };
 
 lvc_agent_session *lvc_agent_session_create(void) {
     lvc_agent_session *s = malloc(sizeof *s);
     if (!s) return NULL;
     sbuf_init(&s->msgs);
     s->nmsgs = 0;
+    s->tools_enabled = 1;
     return s;
+}
+
+void lvc_agent_session_set_tools(lvc_agent_session *s, int enabled) {
+    if (s) s->tools_enabled = enabled ? 1 : 0;
 }
 
 void lvc_agent_session_free(lvc_agent_session *s) {
@@ -928,10 +992,10 @@ int lvc_agent_run_session(lvc_agent_session *sess, const char *host,
                      sapp(&body, ",\"messages\":[") &&
                      sbuf_append(&body,
                                  msgs->data ? msgs->data : "", msgs->len) &&
-                     sapp(&body, "],\"stream\":true") &&
-                     (force_final ||
-                      (sapp(&body, ",\"tools\":") &&
-                       sapp(&body, g_tools_json))) &&
+                     sapp(&body, "],\"stream\":true,\"tools\":") &&
+                     (force_final || !sess->tools_enabled
+                          ? sapp(&body, "[]")
+                          : sapp(&body, g_tools_json)) &&
                      sapp(&body, ",\"options\":{\"temperature\":0.2,"
                                  "\"repeat_penalty\":1.15}}");
         if (!built) {
@@ -994,8 +1058,21 @@ int lvc_agent_run_session(lvc_agent_session *sess, const char *host,
             goto out;
         }
 
-        if (force_final) {
-            /* no tools offered: whatever the model streamed is the answer */
+        if (force_final || !sess->tools_enabled) {
+            /* no tools offered: the model must answer in plain text; if it
+             * still tries a fenced call, discard it and explain instead */
+            extract_fallback_calls(sbuf_cstr(&cs.text), &cs.calls, &cs.ncalls);
+            if (cs.ncalls > 0) {
+                calls_free(cs.calls, cs.ncalls);
+                cs.calls = NULL;
+                cs.ncalls = 0;
+                cb(user, LVC_AGENT_TOKEN,
+                   force_final
+                       ? "도구 호출이 반복되어 종료했다. 위 ⎿ 결과를 확인하라."
+                       : "(이 대화에서는 도구를 사용할 수 없다.)");
+            } else if (cs.text.len) {
+                cb(user, LVC_AGENT_TOKEN, sbuf_cstr(&cs.text));
+            }
             cb(user, LVC_AGENT_DONE, "");
             stream_free(&cs);
             rc = 0;
@@ -1026,7 +1103,9 @@ int lvc_agent_run_session(lvc_agent_session *sess, const char *host,
             }
         }
 
-        if (cs.ncalls == 0) { /* final answer */
+        if (cs.ncalls == 0) { /* final answer: emit the buffered text */
+            if (cs.text.len)
+                cb(user, LVC_AGENT_TOKEN, sbuf_cstr(&cs.text));
             cb(user, LVC_AGENT_DONE, "");
             stream_free(&cs);
             rc = 0;

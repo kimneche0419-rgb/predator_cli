@@ -63,4 +63,15 @@ int lvc_agent_run_session(lvc_agent_session *s, const char *host,
                           const char *model, const char *goal,
                           const char *cwd, lvc_agent_cb cb, void *user);
 
+/* enable/disable the tool loop for this session (default: enabled).
+ * Disabled = pure chat: requests carry no tools and the model answers in
+ * plain text. Handy for greetings/short questions. */
+void lvc_agent_session_set_tools(lvc_agent_session *s, int enabled);
+
+/* GET /api/tags: installed model names. out_names is a malloc'd array of
+ * malloc'd strings — free with lvc_agent_free_models. returns 0/-1. */
+int lvc_agent_list_models(const char *host, char ***out_names,
+                          size_t *out_count);
+void lvc_agent_free_models(char **names, size_t count);
+
 #endif

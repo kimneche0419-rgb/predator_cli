@@ -44,8 +44,8 @@ make install PREFIX=~/.local/bin   # optional: run `predator_cli` from anywhere
 ### REPL (interactive)
 ```bash
 ./predator_cli
-❯ /help
-❯ /model qwen2.5-coder:3b     # switch model
+❯ /model                       # list installed models
+❯ /model 2                     # switch by name or number
 ❯ /cwd /path/to/project       # switch workspace
 ❯ /reset                      # clear conversation memory
 ❯ /stat                       # transcript size
@@ -104,8 +104,8 @@ make install PREFIX=~/.local/bin   # 可选：之后在任意目录运行 `preda
 ### 交互模式（REPL）
 ```bash
 ./predator_cli
-❯ /help
-❯ /model qwen2.5-coder:3b     # 切换模型
+❯ /model                       # 已安装模型列表
+❯ /model 2                     # 按名称或序号切换
 ❯ /cwd /path/to/project       # 切换工作目录
 ❯ /reset                      # 清空对话记忆
 ❯ /stat                       # 查看上下文长度
@@ -161,8 +161,8 @@ make install PREFIX=~/.local/bin   # 선택: 이후 어디서든 `predator_cli` 
 ### 대화형 REPL
 ```bash
 ./predator_cli
-❯ /help
-❯ /model qwen2.5-coder:3b     # 모델 변경
+❯ /model                       # 설치된 모델 목록
+❯ /model 2                     # 이름 또는 번호로 변경
 ❯ /cwd /path/to/project       # 작업 디렉터리 변경
 ❯ /reset                      # 대화 기억 초기화
 ❯ /stat                       # 대화 길이 확인
