@@ -10,6 +10,7 @@
 #include "../ai/agent.h"
 #include <pthread.h>
 #include <signal.h>
+#include <sys/stat.h>
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,6 +24,21 @@ static const char *PERSONA =
     "규칙: 인사·일반 질문·상담에는 도구를 절대 쓰지 말고 바로 답변한다. "
     "파일 수정은 edit_file만 사용한다(run_shell 리다이렉션으로 파일을 "
     "통째로 쓰지 않는다). 사용자가 수정을 요청하지 않으면 read 이상 하지 않는다.";
+
+/* omp (oh-my-pi) system-prompt.md style: terse RFC2119 rule sections */
+static const char *SYSTEM_PROMPT =
+    "§ Role\n"
+    "You are predator_cli, a terminal coding agent on the user's macOS machine.\n"
+    "Explanations: concise Korean. Code: clean, minimal, no dead weight.\n"
+    "§ Tools\n"
+    "list_dir/read_file/edit_file/run_shell are sandboxed to the workspace.\n"
+    "MUST use edit_file for file edits. NEVER overwrite whole files via run_shell "
+    "redirection. MUST read a file before editing it.\n"
+    "§ Conversation\n"
+    "Greetings and general questions: answer directly, no tools.\n"
+    "§ Report\n"
+    "State what you changed and how you verified it. Ground claims in tool "
+    "results; never fabricate output.";
 
 static void on_sigint(int sig) { (void)sig; _exit(130); }
 
@@ -241,9 +257,9 @@ static void on_event(void *user, lvc_agent_event ev, const char *text) {
 
 static void usage(const char *prog) {
     fprintf(stderr,
-            "usage: %s [-m model] [-C dir] [-H host:port] [prompt]\n"
+            "usage: %s [-m model] [-C dir] [-H host:port] [-r session.jsonl] [prompt]\n"
             "  prompt가 있으면 원샷 실행, 없으면 대화형 REPL\n"
-            "  REPL 명령: /help /model [name] /cwd dir /reset /stat /quit\n",
+            "  REPL 명령: /help /model [name|#] /cwd dir /reset /stat /tools /resume [file] /quit\n",
             prog);
 }
 
@@ -297,20 +313,24 @@ static void banner(const char *model, const char *host, const char *cwd) {
 
 int main(int argc, char **argv) {
     const char *model = "qwen2.5-coder:3b";
+    const char *env_model = getenv("PREDATOR_MODEL");
+    if (env_model && *env_model) model = env_model;
     const char *cwd = ".";
     const char *host = "127.0.0.1:11434";
     const char *oneshot = NULL;
+    const char *resume_path = NULL;
     ui_color = isatty(1) && isatty(2);
     {
         const char *ct = getenv("COLORTERM");
         ui_truecolor = ui_color && ct && strstr(ct, "truecolor") != NULL;
     }
     int opt;
-    while ((opt = getopt(argc, argv, "m:C:H:h")) != -1) {
+    while ((opt = getopt(argc, argv, "m:C:H:r:h")) != -1) {
         switch (opt) {
         case 'm': model = optarg; break;
         case 'C': cwd = optarg; break;
         case 'H': host = optarg; break;
+        case 'r': resume_path = optarg; break;
         default: usage(argv[0]); return 2;
         }
     }
@@ -319,7 +339,16 @@ int main(int argc, char **argv) {
 
     lvc_agent_session *sess = lvc_agent_session_create();
     if (!sess) return 1;
+    lvc_agent_session_set_system(sess, SYSTEM_PROMPT);
     int rc = 0;
+
+    if (resume_path) {
+        if (lvc_agent_session_load(sess, resume_path) == 0)
+            fprintf(stderr, "[resumed %zu messages from %s]\n",
+                    lvc_agent_session_len(sess), resume_path);
+        else
+            fprintf(stderr, "[resume failed: %s]\n", resume_path);
+    }
 
     if (oneshot) {
         char *goal = build_goal(oneshot, 1, cwd);
@@ -351,7 +380,8 @@ int main(int argc, char **argv) {
                 break;
             }
             else if (!strcmp(line, "/help"))
-                fprintf(stderr, "/model [name] /cwd dir /reset /stat /quit\n");
+                fprintf(stderr,
+                    "/model [name|#] /cwd dir /reset /stat /tools /resume [file] /quit\n");
             else if (!strcmp(line, "/reset")) {
                 lvc_agent_session_clear(sess);
                 first = 1;
@@ -398,6 +428,29 @@ int main(int argc, char **argv) {
                     }
                     fprintf(stderr, "[model: %s]\n", model);
                 }
+            } else if (!strcmp(line, "/tools")) {
+                fprintf(stderr,
+                    "tools (workspace-sandboxed):\n"
+                    "  list_dir(path)            list a directory\n"
+                    "  read_file(path)           read a file (8 KB cap)\n"
+                    "  edit_file(path,old,new)   replace old_string with new_string\n"
+                    "  run_shell(cmd)            shell command (30 s timeout)\n");
+            } else if (!strncmp(line, "/resume", 7) &&
+                       (line[7] == 0 || line[7] == ' ')) {
+                const char *p = line[7] ? line + 8 : NULL;
+                char defbuf[512];
+                if (!p || !*p) {
+                    const char *home = getenv("HOME");
+                    if (!home) continue;
+                    snprintf(defbuf, sizeof defbuf,
+                             "%s/.predator/last_session.jsonl", home);
+                    p = defbuf;
+                }
+                if (lvc_agent_session_load(sess, p) == 0)
+                    fprintf(stderr, "[resumed %zu messages from %s]\n",
+                            lvc_agent_session_len(sess), p);
+                else
+                    fprintf(stderr, "[resume failed: %s]\n", p);
             } else if (!strncmp(line, "/cwd ", 5)) {
                 snprintf(g_cwd_buf, sizeof g_cwd_buf, "%s", line + 5);
                 cwd = g_cwd_buf; /* takes effect on the next turn */
@@ -414,6 +467,16 @@ int main(int argc, char **argv) {
                                   on_event, NULL) != 0)
             rc = 1;
         free(goal);
+        { /* omp-style persistence: autosave the transcript after each turn */
+            const char *home = getenv("HOME");
+            if (home && *home) {
+                char ap[512], dp[512];
+                snprintf(dp, sizeof dp, "%s/.predator", home);
+                snprintf(ap, sizeof ap, "%s/.predator/last_session.jsonl", home);
+                mkdir(dp, 0700);
+                lvc_agent_session_save(sess, ap);
+            }
+        }
     }
     free(line);
     lvc_agent_session_free(sess);

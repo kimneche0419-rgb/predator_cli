@@ -925,24 +925,80 @@ void lvc_agent_free_models(char **names, size_t count) {
 
 /* ---- the loop ---- */
 
-struct lvc_agent_session { sbuf msgs; size_t nmsgs; int tools_enabled; };
+struct lvc_agent_session {
+    sbuf msgs;          /* transcript: comma-separated message objects */
+    size_t nmsgs;
+    int tools_enabled;
+    sbuf system;        /* raw system prompt text (injected at request time) */
+};
 
 lvc_agent_session *lvc_agent_session_create(void) {
     lvc_agent_session *s = malloc(sizeof *s);
     if (!s) return NULL;
     sbuf_init(&s->msgs);
+    sbuf_init(&s->system);
     s->nmsgs = 0;
     s->tools_enabled = 1;
     return s;
+}
+
+void lvc_agent_session_set_system(lvc_agent_session *s, const char *text) {
+    if (!s) return;
+    sbuf_free(&s->system);
+    sbuf_init(&s->system);
+    if (text && *text) sapp(&s->system, text);
 }
 
 void lvc_agent_session_set_tools(lvc_agent_session *s, int enabled) {
     if (s) s->tools_enabled = enabled ? 1 : 0;
 }
 
+int lvc_agent_session_save(const lvc_agent_session *s, const char *path) {
+    if (!s || !path) return -1;
+    FILE *f = fopen(path, "w");
+    if (!f) return -1;
+    fputs("[", f);
+    if (s->msgs.len) fwrite(s->msgs.data, 1, s->msgs.len, f);
+    fputs("]", f);
+    int bad = ferror(f);
+    fclose(f);
+    return bad ? -1 : 0;
+}
+
+int lvc_agent_session_load(lvc_agent_session *s, const char *path) {
+    if (!s || !path) return -1;
+    FILE *f = fopen(path, "r");
+    if (!f) return -1;
+    sbuf body;
+    sbuf_init(&body);
+    char chunk[4096];
+    size_t n;
+    while ((n = fread(chunk, 1, sizeof chunk, f)) > 0)
+        if (!sbuf_append(&body, chunk, n)) { fclose(f); sbuf_free(&body); return -1; }
+    fclose(f);
+
+    jval *root = json_parse(sbuf_cstr(&body));
+    sbuf_free(&body);
+    if (!root || root->t != J_ARR) { jval_free(root); return -1; }
+
+    sbuf_free(&s->msgs);
+    sbuf_init(&s->msgs);
+    s->nmsgs = 0;
+    for (size_t i = 0; i < root->nitems; i++) {
+        const jval *item = root->items[i];
+        if (!item || item->t != J_OBJ) continue;
+        if (s->nmsgs > 0) sapp(&s->msgs, ",");
+        if (!jdump(&s->msgs, item)) break;
+        s->nmsgs++;
+    }
+    jval_free(root);
+    return 0;
+}
+
 void lvc_agent_session_free(lvc_agent_session *s) {
     if (!s) return;
     sbuf_free(&s->msgs);
+    sbuf_free(&s->system);
     free(s);
 }
 
@@ -990,6 +1046,11 @@ int lvc_agent_run_session(lvc_agent_session *sess, const char *host,
         sbuf_init(&body);
         bool built = sapp(&body, "{\"model\":") && json_escape(&body, model) &&
                      sapp(&body, ",\"messages\":[") &&
+                     (sess->system.len
+                          ? (sapp(&body, "{\"role\":\"system\",\"content\":") &&
+                             json_escape(&body, sbuf_cstr(&sess->system)) &&
+                             sapp(&body, "},"))
+                          : true) &&
                      sbuf_append(&body,
                                  msgs->data ? msgs->data : "", msgs->len) &&
                      sapp(&body, "],\"stream\":true,\"tools\":") &&

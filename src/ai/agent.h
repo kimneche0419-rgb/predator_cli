@@ -68,6 +68,15 @@ int lvc_agent_run_session(lvc_agent_session *s, const char *host,
  * plain text. Handy for greetings/short questions. */
 void lvc_agent_session_set_tools(lvc_agent_session *s, int enabled);
 
+/* system prompt sent as the leading system message on every turn
+ * (never stored in the transcript). NULL clears it. */
+void lvc_agent_session_set_system(lvc_agent_session *s, const char *text);
+
+/* persist the transcript as a JSON array file, and load one back
+ * (replacing this session's transcript). returns 0/-1. */
+int lvc_agent_session_save(const lvc_agent_session *s, const char *path);
+int lvc_agent_session_load(lvc_agent_session *s, const char *path);
+
 /* GET /api/tags: installed model names. out_names is a malloc'd array of
  * malloc'd strings — free with lvc_agent_free_models. returns 0/-1. */
 int lvc_agent_list_models(const char *host, char ***out_names,
