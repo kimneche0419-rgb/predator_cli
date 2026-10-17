@@ -262,7 +262,7 @@ static void banner(const char *model, const char *host, const char *cwd) {
         return;
     }
     char l1[256], l2[512];
-    snprintf(l1, sizeof l1, "✻ predator cli · lvcli");
+    snprintf(l1, sizeof l1, "✻ predator_cli");
     snprintf(l2, sizeof l2, "%s · %s", model, cwd);
     size_t w = strlen(l1) > strlen(l2) ? strlen(l1) : strlen(l2);
     if (w > 50) w = 50;

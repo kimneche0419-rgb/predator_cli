@@ -1,4 +1,4 @@
-# predator_cli — `lvcli` terminal coding agent (Claude Code-style, local Ollama)
+# predator_cli — terminal coding agent (Claude Code-style, local Ollama)
 
 [English](#english) · [中文](#中文) · [한국어](#한국어)
 
@@ -9,30 +9,30 @@
 ### Requirements
 - macOS + [Ollama](https://ollama.com) running (`ollama serve` or the menu bar app)
 - A chat-capable model pulled, e.g. `ollama pull qwen2.5-coder:3b`
-- Build (clang; vendored tree-sitter is included):
+- Build (clang):
 
 ```bash
-make lvcli        # builds ./lvcli
-make              # lvcli + full test suite
-make install PREFIX=~/.local/bin   # optional: run `lvcli` from anywhere
+make                        # builds ./predator_cli
+make test                   # agent unit tests (mock server e2e)
+make install PREFIX=~/.local/bin   # optional: run `predator_cli` from anywhere
 ```
 
 ### One-shot mode
 ```bash
-./lvcli "explain what src/ai/agent.c does"
-./lvcli -C /path/to/project "fix the compiler warning in foo.c"
-./lvcli -m qwen2.5-coder:3b -H 127.0.0.1:11434 "add error handling to main()"
+./predator_cli "explain what src/ai/agent.c does"
+./predator_cli -C /path/to/project "fix the compiler warning in foo.c"
+./predator_cli -m qwen2.5-coder:3b -H 127.0.0.1:11434 "add error handling to main()"
 ```
 
 ### REPL (interactive)
 ```bash
-./lvcli
-▸ /help
-▸ /model qwen2.5-coder:3b     # switch model
-▸ /cwd /path/to/project       # switch workspace
-▸ /reset                      # clear conversation memory
-▸ /stat                       # transcript size
-▸ /quit
+./predator_cli
+❯ /help
+❯ /model qwen2.5-coder:3b     # switch model
+❯ /cwd /path/to/project       # switch workspace
+❯ /reset                      # clear conversation memory
+❯ /stat                       # transcript size
+❯ /quit
 ```
 Anything that is not a `/command` is sent to the model. Conversation memory
 persists across turns until `/reset`.
@@ -69,30 +69,30 @@ agent is forced to answer with what it has.
 ### 前提条件
 - macOS + 正在运行的 [Ollama](https://ollama.com)（`ollama serve` 或菜单栏应用）
 - 已拉取一个对话模型，例如 `ollama pull qwen2.5-coder:3b`
-- 编译（clang；已内置 tree-sitter）：
+- 编译（clang）：
 
 ```bash
-make lvcli        # 生成 ./lvcli
-make              # lvcli + 全部测试
-make install PREFIX=~/.local/bin   # 可选：之后在任意目录运行 `lvcli`
+make                        # 生成 ./predator_cli
+make test                   # 代理单元测试（mock 服务器 e2e）
+make install PREFIX=~/.local/bin   # 可选：之后在任意目录运行 `predator_cli`
 ```
 
 ### 单次模式
 ```bash
-./lvcli "解释 src/ai/agent.c 的作用"
-./lvcli -C /path/to/project "修复 foo.c 的编译警告"
-./lvcli -m qwen2.5-coder:3b -H 127.0.0.1:11434 "给 main() 加上错误处理"
+./predator_cli "解释 src/ai/agent.c 的作用"
+./predator_cli -C /path/to/project "修复 foo.c 的编译警告"
+./predator_cli -m qwen2.5-coder:3b -H 127.0.0.1:11434 "给 main() 加上错误处理"
 ```
 
 ### 交互模式（REPL）
 ```bash
-./lvcli
-▸ /help
-▸ /model qwen2.5-coder:3b     # 切换模型
-▸ /cwd /path/to/project       # 切换工作目录
-▸ /reset                      # 清空对话记忆
-▸ /stat                       # 查看上下文长度
-▸ /quit
+./predator_cli
+❯ /help
+❯ /model qwen2.5-coder:3b     # 切换模型
+❯ /cwd /path/to/project       # 切换工作目录
+❯ /reset                      # 清空对话记忆
+❯ /stat                       # 查看上下文长度
+❯ /quit
 ```
 非 `/` 开头的输入都会发给模型。对话记忆会一直保留，直到 `/reset`。
 
@@ -126,30 +126,30 @@ make install PREFIX=~/.local/bin   # 可选：之后在任意目录运行 `lvcli
 ### 요건
 - macOS + 실행 중인 [Ollama](https://ollama.com) (`ollama serve` 또는 메뉴바 앱)
 - 대화 가능 모델 풀: `ollama pull qwen2.5-coder:3b`
-- 빌드 (clang; tree-sitter는 저장소에 포함됨):
+- 빌드 (clang):
 
 ```bash
-make lvcli        # ./lvcli 생성
-make              # lvcli + 전체 테스트
-make install PREFIX=~/.local/bin   # 선택: 이후 어디서든 `lvcli` 실행
+make                        # ./predator_cli 빌드
+make test                   # 에이전트 단위 테스트 (목 서버 e2e)
+make install PREFIX=~/.local/bin   # 선택: 이후 어디서든 `predator_cli` 실행
 ```
 
 ### 원샷 모드
 ```bash
-./lvcli "src/ai/agent.c이 어떤 일을 하는지 설명해줘"
-./lvcli -C /path/to/project "foo.c의 컴파일 경고 고쳐줘"
-./lvcli -m qwen2.5-coder:3b -H 127.0.0.1:11434 "main()에 에러 처리 추가해줘"
+./predator_cli "src/ai/agent.c이 어떤 일을 하는지 설명해줘"
+./predator_cli -C /path/to/project "foo.c의 컴파일 경고 고쳐줘"
+./predator_cli -m qwen2.5-coder:3b -H 127.0.0.1:11434 "main()에 에러 처리 추가해줘"
 ```
 
 ### 대화형 REPL
 ```bash
-./lvcli
-▸ /help
-▸ /model qwen2.5-coder:3b     # 모델 변경
-▸ /cwd /path/to/project       # 작업 디렉터리 변경
-▸ /reset                      # 대화 기억 초기화
-▸ /stat                       # 대화 길이 확인
-▸ /quit
+./predator_cli
+❯ /help
+❯ /model qwen2.5-coder:3b     # 모델 변경
+❯ /cwd /path/to/project       # 작업 디렉터리 변경
+❯ /reset                      # 대화 기억 초기화
+❯ /stat                       # 대화 길이 확인
+❯ /quit
 ```
 `/`로 시작하지 않는 입력은 모두 모델로 전달됩니다. 대화 기억은 `/reset` 전까지 유지됩니다.
 
