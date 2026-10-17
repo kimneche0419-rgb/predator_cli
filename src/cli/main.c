@@ -45,7 +45,7 @@ static void on_sigint(int sig) { (void)sig; _exit(130); }
 static char g_model_buf[256]; /* /model selection storage */
 static char g_cwd_buf[1024];  /* /cwd selection storage */
 
-/* ---- Claude Code-style UI ---- */
+/* ---- raw-mode line editor + arrow-key picker (no external deps) ---- */
 
 static int ui_color = 0;          /* ANSI enabled */
 static int ui_truecolor = 0;      /* COLORTERM=truecolor */
@@ -62,6 +62,307 @@ static void sleep_ms(int ms) {
     struct timespec ts = { ms / 1000, (long)(ms % 1000) * 1000000L };
     nanosleep(&ts, NULL);
 }
+
+#include <termios.h>
+#include <unistd.h>
+
+enum { K_CHAR, K_UP, K_DOWN, K_LEFT, K_RIGHT, K_ENTER, K_ESC, K_BACKSPACE,
+       K_DELETE, K_HOME, K_END, K_EOF, K_CTRL_C, K_NONE };
+
+static struct termios g_orig_tio;
+
+static void pred_raw(int on) {
+    static int saved = 0;
+    struct termios t;
+    if (on) {
+        tcgetattr(0, &g_orig_tio);
+        t = g_orig_tio;
+        t.c_lflag &= ~(ICANON | ECHO | ISIG);
+        t.c_cc[VMIN] = 1;
+        t.c_cc[VTIME] = 0;
+        tcsetattr(0, TCSANOW, &t);
+        saved = 1;
+    } else if (saved) {
+        tcsetattr(0, TCSANOW, &g_orig_tio);
+        saved = 0;
+    }
+}
+
+/* decode one utf-8 char; returns byte length, sets *w to display width */
+static size_t utf8_width_step(const char *s, size_t len, int *w) {
+    unsigned char c = (unsigned char)(len ? s[0] : 0);
+    size_t n = 1;
+    uint32_t cp = c;
+    if (c >= 0xC0) {
+        if ((c & 0xF8) == 0xF0) n = 4;
+        else if ((c & 0xF0) == 0xE0) n = 3;
+        else if ((c & 0xE0) == 0xC0) n = 2;
+        cp = c & (unsigned)(0xFF >> (n + 1));
+        for (size_t k = 1; k < n && k < len; k++)
+            cp = (cp << 6) | ((unsigned char)s[k] & 0x3F);
+    }
+    if (w) {
+        int wide = (cp >= 0x1100 && cp <= 0x115F) || cp == 0x2329 ||
+                   cp == 0x232A || (cp >= 0x2E80 && cp <= 0xA4CF &&
+                                    cp != 0x303F) ||
+                   (cp >= 0xAC00 && cp <= 0xD7A3) ||
+                   (cp >= 0xF900 && cp <= 0xFAFF) ||
+                   (cp >= 0xFE30 && cp <= 0xFE6F) ||
+                   (cp >= 0xFF00 && cp <= 0xFF60) ||
+                   (cp >= 0xFFE0 && cp <= 0xFFE6);
+        *w = cp == 0 ? 0 : (wide ? 2 : 1);
+    }
+    return len ? n : 0;
+}
+
+static size_t line_width(const char *s, size_t len) {
+    size_t w = 0, i = 0;
+    int cw;
+    while (i < len) {
+        i += utf8_width_step(s + i, len - i, &cw);
+        w += (size_t)cw;
+    }
+    return w;
+}
+
+/* move cursor left by one display char from byte offset cur */
+static size_t prev_boundary(const char *s, size_t cur) {
+    if (cur == 0) return 0;
+    size_t p = cur - 1;
+    while (p > 0 && ((unsigned char)s[p] & 0xC0) == 0x80) p--;
+    return p;
+}
+static size_t next_boundary(const char *s, size_t len, size_t cur) {
+    if (cur >= len) return len;
+    size_t p = cur + 1;
+    while (p < len && ((unsigned char)s[p] & 0xC0) == 0x80) p++;
+    return p;
+}
+
+/* read one key in raw mode; chout receives printable char when K_CHAR */
+static int read_key(char *chout) {
+    char c;
+    ssize_t n = read(0, &c, 1);
+    if (n <= 0) return K_EOF;
+    if (c == '\r' || c == '\n') return K_ENTER;
+    if (c == 127 || c == 8) return K_BACKSPACE;
+    if (c == 3) return K_CTRL_C;
+    if (c == 4) return K_EOF;
+    if (c == 1) return K_HOME;
+    if (c == 5) return K_END;
+    if (c == 27) {
+        /* try to read the sequence; bare esc (timeout) = K_ESC */
+        struct termios t;
+        tcgetattr(0, &t);
+        struct termios t2 = t;
+        t2.c_cc[VMIN] = 0;
+        t2.c_cc[VTIME] = 1; /* 100 ms */
+        tcsetattr(0, TCSANOW, &t2);
+        char c2;
+        n = read(0, &c2, 1);
+        if (n <= 0) { tcsetattr(0, TCSANOW, &t); *chout = 27; return K_CHAR; }
+        if (c2 == '[' || c2 == 'O') {
+            char c3;
+            n = read(0, &c3, 1);
+            tcsetattr(0, TCSANOW, &t);
+            if (n <= 0) return K_ESC;
+            switch (c3) {
+            case 'A': return K_UP;
+            case 'B': return K_DOWN;
+            case 'C': return K_RIGHT;
+            case 'D': return K_LEFT;
+            case 'H': return K_HOME;
+            case 'F': return K_END;
+            default: return K_NONE;
+            }
+        }
+        tcsetattr(0, TCSANOW, &t);
+        *chout = c2;
+        return K_CHAR;
+    }
+    *chout = c;
+    return K_CHAR;
+}
+
+typedef struct {
+    char **items;
+    size_t n, cap;
+    size_t pos; /* current history cursor: n == fresh input */
+} pred_hist;
+
+static void hist_push(pred_hist *h, const char *s) {
+    if (!s || !*s) return;
+    if (h->n && !strcmp(h->items[h->n - 1], s)) { h->pos = h->n; return; }
+    if (h->n == h->cap) {
+        h->cap = h->cap ? h->cap * 2 : 16;
+        h->items = realloc(h->items, h->cap * sizeof(char *));
+    }
+    h->items[h->n++] = strdup(s);
+    h->pos = h->n;
+}
+
+/* raw-mode editable line: history nav, utf-8 aware. returns malloc'd line
+ * ("" on ctrl-c), NULL on EOF. */
+static char *pred_readline(const char *prompt, pred_hist *h) {
+    if (!isatty(0)) { /* piped: plain getline */
+        char *line = NULL;
+        size_t cap = 0;
+        ssize_t n = getline(&line, &cap, stdin);
+        if (n < 0) { free(line); return NULL; }
+        while (n > 0 && (line[n - 1] == '\n' || line[n - 1] == '\r'))
+            line[--n] = 0;
+        return line;
+    }
+
+    char buf[8192];
+    size_t len = 0, cur = 0;
+    size_t hpos = h->n;
+    char draft[8192] = "";
+    pred_raw(1);
+
+#define RL_RENDER()                                                    \
+    do {                                                               \
+        fprintf(stderr, "\r\033[K%s%s", prompt, buf);                  \
+        size_t tw = line_width(buf + cur, len - cur);                  \
+        if (tw) fprintf(stderr, "\033[%zuD", tw);                      \
+        fflush(stderr);                                                \
+    } while (0)
+
+    RL_RENDER();
+    for (;;) {
+        char ch;
+        int k = read_key(&ch);
+        if (k == K_EOF) { pred_raw(0); fprintf(stderr, "\r\033[K"); return NULL; }
+        if (k == K_ENTER) break;
+        if (k == K_CTRL_C) {
+            buf[0] = 0;
+            pred_raw(0);
+            fprintf(stderr, "\r\033[K");
+            return strdup("");
+        }
+        switch (k) {
+        case K_BACKSPACE:
+            if (cur > 0) {
+                size_t p = prev_boundary(buf, cur);
+                memmove(buf + p, buf + cur, len - cur);
+                len -= cur - p;
+                cur = p;
+                RL_RENDER();
+            }
+            break;
+        case K_DELETE: {
+            size_t nx = next_boundary(buf, len, cur);
+            if (nx > cur) {
+                memmove(buf + cur, buf + nx, len - nx);
+                len -= nx - cur;
+                RL_RENDER();
+            }
+            break;
+        }
+        case K_LEFT:
+            if (cur > 0) {
+                cur = prev_boundary(buf, cur);
+                RL_RENDER();
+            }
+            break;
+        case K_RIGHT:
+            if (cur < len) {
+                cur = next_boundary(buf, len, cur);
+                RL_RENDER();
+            }
+            break;
+        case K_HOME:
+            cur = 0;
+            RL_RENDER();
+            break;
+        case K_END:
+            cur = len;
+            RL_RENDER();
+            break;
+        case K_UP:
+            if (h->n == 0) break;
+            if (hpos == h->n) { /* entering history: stash draft */
+                snprintf(draft, sizeof draft, "%s", buf);
+                hpos = h->n - 1;
+            } else if (hpos > 0)
+                hpos--;
+            snprintf(buf, sizeof buf, "%s", h->items[hpos]);
+            len = cur = strlen(buf);
+            RL_RENDER();
+            break;
+        case K_DOWN:
+            if (hpos < h->n) {
+                hpos++;
+                if (hpos == h->n)
+                    snprintf(buf, sizeof buf, "%s", draft);
+                else
+                    snprintf(buf, sizeof buf, "%s", h->items[hpos]);
+                len = cur = strlen(buf);
+                RL_RENDER();
+            }
+            break;
+        case K_CHAR: {
+            if (ch == '\n' || ch == '\r') break;
+            if (len + 1 >= sizeof buf) break;
+            if (cur == len) {
+                buf[len++] = ch;
+                cur = len;
+            } else {
+                memmove(buf + cur + 1, buf + cur, len - cur);
+                buf[cur++] = ch;
+                len++;
+            }
+            RL_RENDER(); /* multibyte chars redraw per byte; correct on the
+                            final byte */
+            break;
+        }
+        default:
+            break;
+        }
+    }
+#undef RL_RENDER
+    pred_raw(0);
+    buf[len] = 0;
+    return strdup(buf);
+}
+
+/* arrow-key picker: returns malloc'd selection, NULL on cancel */
+static char *pred_picker(char **items, size_t n, const char *title) {
+    if (!isatty(0) || !ui_color || n == 0) return NULL;
+    size_t idx = 0;
+    pred_raw(1);
+    fprintf(stderr, "%s%s%s\n", C_ACCENT, title, C_RESET);
+    for (;;) {
+        for (size_t i = 0; i < n; i++) {
+            fprintf(stderr, "\033[K%s%s%s %s%s\n", i == idx ? C_ACCENT : C_DIM,
+                    i == idx ? "❯ " : "  ", C_RESET, items[i],
+                    i == idx ? "  ←" : "");
+        }
+        fflush(stderr);
+        char ch;
+        int k = read_key(&ch);
+        if (k == K_UP || k == K_NONE) { /* redraw one line up */
+            if (idx == 0) { /* no move: reprint */ }
+            else idx--;
+        } else if (k == K_DOWN) {
+            if (idx + 1 < n) idx++;
+        } else if (k == K_ENTER) {
+            pred_raw(0);
+            return strdup(items[idx]);
+        } else if (k == K_ESC || k == K_CTRL_C || k == K_CHAR) {
+            if (k != K_CHAR || ch == 'q') {
+                pred_raw(0);
+                fprintf(stderr, "\033[%zuA\r\033[K%s%s%s\n", n, C_DIM,
+                        "(cancelled)", C_RESET);
+                return NULL;
+            }
+        }
+        /* rewind to the top of the list and redraw */
+        fprintf(stderr, "\033[%zuA\r", n);
+    }
+}
+
+/* ---- Claude Code-style UI ---- */
 
 /* render one assistant line with light markdown styling */
 static int g_in_fence = 0;
@@ -363,17 +664,23 @@ int main(int argc, char **argv) {
     }
 
     banner(model, host, cwd);
-    char *line = NULL;
-    size_t cap = 0;
+    pred_hist hist = {0};
     int first = 1; /* re-seed the persona after a fresh/cleared session */
+    int tty_in = isatty(0);
     for (;;) {
-        fprintf(stderr, "%s%s❯%s ", C_BOLD, C_ACCENT, C_RESET);
-        fflush(stderr);
-        ssize_t n = getline(&line, &cap, stdin);
-        if (n < 0) break; /* EOF: quit */
-        while (n > 0 && (line[n - 1] == '\n' || line[n - 1] == '\r'))
-            line[--n] = 0;
-        if (!n) continue;
+        char *line;
+        if (tty_in)
+            line = pred_readline("❯ ", &hist); /* raw mode: history nav */
+        else {
+            line = NULL;
+            size_t cap = 0;
+            ssize_t n = getline(&line, &cap, stdin);
+            if (n < 0) { free(line); break; }
+            while (n > 0 && (line[n - 1] == '\n' || line[n - 1] == '\r'))
+                line[--n] = 0;
+        }
+        if (!line) break; /* EOF: quit */
+        if (!*line) { free(line); continue; } /* empty / ctrl-c */
         if (line[0] == '/') {
             if (!strcmp(line, "/quit") || !strcmp(line, "/exit")) {
                 printf("%s✻ session ended%s\n", C_DIM, C_RESET);
@@ -391,18 +698,23 @@ int main(int argc, char **argv) {
                         lvc_agent_session_len(sess));
             } else if (!strcmp(line, "/model") || !strncmp(line, "/model ", 7)) {
                 const char *arg = line[7] ? line + 7 : NULL;
-                if (!arg) { /* list installed models */
+                if (!arg) { /* interactive picker (tty) or plain list */
                     char **names = NULL;
                     size_t cnt = 0;
                     if (lvc_agent_list_models(host, &names, &cnt) == 0 && cnt) {
-                        fprintf(stderr, "installed models:\n");
-                        for (size_t i = 0; i < cnt; i++)
-                            fprintf(stderr, "  %zu. %s%s\n", i + 1, names[i],
-                                    strcmp(names[i], model)
-                                        ? ""
-                                        : "  ← current");
-                        lvc_agent_free_models(names, cnt);
-                        fprintf(stderr, "switch: /model <name> or /model <#>\n");
+                        if (isatty(0)) {
+                            char *sel = pred_picker(names, cnt,
+                                "model — ↑/↓ 이동 · Enter 선택 · Esc 취소");
+                            if (sel) {
+                                snprintf(g_model_buf, sizeof g_model_buf, "%s", sel);
+                                model = g_model_buf;
+                                fprintf(stderr, "[model: %s]\n", model);
+                                free(sel);
+                            }
+                        } else {
+                            for (size_t i = 0; i < cnt; i++)
+                                fprintf(stderr, "  %zu. %s\n", i + 1, names[i]);
+                        }
                     } else {
                         fprintf(stderr,
                             "[cannot list models — is Ollama running at %s?]\n",
@@ -467,6 +779,7 @@ int main(int argc, char **argv) {
                                   on_event, NULL) != 0)
             rc = 1;
         free(goal);
+        if (line[0] != '/') hist_push(&hist, line);
         { /* omp-style persistence: autosave the transcript after each turn */
             const char *home = getenv("HOME");
             if (home && *home) {
@@ -477,8 +790,8 @@ int main(int argc, char **argv) {
                 lvc_agent_session_save(sess, ap);
             }
         }
+        free(line);
     }
-    free(line);
     lvc_agent_session_free(sess);
     return rc;
 }
