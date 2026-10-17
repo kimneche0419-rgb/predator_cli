@@ -13,7 +13,7 @@
 
 ```bash
 make lvcli        # builds ./lvcli
-make              # editor (LVC.app) + lvcli + full test suite
+make              # lvcli + full test suite
 ```
 
 ### One-shot mode
@@ -72,7 +72,7 @@ agent is forced to answer with what it has.
 
 ```bash
 make lvcli        # 生成 ./lvcli
-make              # 编辑器 (LVC.app) + lvcli + 全部测试
+make              # lvcli + 全部测试
 ```
 
 ### 单次模式
@@ -128,7 +128,7 @@ make              # 编辑器 (LVC.app) + lvcli + 全部测试
 
 ```bash
 make lvcli        # ./lvcli 생성
-make              # 에디터 (LVC.app) + lvcli + 전체 테스트
+make              # lvcli + 전체 테스트
 ```
 
 ### 원샷 모드
@@ -172,18 +172,5 @@ Claude Code처럼 도구 루프를 돌립니다. 작업 디렉터리로 샌드�
 
 ### 팁
 - 모델이 클수록 수정 품질이 좋습니다: 16GB+ 머신에서 `-m qwen2.5-coder:14b`.
-- 에이전트는 **파일을 수정하고 명령을 실행**합니다. 도구 호출 출력(`▶ … ◀ …`)을
+- 에이전트는 **파일을 수정하고 명령을 실행**합니다. 도구 호출 출력(`● … ⎿ …`)을
   확인하고, 작업물은 git으로 관리하세요.
-
----
-
-## The editor (LVC.app)
-
-`make app` builds the native macOS editor (`open LVC.app`): gap-buffer editing,
-tree-sitter highlighting, FIM ghost completion (Tab to accept, Esc to dismiss,
-arrows/Cmd-Z supported), model picker with RAM recommendation, chat (`Ask`),
-inline refactor (⌘⇧R / ⌘⇧A / ⌘⇧D), terminal pane, clangd diagnostics, and an
-in-editor agent (`!task` in the chat input).
-
-`에디터 빌드`: `make app` 후 `open LVC.app`. 채팅 입력창에 `!과제`를 입력하면
-에디터 안에서도 에이전트가 동작합니다.
