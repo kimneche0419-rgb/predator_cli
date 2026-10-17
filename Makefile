@@ -7,6 +7,11 @@ all: lvcli test
 lvcli: src/ai/agent.c src/cli/main.c
 	$(CC) $(CFLAGS) $^ -lcurl -o $@
 
+# system-wide install: run `lvcli` from anywhere
+install: lvcli
+	mkdir -p $(PREFIX)
+	cp lvcli $(PREFIX)/lvcli
+
 test: run_agent
 	@echo "=== all tests passed ==="
 
@@ -28,4 +33,4 @@ run_cli: lvcli
 
 ci: test run_cli
 
-.PHONY: all test run_agent run_cli ci
+.PHONY: all install test run_agent run_cli ci

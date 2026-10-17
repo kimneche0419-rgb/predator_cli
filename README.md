@@ -14,6 +14,7 @@
 ```bash
 make lvcli        # builds ./lvcli
 make              # lvcli + full test suite
+make install PREFIX=~/.local/bin   # optional: run `lvcli` from anywhere
 ```
 
 ### One-shot mode
@@ -73,6 +74,7 @@ agent is forced to answer with what it has.
 ```bash
 make lvcli        # 生成 ./lvcli
 make              # lvcli + 全部测试
+make install PREFIX=~/.local/bin   # 可选：之后在任意目录运行 `lvcli`
 ```
 
 ### 单次模式
@@ -129,6 +131,7 @@ make              # lvcli + 全部测试
 ```bash
 make lvcli        # ./lvcli 생성
 make              # lvcli + 전체 테스트
+make install PREFIX=~/.local/bin   # 선택: 이후 어디서든 `lvcli` 실행
 ```
 
 ### 원샷 모드
