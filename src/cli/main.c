@@ -8,7 +8,9 @@
  * read_file, edit_file, run_shell) are sandboxed to the working directory.
  */
 #include "../ai/agent.h"
+#include <pthread.h>
 #include <signal.h>
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,38 +26,212 @@ static const char *PERSONA =
 
 static void on_sigint(int sig) { (void)sig; _exit(130); }
 
-static void print_trunc(const char *s, size_t max) {
-    size_t n = s ? strlen(s) : 0;
-    fwrite(s, 1, n < max ? n : max, stdout);
-    if (n > max) fputs("…", stdout);
+/* ---- Claude Code-style UI ---- */
+
+static int ui_color = 0;          /* ANSI enabled */
+static int ui_truecolor = 0;      /* COLORTERM=truecolor */
+
+#define C_RESET   (ui_color ? "\033[0m" : "")
+#define C_ACCENT  (ui_color ? (ui_truecolor ? "\033[38;2;217;119;87m" \
+                                            : "\033[38;5;209m") : "")
+#define C_DIM     (ui_color ? "\033[2m" : "")
+#define C_BOLD    (ui_color ? "\033[1m" : "")
+#define C_CODE    (ui_color ? "\033[36m" : "")
+#define C_ERR     (ui_color ? "\033[31m" : "")
+
+static void sleep_ms(int ms) {
+    struct timespec ts = { ms / 1000, (long)(ms % 1000) * 1000000L };
+    nanosleep(&ts, NULL);
+}
+
+/* render one assistant line with light markdown styling */
+static int g_in_fence = 0;
+
+static void emit_inline(const char *s) {
+    /* `code` spans and **bold** spans, per line */
+    for (const char *p = s; *p; ) {
+        if (p[0] == '`') {
+            const char *e = strchr(p + 1, '`');
+            if (e) {
+                printf("%s%.*s%s", C_CODE, (int)(e - p - 1), p + 1, C_RESET);
+                p = e + 1;
+                continue;
+            }
+        }
+        if (p[0] == '*' && p[1] == '*') {
+            const char *e = strstr(p + 2, "**");
+            if (e) {
+                printf("%s%.*s%s", C_BOLD, (int)(e - p - 2), p + 2, C_RESET);
+                p = e + 2;
+                continue;
+            }
+        }
+        fputc(*p, stdout);
+        p++;
+    }
+}
+
+static void md_line(const char *line) {
+    /* the model often echoes its own tool call as raw json — hide it */
+    if (!g_in_fence && line[0] == '{' && line[strlen(line) - 1] == '}' &&
+        (strstr(line, "\"name\"") || strstr(line, "\"tool\"")))
+        return;
+    if (!strncmp(line, "```", 3)) {
+        if (!g_in_fence) {
+            g_in_fence = 1;
+            if (ui_color) printf("%s╭─╮%s\n", C_ACCENT, C_RESET);
+        }
+        return;
+    }
+    if (g_in_fence) {
+        if (ui_color) printf("%s│%s ", C_ACCENT, C_RESET);
+        printf("%s\n", line);
+        return;
+    }
+    if (line[0] == '#' && ui_color) {
+        printf("%s%s%s%s\n", C_BOLD, C_ACCENT, line, C_RESET);
+        return;
+    }
+    if ((!strncmp(line, "- ", 2) || !strncmp(line, "* ", 2)) && ui_color) {
+        printf("%s•%s ", C_ACCENT, C_RESET);
+        emit_inline(line + 2);
+        printf("\n");
+        return;
+    }
+    emit_inline(line);
+    printf("\n");
+}
+
+/* pending partial line for streamed tokens */
+static char pbuf[8192];
+static size_t plen = 0;
+
+static void stream_flush(void) {
+    pbuf[plen] = 0;
+    md_line(pbuf);
+    plen = 0;
+}
+
+static void stream_text(const char *s) {
+    for (const char *p = s; *p; p++) {
+        if (plen < sizeof pbuf - 1) pbuf[plen++] = *p;
+        if (*p == '\n') stream_flush();
+    }
+}
+
+/* braille spinner while the model thinks */
+static volatile int spin_run = 0;
+static pthread_t spin_tid;
+
+static void *spin_fn(void *arg) {
+    const char *frames[] = {"✻", "✽", "✶", "✳"};
+    const char *verbs[] = {"Thinking", "Pondering", "Working", "Conjuring"};
+    int f = 0, v = (int)(time(NULL) % 4);
+    time_t t0 = time(NULL);
+    (void)arg;
+    while (spin_run) {
+        if (ui_color)
+            fprintf(stderr, "\r\033[K%s%s %s… (%lds)%s", C_ACCENT,
+                    frames[f % 4], verbs[v % 4],
+                    (long)(time(NULL) - t0), C_RESET);
+        else
+            fprintf(stderr, "\r\033[K* %s… (%lds)", verbs[v % 4],
+                    (long)(time(NULL) - t0));
+        fflush(stderr);
+        f++;
+        if (f % 4 == 0) v++;
+        sleep_ms(90);
+    }
+    fprintf(stderr, "\r\033[K");
+    fflush(stderr);
+    return NULL;
+}
+
+static void spin_start(void) {
+    if (!spin_run) {
+        spin_run = 1;
+        pthread_create(&spin_tid, NULL, spin_fn, NULL);
+    }
+}
+
+static void spin_stop(void) {
+    if (spin_run) {
+        spin_run = 0;
+        pthread_join(spin_tid, NULL);
+    }
+}
+
+/* tool display: Claude Code-style "● Read(path)" + "⎿ result" */
+static const char *pretty_tool(const char *name) {
+    if (!strcmp(name, "list_dir")) return "List";
+    if (!strcmp(name, "read_file")) return "Read";
+    if (!strcmp(name, "edit_file")) return "Edit";
+    if (!strcmp(name, "run_shell")) return "Bash";
+    return name;
+}
+
+/* primary argument of a tool call: "path"/"cmd" value, or the raw json */
+static void tool_key(const char *json, char *out, size_t outn) {
+    const char *keys[] = {"\"path\":\"", "\"path\": \"", "\"cmd\":\"", "\"cmd\": \""};
+    for (size_t i = 0; i < 4; i++) {
+        const char *p = strstr(json ? json : "", keys[i]);
+        if (!p) continue;
+        p += strlen(keys[i]);
+        size_t w = 0;
+        while (*p && w < outn - 1) {
+            if (*p == '\\' && p[1]) {
+                p++;
+                if (*p == 'n') { out[w++] = ' '; p++; continue; }
+            }
+            if (*p == '"') break;
+            out[w++] = *p++;
+        }
+        out[w] = 0;
+        return;
+    }
+    snprintf(out, outn, "%s", json ? json : "");
 }
 
 static void on_event(void *user, lvc_agent_event ev, const char *text) {
-    int color = *(int *)user;
+    (void)user;
+    spin_stop();
     switch (ev) {
     case LVC_AGENT_TOKEN:
-        fputs(text ? text : "", stdout);
-        fflush(stdout);
+        stream_text(text ? text : "");
         break;
-    case LVC_AGENT_TOOL_CALL:
-        printf("\n%s▶ ", color ? "\033[33m" : "");
-        print_trunc(text, 200);
-        printf("%s\n", color ? "\033[0m" : "");
+    case LVC_AGENT_TOOL_CALL: {
+        const char *sp = text ? strchr(text, ' ') : NULL;
+        size_t nlen = sp ? (size_t)(sp - text) : strlen(text ? text : "");
+        char name[32];
+        snprintf(name, sizeof name, "%.*s", (int)nlen, text ? text : "");
+        size_t nl2 = strlen(name);
+        if (nl2 && name[nl2 - 1] == ':') name[nl2 - 1] = 0;
+        char key[128];
+        tool_key(sp ? sp + 1 : "", key, sizeof key);
+        printf("%s●%s %s%s%s(%s%s%s)%s\n",
+               C_ACCENT, C_RESET, C_BOLD, pretty_tool(name), C_RESET,
+               C_DIM, key, C_RESET, C_RESET);
         break;
+    }
     case LVC_AGENT_TOOL_RESULT: {
         const char *nl = text ? strchr(text, '\n') : NULL;
-        size_t n = nl ? (size_t)(nl - text) : (text ? strlen(text) : 0);
-        if (n > 200) n = 200;
-        printf("%s◀ %.*s%s\n", color ? "\033[2m" : "", (int)n,
-               text ? text : "", color ? "\033[0m" : "");
+        size_t first = nl ? (size_t)(nl - text) : (text ? strlen(text) : 0);
+        if (first > 100) first = 100;
+        size_t lines = 1;
+        for (const char *p = text; p && *p; p++) if (*p == '\n') lines++;
+        printf("%s  ⎿ %.*s%s", C_DIM, (int)first, text ? text : "", C_RESET);
+        if (lines > 1) printf(" %s(+%zu lines)%s", C_DIM, lines - 1, C_RESET);
+        printf("\n");
+        spin_start(); /* next round: the model is thinking again */
         break;
     }
     case LVC_AGENT_DONE:
+        stream_flush();
         printf("\n");
         break;
     case LVC_AGENT_ERROR:
-        printf("%s[error] %s%s\n", color ? "\033[31m" : "",
-               text ? text : "", color ? "\033[0m" : "");
+        stream_flush();
+        printf("%s[error] %s%s\n", C_ERR, text ? text : "", C_RESET);
         break;
     }
 }
@@ -79,12 +255,47 @@ static char *build_goal(const char *input, int fresh, const char *cwd) {
     return g;
 }
 
+static void banner(const char *model, const char *host, const char *cwd) {
+    if (!ui_color) {
+        fprintf(stderr, "lvcli — model %s @ %s, cwd %s (/help)\n",
+                model, host, cwd);
+        return;
+    }
+    char l1[256], l2[512];
+    snprintf(l1, sizeof l1, "✻ predator cli · lvcli");
+    snprintf(l2, sizeof l2, "%s · %s", model, cwd);
+    size_t w = strlen(l1) > strlen(l2) ? strlen(l1) : strlen(l2);
+    if (w > 50) w = 50;
+    if (strlen(l2) > w) l2[w] = 0;
+    char edge[96], pad[96];
+    snprintf(edge, sizeof edge, "╭%.*s╮", (int)(w + 2),
+             "────────────────────────────────────────────────────────");
+    memset(pad, ' ', sizeof pad - 1);
+    fprintf(stderr,
+            "%s%s%s\n"
+            "%s│%s %s%s%s%.*s%s%s│%s\n"
+            "%s│%s %s%s%s%.*s%s%s│%s\n"
+            "%s%s%s\n"
+            "  %s/help%s for commands · ctrl-c to exit\n",
+            C_ACCENT, edge, C_RESET,
+            C_ACCENT, C_RESET, C_BOLD, l1, C_RESET,
+            (int)(w - strlen(l1) + 1), pad, C_ACCENT, C_RESET, C_RESET,
+            C_ACCENT, C_RESET, C_DIM, l2, C_RESET,
+            (int)(w - strlen(l2) + 1), pad, C_ACCENT, C_RESET, C_RESET,
+            C_ACCENT, edge, C_RESET,
+            C_DIM, C_RESET);
+}
+
 int main(int argc, char **argv) {
     const char *model = "qwen2.5-coder:3b";
     const char *cwd = ".";
     const char *host = "127.0.0.1:11434";
     const char *oneshot = NULL;
-    int color = isatty(1);
+    ui_color = isatty(1) && isatty(2);
+    {
+        const char *ct = getenv("COLORTERM");
+        ui_truecolor = ui_color && ct && strstr(ct, "truecolor") != NULL;
+    }
     int opt;
     while ((opt = getopt(argc, argv, "m:C:H:h")) != -1) {
         switch (opt) {
@@ -104,19 +315,20 @@ int main(int argc, char **argv) {
     if (oneshot) {
         char *goal = build_goal(oneshot, 1, cwd);
         if (!goal) return 1;
+        spin_start();
         rc = lvc_agent_run_session(sess, host, model, goal, cwd,
-                                   on_event, &color) == 0 ? 0 : 1;
+                                   on_event, NULL) == 0 ? 0 : 1;
         free(goal);
         lvc_agent_session_free(sess);
         return rc;
     }
 
-    fprintf(stderr, "lvcli — model %s @ %s, cwd %s (/help)\n", model, host, cwd);
+    banner(model, host, cwd);
     char *line = NULL;
     size_t cap = 0;
     int first = 1; /* re-seed the persona after a fresh/cleared session */
     for (;;) {
-        fprintf(stderr, "%s", color ? "\033[36m▸ \033[0m" : "▸ ");
+        fprintf(stderr, "%s%s❯%s ", C_BOLD, C_ACCENT, C_RESET);
         fflush(stderr);
         ssize_t n = getline(&line, &cap, stdin);
         if (n < 0) break; /* EOF: quit */
@@ -124,7 +336,10 @@ int main(int argc, char **argv) {
             line[--n] = 0;
         if (!n) continue;
         if (line[0] == '/') {
-            if (!strcmp(line, "/quit") || !strcmp(line, "/exit")) break;
+            if (!strcmp(line, "/quit") || !strcmp(line, "/exit")) {
+                printf("%s✻ session ended%s\n", C_DIM, C_RESET);
+                break;
+            }
             else if (!strcmp(line, "/help"))
                 fprintf(stderr, "/model [name] /cwd dir /reset /stat /quit\n");
             else if (!strcmp(line, "/reset")) {
@@ -148,8 +363,9 @@ int main(int argc, char **argv) {
         char *goal = build_goal(line, first, cwd);
         if (!goal) continue;
         first = 0;
+        spin_start();
         if (lvc_agent_run_session(sess, host, model, goal, cwd,
-                                  on_event, &color) != 0)
+                                  on_event, NULL) != 0)
             rc = 1;
         free(goal);
     }
