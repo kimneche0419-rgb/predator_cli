@@ -373,12 +373,20 @@ static char *pred_readline(const char *prompt, pred_hist *h) {
     for (;;) {
         char ch;
         int k = read_key(&ch);
-        if (k == K_EOF) { pred_raw(0); fprintf(stderr, "\r\033[K"); return NULL; }
-        if (k == K_ENTER) break;
+        if (k == K_EOF) {
+            pred_raw(0);
+            fprintf(stderr, "\r\033[K\n");
+            return NULL;
+        }
+        if (k == K_ENTER) {
+            pred_raw(0);
+            fprintf(stderr, "\n"); /* leave the submitted line intact */
+            break;
+        }
         if (k == K_CTRL_C) {
             buf[0] = 0;
             pred_raw(0);
-            fprintf(stderr, "\r\033[K");
+            fprintf(stderr, "\r\033[K\n");
             return strdup("");
         }
         switch (k) {
@@ -744,7 +752,8 @@ static void banner(const char *model, const char *host, const char *cwd) {
             "%s│ %s%s%s│%s\n"
             "%s│ %s%s%s│%s\n"
             "%s╰%s╯%s\n"
-            "  %s/help%s for commands · ctrl-c to exit\n",
+            "  %s/help%s for commands · ctrl-c to exit\n"
+            "\n",
             C_ACCENT, edge, C_RESET,
             C_ACCENT, C_BOLD, l1, pad1, C_RESET,
             C_ACCENT, C_DIM, l2, pad2, C_RESET,
