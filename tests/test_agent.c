@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
+#include <sys/stat.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -61,7 +62,10 @@ static pid_t start_mock(int port) {
 
 static char *slurp(const char *path) {
     FILE *f = fopen(path, "rb");
-    CHECK(f != NULL);
+    if (!f) {
+        fprintf(stderr, "slurp: cannot open %s\n", path);
+        exit(1);
+    }
     char buf[65536];
     size_t n = fread(buf, 1, sizeof buf - 1, f);
     fclose(f);
@@ -83,11 +87,20 @@ int main(void) {
     snprintf(dir, sizeof dir, "%s/lvc_agent_testXXXXXX", tmp);
     CHECK(mkdtemp(dir) != NULL);
 
+    /* request capture: the mock appends every /api/chat body here */
+    char reqlog[1200];
+    snprintf(reqlog, sizeof reqlog, "%s/reqlog.txt", dir);
+    setenv("MOCK_REQ_OUT", reqlog, 1);
+
     pid_t mock = start_mock(port);
 
     char host[64];
     snprintf(host, sizeof host, "127.0.0.1:%d", port);
-    int rc = lvc_agent_run(host, "qwen2.5-coder:3b-test",
+    lvc_agent_session *sess = lvc_agent_session_create();
+    CHECK(sess != NULL);
+    lvc_agent_session_set_system(
+        sess, "You are predator_cli, a terminal coding agent. Be terse.");
+    int rc = lvc_agent_run_session(sess, host, "qwen2.5-coder:3b-test",
                            "create created.txt, replace world with agent, read it back, "
                            "then try an out-of-workspace edit, then finish",
                            dir, on_event, NULL);
@@ -150,6 +163,76 @@ int main(void) {
     char *body = slurp(fpath);
     CHECK(strcmp(body, "hello agent") == 0);
     free(body);
+
+    /* system prompt: sent as the leading system message of every request */
+    char *req = slurp(reqlog);
+    CHECK(req != NULL);
+    CHECK(strstr(req, "\"role\":\"system\"") != NULL);
+    CHECK(strstr(req, "terminal coding agent") != NULL);
+    CHECK(strstr(req, "\"tools\":[{\"type\":\"function\",\"function\":"
+                        "{\"name\":\"list_dir\"") != NULL);
+    free(req);
+
+    /* omp-style persistence: save → load → byte-identical transcript */
+    char spath[1200], spath2[1200];
+    snprintf(spath, sizeof spath, "%s/saved.jsonl", dir);
+    snprintf(spath2, sizeof spath2, "%s/saved2.jsonl", dir);
+    CHECK(lvc_agent_session_save(sess, spath) == 0);
+    lvc_agent_session *s2 = lvc_agent_session_create();
+    CHECK(s2 != NULL);
+    CHECK(lvc_agent_session_load(s2, spath) == 0);
+    CHECK(lvc_agent_session_len(s2) == lvc_agent_session_len(sess));
+    CHECK(lvc_agent_session_len(sess) > 0);
+    CHECK(lvc_agent_session_save(s2, spath2) == 0);
+    char *sa = slurp(spath), *sb2 = slurp(spath2);
+    CHECK(strcmp(sa, sb2) == 0);
+    free(sa);
+    free(sb2);
+    lvc_agent_session_free(s2);
+
+    /* read_skill: registered skill dir + scripted native read_skill call */
+    char skilldir[1200];
+    snprintf(skilldir, sizeof skilldir, "%s/skills", dir);
+    CHECK(mkdir(skilldir, 0700) == 0);
+    char sfile[1400];
+    snprintf(sfile, sizeof sfile, "%s/greet-skill.md", skilldir);
+    FILE *sf = fopen(sfile, "w");
+    CHECK(sf != NULL);
+    fputs("Greet in Korean: say 안녕하세요 first.\n", sf);
+    fclose(sf);
+
+    setenv("MOCK_MODE", "skill", 1);
+    char reqlog2[1200];
+    snprintf(reqlog2, sizeof reqlog2, "%s/reqlog2.txt", dir);
+    setenv("MOCK_REQ_OUT", reqlog2, 1);
+    pid_t mock2 = start_mock(11437);
+    g_nev = 0;
+    lvc_agent_session *s3 = lvc_agent_session_create();
+    CHECK(s3 != NULL);
+    lvc_agent_session_add_skills_dir(s3, skilldir);
+    rc = lvc_agent_run_session(s3, "127.0.0.1:11437", "m", "greet the user",
+                               dir, on_event, NULL);
+    CHECK(rc == 0);
+    /* TOOL_CALL(read_skill) → TOOL_RESULT(skill body) → TOKEN(answer) → DONE */
+    CHECK(g_nev == 4);
+    CHECK(g_ev[0].ev == LVC_AGENT_TOOL_CALL);
+    CHECK(strstr(g_ev[0].text, "read_skill") != NULL);
+    CHECK(g_ev[1].ev == LVC_AGENT_TOOL_RESULT);
+    if (!strstr(g_ev[1].text, "안녕하세요"))
+        fprintf(stderr, "read_skill result: %.300s\n", g_ev[1].text);
+    CHECK(strstr(g_ev[1].text, "안녕하세요") != NULL);
+    CHECK(g_ev[2].ev == LVC_AGENT_TOKEN);
+    CHECK(strncmp(g_ev[2].text, "skill loaded", 12) == 0);
+    CHECK(g_ev[3].ev == LVC_AGENT_DONE);
+    char *req2 = slurp(reqlog2);
+    CHECK(req2 != NULL);
+    CHECK(strstr(req2, "read_skill") != NULL); /* tool advertised */
+    free(req2);
+    lvc_agent_session_free(s3);
+    (void)kill(mock2, SIGTERM);
+    waitpid(mock2, NULL, 0);
+    unsetenv("MOCK_MODE");
+    unsetenv("MOCK_REQ_OUT");
 
     /* no server: transport error surfaces as ERROR event + -1 */
     g_nev = 0;

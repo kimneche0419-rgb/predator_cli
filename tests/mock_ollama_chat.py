@@ -12,10 +12,19 @@ Serves ONE scripted conversation on 127.0.0.1:<port> (default 11436):
 
 Responses are NDJSON, split across several lines to exercise incremental
 client-side parsing.
+
+Env knobs:
+  MOCK_MODE=skill  single-round scenario: read_skill("greet-skill") then a
+                   plain final answer
+  MOCK_REQ_OUT     append every request body to this file (request capture)
 """
 import json
+import os
 import sys
 from http.server import BaseHTTPRequestHandler, HTTPServer
+
+MODE = os.environ.get("MOCK_MODE", "default")
+REQ_OUT = os.environ.get("MOCK_REQ_OUT", "")
 
 FALLBACK_TEXT = (
     "I cannot edit files outside the workspace.\n"
@@ -78,7 +87,13 @@ class H(BaseHTTPRequestHandler):
 
     def do_POST(self):
         n = int(self.headers.get("Content-Length", 0))
-        body = json.loads(self.rfile.read(n))
+        raw = self.rfile.read(n)
+        if REQ_OUT:
+            with open(REQ_OUT, "ab") as f:
+                f.write(b"---REQ---\n")
+                f.write(raw)
+                f.write(b"\n")
+        body = json.loads(raw)
         if (self.path != "/api/chat" or "model" not in body
                 or "messages" not in body or "tools" not in body
                 or body.get("stream") is not True):
@@ -86,6 +101,17 @@ class H(BaseHTTPRequestHandler):
             return
         if body.get("messages") == []:  # readiness ping: never consumes a step
             self._send({"ok": True}, 200)
+            return
+        if MODE == "skill":
+            lines = ([tool_line("read_skill", '{"name": "greet-skill"}'),
+                      done_line()] if H.step == 0
+                     else [done_line("skill loaded")])
+            H.step += 1
+            self.send_response(200)
+            self.send_header("Content-Type", "application/x-ndjson")
+            self.end_headers()
+            for obj in lines:
+                self.wfile.write(json.dumps(obj, separators=(",", ":")).encode() + b"\n")
             return
         if H.step >= len(STEPS):
             self._send({"error": "script exhausted"}, 500)

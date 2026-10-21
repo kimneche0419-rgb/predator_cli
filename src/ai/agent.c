@@ -551,6 +551,18 @@ static bool path_under(const char *path, const char *base) {
  * (so symlinked aliases of cwd, e.g. /tmp vs /private/tmp, still work). */
 static bool resolve_path(const char *base, const char *rel, char *out, size_t outsz) {
     if (!rel) rel = "";
+    /* collapse duplicate slashes in base (raw cwd strings may carry them,
+     * e.g. TMPDIR ends with '/') — path_under does exact prefix matching */
+    char nbase[PATH_MAX];
+    size_t nb = 0;
+    for (const char *bp = base ? base : ""; *bp && nb + 1 < sizeof nbase; bp++) {
+        if (bp[0] == '/' && bp[1] == '/') continue;
+        nbase[nb++] = *bp;
+    }
+    while (nb > 1 && nbase[nb - 1] == '/') nb--;
+    nbase[nb] = 0;
+    base = nbase;
+
     char cand[PATH_MAX * 2];
     int cw = rel[0] == '/'
         ? snprintf(cand, sizeof cand, "%s", rel)
@@ -788,6 +800,7 @@ static char *tool_exec(const char *base, const char *name, const char *args_json
             res = xstrdup("error: read_skill requires string 'name'");
         else {
             bool found = false;
+            char lasttry[PATH_MAX] = "";
             for (int i = 0; i < skill_dirs_n && !found; i++) {
                 const char *cands[3] = { nm, NULL, NULL };
                 char with_md[512], with_dir[512];
@@ -800,6 +813,7 @@ static char *tool_exec(const char *base, const char *name, const char *args_json
                     if (!resolve_path(skill_dirs[i], cands[t], fullc,
                                       sizeof fullc))
                         continue;
+                    snprintf(lasttry, sizeof lasttry, "%s", fullc);
                     FILE *f = fopen(fullc, "r");
                     if (!f) continue;
                     found = true;
@@ -825,7 +839,8 @@ static char *tool_exec(const char *base, const char *name, const char *args_json
             }
             if (!found)
                 res = tool_result_error(
-                    "error: skill '%s' not found in registered skill dirs", nm);
+                    "error: skill '%s' not found (dirs: %d, last tried: %s)",
+                    nm, skill_dirs_n, lasttry);
         }
     } else if (strcmp(name, "run_shell") == 0) {
         const char *cmd = jarg_str(args, "cmd");

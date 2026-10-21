@@ -20,9 +20,7 @@ test: run_agent
 
 run_agent: src/ai/agent.c tests/test_agent.c
 	$(CC) $(CFLAGS) $^ -lcurl -o /tmp/$@
-	python3 tests/mock_ollama_chat.py 11436 >/dev/null 2>&1 & MOCK=$$!; \
-	for i in $$(seq 1 40); do curl -s -o /dev/null -X POST -d '{"model":"m","messages":[],"tools":[],"stream":true}' localhost:11436/api/chat && break; sleep 0.5; done; \
-	/tmp/run_agent; RC=$$?; kill $$MOCK 2>/dev/null; exit $$RC
+	/tmp/run_agent   # spawns its own mock (tests/mock_ollama_chat.py, port 11436)
 
 run_cli: predator_cli
 	python3 tests/mock_ollama_chat.py 11436 >/dev/null 2>&1 & MOCK=$$!; \
