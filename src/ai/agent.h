@@ -87,4 +87,12 @@ void lvc_agent_free_models(char **names, size_t count);
  * (up to 4 dirs; e.g. project .predator/skills and ~/.predator/skills) */
 void lvc_agent_session_add_skills_dir(lvc_agent_session *s, const char *dir);
 
+/* parse a markdown front-matter block ("---\nkey: value\n---") at the start
+ * of text. fills name/description/globs ("" when absent), sets *always for
+ * "alwaysApply: true". returns the byte offset of the body (after the
+ * closing ---), or (long)-1 when no front-matter block is present. */
+long lvc_parse_frontmatter(const char *text, size_t len, char *name,
+                           size_t namesz, char *description, size_t descsz,
+                           char *globs, size_t globsz, int *always);
+
 #endif

@@ -15,9 +15,10 @@ predator_cli -r ~/.predator/last_session.jsonl  # 세션 복원 / resume / 恢�
 ```
 
 **프로젝트 메모리 & 스킬 / Project memory & skills / 项目记忆与技能**
-- `CLAUDE.md`/`AGENTS.md`(작업 디렉터리 또는 상위) → 매 세전 시스템 프롬프트에 자동 주입
-- 스킬: `.predator/skills/*.md` (프로젝트) 또는 `~/.predator/skills/` — 시스템 프롬프트에 카탈로그가 실리고 모델이 `read_skill`로 로드
-- REPL: `/skills` `/memory` `/reload` `/tools` `/model` `↑↓` 히스토리
+- `CLAUDE.md`/`AGENTS.md`(작업 디렉터리 또는 상위) → 매 세션 시스템 프롬프트에 자동 주입
+- 스킬: `.predator/skills/*.md` (프로젝트) 또는 `~/.predator/skills/` — 프론트매터(`name:`, `description:`, `alwaysApply: true`) 지원, 시스템 프롬프트에 카탈로그가 실리고 모델이 `read_skill`로 로드
+- 룰: `.predator/rules/*.md` — 프론트매터 `alwaysApply: true`면 § Rules에 항상 주입, `globs: <패턴>`이면 도메인 룰로 표기
+- REPL: `/skills` `/rules` `/memory` `/reload` `/tools` `/model` `↑↓` 히스토리
 
 사전 준비 / Prerequisite / 前提: Ollama 실행 중 + `ollama pull qwen2.5-coder:3b`
 

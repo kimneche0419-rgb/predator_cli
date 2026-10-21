@@ -140,23 +140,33 @@ static void scan_skills(const char *cwd, lvc_agent_session *sess,
             char *md = strstr(name, ".md");
             if (md && !md[3]) *md = 0;
             char desc[160] = "(no description)";
-            FILE *f = fopen(content_path, "r");
-            if (!f) continue;
-            char l[256];
-            while (fgets(l, sizeof l, f)) {
-                char *p = l;
+            char *full = read_file_capped(content_path, 16384);
+            if (!full) continue;
+            char fm_name[128] = "", fm_desc[160] = "", fm_globs[128];
+            int fm_always = 0;
+            long off = lvc_parse_frontmatter(full, strlen(full), fm_name,
+                                             sizeof fm_name, fm_desc,
+                                             sizeof fm_desc, fm_globs,
+                                             sizeof fm_globs, &fm_always);
+            if (*fm_name) snprintf(name, sizeof name, "%s", fm_name);
+            if (*fm_desc) {
+                snprintf(desc, sizeof desc, "%.140s", fm_desc);
+            } else if (off > 0) {
+                const char *bp = full + off; /* body: first non-empty line */
+                while (*bp == '\n' || *bp == '\r') bp++;
+                const char *nl = strchr(bp, '\n');
+                size_t dl = nl ? (size_t)(nl - bp) : strlen(bp);
+                char first[160];
+                snprintf(first, sizeof first, "%.*s", (int)dl, bp);
+                char *p = first;
                 while (*p == ' ' || *p == '#') p++;
-                if (*p && *p != '\n') {
-                    size_t dl = strlen(p);
-                    while (dl && (p[dl - 1] == '\n' || p[dl - 1] == '\r'))
-                        p[--dl] = 0;
-                    if (dl > 140) dl = 140;
-                    snprintf(desc, sizeof desc, "%.*s", (int)dl, p);
-                    break;
-                }
+                if (*p) snprintf(desc, sizeof desc, "%.140s", p);
             }
-            fclose(f);
-            if (cw + strlen(name) + strlen(desc) + 8 < catsz)
+            free(full);
+            if (fm_always && cw + strlen(name) + strlen(desc) + 24 < catsz)
+                cw += (size_t)snprintf(cat + cw, catsz - cw,
+                                       "- %s: %s (always loaded)\n", name, desc);
+            else if (cw + strlen(name) + strlen(desc) + 8 < catsz)
                 cw += (size_t)snprintf(cat + cw, catsz - cw,
                                        "- %s: %s\n", name, desc);
         }
@@ -164,8 +174,74 @@ static void scan_skills(const char *cwd, lvc_agent_session *sess,
     }
 }
 
+/* ---- omp-style rules: .predator/rules markdown files with buckets ---- */
+
+static void scan_rules(const char *cwd, char *always, size_t alwaysz,
+                       char *domain, size_t domainsz) {
+    const char *home = getenv("HOME");
+    char dirs[4][4096];
+    int dn = 0;
+    if (cwd && *cwd) {
+        snprintf(dirs[dn], sizeof dirs[dn], "%s/.predator/rules", cwd);
+        if (access(dirs[dn], R_OK) == 0) dn++;
+    }
+    if (home && *home && dn < 4) {
+        snprintf(dirs[dn], sizeof dirs[dn], "%s/.predator/rules", home);
+        if (access(dirs[dn], R_OK) == 0 &&
+            (dn == 0 || strcmp(dirs[dn], dirs[0]) != 0))
+            dn++;
+    }
+    always[0] = 0;
+    domain[0] = 0;
+    size_t aw = 0, dw = 0;
+    for (int i = 0; i < dn; i++) {
+        DIR *d = opendir(dirs[i]);
+        if (!d) continue;
+        struct dirent *e;
+        while ((e = readdir(d))) {
+            if (e->d_name[0] == '.' || !strstr(e->d_name, ".md")) continue;
+            char rpath[4200];
+            snprintf(rpath, sizeof rpath, "%s/%s", dirs[i], e->d_name);
+            char *full = read_file_capped(rpath, 12288);
+            if (!full) continue;
+            char rname[128] = "", rdesc[256] = "", rglobs[256] = "";
+            int ralways = 0;
+            long off = lvc_parse_frontmatter(full, strlen(full), rname,
+                                             sizeof rname, rdesc,
+                                             sizeof rdesc, rglobs,
+                                             sizeof rglobs, &ralways);
+            const char *bp = off > 0 ? full + off : full;
+            if (!*rname) { /* name from filename */
+                snprintf(rname, sizeof rname, "%s", e->d_name);
+                char *dot = strstr(rname, ".md");
+                if (dot) *dot = 0;
+            }
+            if (!*rdesc) { /* description from the first non-empty body line */
+                const char *p = bp;
+                while (*p == '\n' || *p == '\r') p++;
+                const char *nl = strchr(p, '\n');
+                size_t dl = nl ? (size_t)(nl - p) : strlen(p);
+                if (dl > 120) dl = 120;
+                snprintf(rdesc, sizeof rdesc, "%.*s", (int)dl, p);
+            }
+            if (ralways) {
+                if (aw + strlen(bp) + strlen(rname) + 16 < alwaysz)
+                    aw += (size_t)snprintf(always + aw, alwaysz - aw,
+                                           "### %s\n%s\n\n", rname, bp);
+            } else if (dw + strlen(rname) + strlen(rdesc) + strlen(rglobs) +
+                       40 < domainsz) {
+                dw += (size_t)snprintf(domain + dw, domainsz - dw,
+                                       "- %s (%s): %s\n", rname,
+                                       *rglobs ? rglobs : "all files", rdesc);
+            }
+            free(full);
+        }
+        closedir(d);
+    }
+}
+
 /* omp system-prompt.md structure: base rules + § Workspace + § Project
- * instructions (CLAUDE.md) + § Skills catalog */
+ * instructions (CLAUDE.md) + § Skills catalog + § Rules */
 static void rebuild_system(const char *cwd, lvc_agent_session *sess) {
     char *buf = NULL;
     size_t sz = 0;
@@ -184,6 +260,13 @@ static void rebuild_system(const char *cwd, lvc_agent_session *sess) {
         fprintf(f,
             "\n§ Skills\nMatching skill → MUST call read_skill before using it.\n%s",
             cat);
+    char always[12288], domain[4096];
+    scan_rules(cwd, always, sizeof always, domain, sizeof domain);
+    if (*always) fprintf(f, "\n§ Rules\n%s\n", always);
+    if (*domain)
+        fprintf(f,
+            "\n<domain-rules>\nApply these when touching matching files.\n%s</domain-rules>\n",
+            domain);
     fclose(f);
     lvc_agent_session_set_system(sess, buf);
     free(buf);
@@ -916,6 +999,16 @@ int main(int argc, char **argv) {
                     fprintf(stderr,
                         "no skills — put *.md in .predator/skills/ (project) or "
                         "~/.predator/skills/\n");
+            } else if (!strcmp(line, "/rules")) {
+                char always[12288], domain[4096];
+                scan_rules(cwd, always, sizeof always, domain, sizeof domain);
+                if (*always || *domain) {
+                    if (*always) fprintf(stderr, "always-applied rules:\n%s", always);
+                    if (*domain) fprintf(stderr, "domain rules:\n%s", domain);
+                } else
+                    fprintf(stderr,
+                        "no rules — put *.md in .predator/rules/ (project) or "
+                        "~/.predator/rules/ (front-matter: alwaysApply: true, globs)\n");
             } else if (!strcmp(line, "/memory")) {
                 char *mem = find_project_memory(cwd);
                 if (mem) {

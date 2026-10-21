@@ -833,6 +833,17 @@ static char *tool_exec(const char *base, const char *name, const char *args_json
                         total += n;
                     }
                     fclose(f);
+                    char sk_n[256], sk_d[512], sk_g[256];
+                    int sk_a = 0;
+                    long off = lvc_parse_frontmatter(sbuf_cstr(&sb), sb.len,
+                                                     sk_n, sizeof sk_n, sk_d,
+                                                     sizeof sk_d, sk_g,
+                                                     sizeof sk_g, &sk_a);
+                    if (off > 0) { /* present the body, not the front-matter */
+                        memmove(sb.data, sb.data + off, sb.len - (size_t)off);
+                        sb.len -= (size_t)off;
+                        sb.data[sb.len] = 0;
+                    }
                     res = xstrdup(sbuf_cstr(&sb));
                     sbuf_free(&sb);
                 }
@@ -1027,6 +1038,49 @@ void lvc_agent_session_add_skills_dir(lvc_agent_session *s, const char *dir) {
     for (int i = 0; i < s->skills_dirs_n; i++)
         if (!strcmp(s->skills_dirs[i], dir)) return; /* dedup */
     s->skills_dirs[s->skills_dirs_n++] = strdup(dir);
+}
+
+long lvc_parse_frontmatter(const char *text, size_t len, char *name,
+                           size_t namesz, char *description, size_t descsz,
+                           char *globs, size_t globsz, int *always) {
+    if (name && namesz) name[0] = 0;
+    if (description && descsz) description[0] = 0;
+    if (globs && globsz) globs[0] = 0;
+    if (always) *always = 0;
+    if (!text || len < 4 || strncmp(text, "---", 3) != 0) return -1;
+    const char *p = text + 3;
+    if (p < text + len && *p == '\r') p++;
+    if (p < text + len && *p == '\n') p++;
+    while (p < text + len) {
+        if (p[0] == '-' && p[1] == '-' && p[2] == '-') {
+            p += 3;
+            while (p < text + len && (*p == '\r' || *p == '\n')) p++;
+            return (long)(p - text);
+        }
+        const char *eol = memchr(p, '\n', (size_t)(text + len - p));
+        size_t ll = eol ? (size_t)(eol - p) : (size_t)(text + len - p);
+        const char *colon = memchr(p, ':', ll);
+        if (colon) {
+            size_t klen = (size_t)(colon - p);
+            const char *v = colon + 1;
+            while ((size_t)(v - p) < ll && (*v == ' ' || *v == '\t')) v++;
+            size_t vlen = (size_t)(p + ll - v);
+            while (vlen && (v[vlen - 1] == ' ' || v[vlen - 1] == '\r')) vlen--;
+            int is_true = vlen == 4 && strncmp(v, "true", 4) == 0;
+            if (klen == 4 && !strncmp(p, "name", 4) && name && namesz)
+                snprintf(name, namesz, "%.*s", (int)vlen, v);
+            else if (klen == 11 && !strncmp(p, "description", 11) &&
+                     description && descsz)
+                snprintf(description, descsz, "%.*s", (int)vlen, v);
+            else if (klen == 5 && !strncmp(p, "globs", 5) && globs && globsz)
+                snprintf(globs, globsz, "%.*s", (int)vlen, v);
+            else if (klen == 11 && !strncmp(p, "alwaysApply", 11) && always)
+                *always = is_true;
+        }
+        if (!eol) break;
+        p = eol + 1;
+    }
+    return -1;
 }
 
 int lvc_agent_session_save(const lvc_agent_session *s, const char *path) {
