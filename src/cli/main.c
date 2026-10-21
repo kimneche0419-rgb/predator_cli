@@ -44,6 +44,31 @@ static void on_sigint(int sig) { (void)sig; _exit(130); }
 static char g_model_buf[256]; /* /model selection storage */
 static char g_cwd_buf[1024];  /* /cwd selection storage */
 static char g_mem_src[1024] = ""; /* project memory source path */
+static char g_lang[32] = "ko";    /* response language */
+
+/* live slash-command menu shown while typing "/" */
+static const struct { const char *cmd; const char *desc; } SLASH[] = {
+    {"/model",  "모델 목록 · 전환 (installed models)"},
+    {"/lang",   "응답 언어 변경 (answer language)"},
+    {"/tools",  "도구 나열"},
+    {"/skills", "스킬 목록"},
+    {"/rules",  "룰 나열"},
+    {"/memory", "프로젝트 메모리 보기"},
+    {"/reload", "메모리·스킬 재스캔"},
+    {"/resume", "세션 복원"},
+    {"/reset",  "대화 초기화"},
+    {"/stat",   "대화 통계"},
+    {"/cwd",    "작업 디렉터리 변경"},
+    {"/quit",   "종료"},
+};
+
+static size_t slash_menu(const char *prefix, char out[][160], size_t maxn) {
+    size_t pl = strlen(prefix), mn = 0;
+    for (size_t i = 0; i < sizeof SLASH / sizeof SLASH[0] && mn < maxn; i++)
+        if (pl == 0 || strncmp(SLASH[i].cmd, prefix, pl) == 0)
+            snprintf(out[mn++], 160, "%s — %s", SLASH[i].cmd, SLASH[i].desc);
+    return mn;
+}
 
 /* ---- project memory (Claude Code CLAUDE.md convention) ---- */
 
@@ -240,8 +265,19 @@ static void scan_rules(const char *cwd, char *always, size_t alwaysz,
     }
 }
 
-/* omp system-prompt.md structure: base rules + § Workspace + § Project
- * instructions (CLAUDE.md) + § Skills catalog + § Rules */
+/* omp system-prompt.md structure: base rules + § Workspace + § Language +
+ * § Project instructions (CLAUDE.md) + § Skills catalog + § Rules */
+static const char *lang_name(const char *code) {
+    if (!strcmp(code, "ko")) return "Korean (한국어)";
+    if (!strcmp(code, "en")) return "English";
+    if (!strcmp(code, "ja")) return "Japanese (日本語)";
+    if (!strcmp(code, "zh")) return "Chinese (中文)";
+    if (!strcmp(code, "es")) return "Spanish (Español)";
+    if (!strcmp(code, "fr")) return "French (Français)";
+    if (!strcmp(code, "de")) return "German (Deutsch)";
+    return code;
+}
+
 static void rebuild_system(const char *cwd, lvc_agent_session *sess) {
     char *buf = NULL;
     size_t sz = 0;
@@ -249,6 +285,10 @@ static void rebuild_system(const char *cwd, lvc_agent_session *sess) {
     if (!f) return;
     fputs(SYSTEM_PROMPT, f);
     fprintf(f, "\n§ Workspace\n%s\n", cwd);
+    fprintf(f, "\n§ Language\nThe user's conversation language is %s (%s). "
+               "ALWAYS write every answer in %s, regardless of the language "
+               "of the user's input.\n",
+            g_lang, lang_name(g_lang), lang_name(g_lang));
     char *mem = find_project_memory(cwd);
     if (mem)
         fprintf(f,
@@ -447,6 +487,8 @@ static char *pred_readline(const char *prompt, pred_hist *h) {
     size_t len = 0, cur = 0;
     size_t hpos = h->n;
     char draft[8192] = "";
+    int menu_on = isatty(2);
+    size_t prev_mn = 0; /* menu lines drawn by the previous render */
     pred_raw(1);
 
 #define RL_RENDER()                                                    \
@@ -454,6 +496,20 @@ static char *pred_readline(const char *prompt, pred_hist *h) {
         fprintf(stderr, "\r\033[K%s%s", prompt, buf);                  \
         size_t tw = line_width(buf + cur, len - cur);                  \
         if (tw) fprintf(stderr, "\033[%zuD", tw);                      \
+        fflush(stderr);                                                \
+        if (menu_on && buf[0] == '/') { /* live command menu below */  \
+            char mout[8][160];                                         \
+            size_t mn = slash_menu(buf + 1, mout, 8);                  \
+            for (size_t i = 0; i < prev_mn; i++)                       \
+                fprintf(stderr, "\n\033[K");                           \
+            for (size_t i = 0; i < mn; i++)                            \
+                fprintf(stderr, "%s\033[K%s%s\n", i == 0 ? "\n" : "",  \
+                        C_DIM, mout[i]);                               \
+            fprintf(stderr, "\033[%zuA\r", mn);                        \
+            fprintf(stderr, "%s%s", prompt, buf);                      \
+            if (tw) fprintf(stderr, "\033[%zuD", tw);                  \
+            prev_mn = mn;                                              \
+        }                                                              \
         fflush(stderr);                                                \
     } while (0)
 
@@ -463,17 +519,22 @@ static char *pred_readline(const char *prompt, pred_hist *h) {
         int k = read_key(&ch);
         if (k == K_EOF) {
             pred_raw(0);
+            for (size_t i = 0; i < prev_mn; i++) fprintf(stderr, "\n\033[K");
             fprintf(stderr, "\r\033[K\n");
             return NULL;
         }
         if (k == K_ENTER) {
             pred_raw(0);
+            for (size_t i = 0; i < prev_mn; i++) fprintf(stderr, "\n\033[K");
+            fprintf(stderr, "\033[%zuA\r", prev_mn);
             fprintf(stderr, "\n"); /* leave the submitted line intact */
             break;
         }
         if (k == K_CTRL_C) {
             buf[0] = 0;
             pred_raw(0);
+            for (size_t i = 0; i < prev_mn; i++) fprintf(stderr, "\n\033[K");
+            fprintf(stderr, "\033[%zuA\r", prev_mn);
             fprintf(stderr, "\r\033[K\n");
             return strdup("");
         }
@@ -809,6 +870,73 @@ static int casual_input(const char *s) {
     return strpbrk(s, "./\\`0123456789") == NULL;
 }
 
+/* ---- non-programmer config: ~/.predator/config (key = value lines) ---- */
+
+static void cfg_get(const char *key, char *out, size_t outn) {
+    out[0] = 0;
+    const char *home = getenv("HOME");
+    if (!home || !*home) return;
+    char path[512];
+    snprintf(path, sizeof path, "%s/.predator/config", home);
+    FILE *f = fopen(path, "r");
+    if (!f) return;
+    size_t kl = strlen(key);
+    char l[512];
+    while (fgets(l, sizeof l, f)) {
+        char *p = l;
+        while (*p == ' ') p++;
+        if (strncmp(p, key, kl) == 0 && p[kl] == '=') {
+            char *v = p + kl + 1;
+            char *e = v + strlen(v);
+            while (e > v && (e[-1] == '\n' || e[-1] == '\r' || e[-1] == ' '))
+                *--e = 0;
+            snprintf(out, outn, "%s", v);
+            break;
+        }
+    }
+    fclose(f);
+}
+
+static void cfg_set(const char *key, const char *value) {
+    const char *home = getenv("HOME");
+    if (!home || !*home) return;
+    char dir[512], path[560];
+    snprintf(dir, sizeof dir, "%s/.predator", home);
+    snprintf(path, sizeof path, "%s/config", dir);
+    mkdir(dir, 0700);
+    char old[4096] = "";
+    FILE *f = fopen(path, "r");
+    if (f) {
+        size_t n = fread(old, 1, sizeof old - 1, f);
+        old[n] = 0;
+        fclose(f);
+    }
+    size_t kl = strlen(key);
+    FILE *w = fopen(path, "w");
+    if (!w) return;
+    char *p = old;
+    int written = 0;
+    while (*p) {
+        char *eol = strchr(p, '\n');
+        size_t ll = eol ? (size_t)(eol - p) + 1 : strlen(p);
+        char line[512];
+        snprintf(line, sizeof line, "%.*s",
+                 (int)(eol ? (size_t)(eol - p) : strlen(p)), p);
+        char *q = line;
+        while (*q == ' ') q++;
+        if (strncmp(q, key, kl) == 0 && q[kl] == '=') {
+            if (!written) { fprintf(w, "%s = %s\n", key, value); written = 1; }
+        } else if (ll) {
+            fwrite(p, 1, ll, w);
+            if (!eol) fputc('\n', w);
+        }
+        if (!eol) break;
+        p = eol + 1;
+    }
+    if (!written) fprintf(w, "%s = %s\n", key, value);
+    fclose(w);
+}
+
 static void banner(const char *model, const char *host, const char *cwd) {
     if (!ui_color) {
         fprintf(stderr, "predator_cli — model %s @ %s, cwd %s (/help)\n",
@@ -853,11 +981,16 @@ static void banner(const char *model, const char *host, const char *cwd) {
 }
 
 int main(int argc, char **argv) {
-    const char *model = DEFAULT_MODEL;
+    char cfg_model[256] = "", cfg_lang[32] = "", cfg_host[128] = "";
+    cfg_get("model", cfg_model, sizeof cfg_model);
+    cfg_get("language", cfg_lang, sizeof cfg_lang);
+    cfg_get("host", cfg_host, sizeof cfg_host);
+    const char *model = *cfg_model ? cfg_model : DEFAULT_MODEL;
     const char *env_model = getenv("PREDATOR_MODEL");
     if (env_model && *env_model) model = env_model;
     const char *cwd = ".";
-    const char *host = "127.0.0.1:11434";
+    const char *host = *cfg_host ? cfg_host : "127.0.0.1:11434";
+    if (*cfg_lang) snprintf(g_lang, sizeof g_lang, "%s", cfg_lang);
     const char *oneshot = NULL;
     const char *resume_path = NULL;
     ui_color = isatty(1) && isatty(2);
@@ -982,6 +1115,29 @@ int main(int argc, char **argv) {
                     }
                     fprintf(stderr, "[model: %s]\n", model);
                 }
+                cfg_set("model", model);
+            } else if (!strncmp(line, "/lang", 5) &&
+                       (line[5] == 0 || line[5] == ' ')) {
+                const char *arg = line[5] ? line + 6 : NULL;
+                if (arg && *arg) {
+                    snprintf(g_lang, sizeof g_lang, "%s", arg);
+                    cfg_set("language", g_lang);
+                    rebuild_system(cwd, sess);
+                }
+                fprintf(stderr, "[language: %s — %s]\n", g_lang,
+                        lang_name(g_lang));
+            } else if (!strcmp(line, "/context")) {
+                long tin = -1, tout = -1, ctx = -1;
+                lvc_agent_session_last_usage(sess, &tin, &tout);
+                lvc_agent_model_context(host, model, &ctx);
+                if (ctx > 0)
+                    fprintf(stderr,
+                        "context: %ld / %ld tokens (%.0f%% used) · messages: %zu\n",
+                        tin > 0 ? tin : 0, ctx,
+                        tin > 0 ? (double)tin / ctx * 100.0 : 0.0,
+                        lvc_agent_session_len(sess));
+                else
+                    fprintf(stderr, "context: unknown (model %s)\n", model);
             } else if (!strcmp(line, "/tools")) {
                 fprintf(stderr,
                     "tools (workspace-sandboxed):\n"

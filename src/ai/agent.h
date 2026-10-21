@@ -105,4 +105,13 @@ void lvc_frontmatter_get(const char *text, size_t len, const char *key,
  * -1 when not found. */
 int lvc_agent_read_skill(lvc_agent_session *s, const char *name, char **out);
 
+/* token usage of the most recent turn (last request's prompt tokens and
+ * generated tokens; -1 when unknown) */
+void lvc_agent_session_last_usage(const lvc_agent_session *s, long *in_tokens,
+                                  long *out_tokens);
+
+/* the model's context window in tokens via GET..POST /api/show
+ * (any *.context_length entry in model_info). returns 0/-1. */
+int lvc_agent_model_context(const char *host, const char *model, long *out);
+
 #endif

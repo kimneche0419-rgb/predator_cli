@@ -471,6 +471,7 @@ typedef struct {
     tool_call *calls;
     size_t ncalls;
     bool done, err;
+    long eval_count, prompt_eval_count;
     lvc_agent_cb cb;
     void *user;
 } chat_stream;
@@ -518,7 +519,13 @@ static void process_line(chat_stream *cs, const char *line) {
         }
     }
     const jval *dv = jobj_get(root, "done");
-    if (dv && dv->t == J_BOOL && dv->b) cs->done = true;
+    if (dv && dv->t == J_BOOL && dv->b) {
+        cs->done = true;
+        const jval *ec = jobj_get(root, "eval_count");
+        const jval *pc = jobj_get(root, "prompt_eval_count");
+        if (ec && ec->t == J_NUM) cs->eval_count = (long)ec->num;
+        if (pc && pc->t == J_NUM) cs->prompt_eval_count = (long)pc->num;
+    }
     jval_free(root);
 }
 
@@ -1028,6 +1035,7 @@ struct lvc_agent_session {
     sbuf system;        /* raw system prompt text (injected at request time) */
     char *skills_dirs[4];
     int skills_dirs_n;
+    long last_in, last_out; /* last turn: prompt / generated tokens */
 };
 
 lvc_agent_session *lvc_agent_session_create(void) {
@@ -1045,6 +1053,57 @@ void lvc_agent_session_set_system(lvc_agent_session *s, const char *text) {
     sbuf_free(&s->system);
     sbuf_init(&s->system);
     if (text && *text) sapp(&s->system, text);
+}
+
+void lvc_agent_session_last_usage(const lvc_agent_session *s, long *in_tokens,
+                                  long *out_tokens) {
+    if (in_tokens) *in_tokens = s ? s->last_in : -1;
+    if (out_tokens) *out_tokens = s ? s->last_out : -1;
+}
+
+int lvc_agent_model_context(const char *host, const char *model, long *out) {
+    if (out) *out = -1;
+    if (!host || !model || !out) return -1;
+    if (curl_ref() != 0) return -1;
+    int rc = -1;
+    CURL *c = curl_easy_init();
+    sbuf body;
+    sbuf_init(&body);
+    if (!c) { curl_unref(); return -1; }
+    char *esc = curl_easy_escape(c, model, 0);
+    char url[512];
+    snprintf(url, sizeof url, "http://%s/api/show", host);
+    char post[256 + strlen(model)];
+    snprintf(post, sizeof post, "{\"model\":\"%s\"}", model);
+    curl_free(esc);
+    curl_easy_setopt(c, CURLOPT_URL, url);
+    curl_easy_setopt(c, CURLOPT_POSTFIELDS, post);
+    curl_easy_setopt(c, CURLOPT_WRITEFUNCTION, sbuf_write);
+    curl_easy_setopt(c, CURLOPT_WRITEDATA, &body);
+    curl_easy_setopt(c, CURLOPT_CONNECTTIMEOUT, 3L);
+    curl_easy_setopt(c, CURLOPT_TIMEOUT, 15L);
+    CURLcode cr = curl_easy_perform(c);
+    long http_code = 0;
+    curl_easy_getinfo(c, CURLINFO_RESPONSE_CODE, &http_code);
+    curl_easy_cleanup(c);
+    if (cr != CURLE_OK || http_code != 200) goto out;
+    jval *root = json_parse(sbuf_cstr(&body));
+    if (!root || root->t != J_OBJ) { jval_free(root); goto out; }
+    /* context_length lives inside model_info, not at the top level */
+    const jval *mi = jobj_get(root, "model_info");
+    if (!mi || mi->t != J_OBJ) { jval_free(root); goto out; }
+    for (size_t i = 0; i < mi->nkeys; i++) {
+        size_t kl = strlen(mi->keys[i]);
+        if (kl > 15 && strcmp(mi->keys[i] + kl - 15, ".context_length") == 0) {
+            const jval *v = mi->vals[i];
+            if (v && v->t == J_NUM) { *out = (long)v->num; rc = 0; break; }
+        }
+    }
+    jval_free(root);
+out:
+    sbuf_free(&body);
+    curl_unref();
+    return rc;
 }
 
 void lvc_agent_session_set_tools(lvc_agent_session *s, int enabled) {
@@ -1252,6 +1311,8 @@ round_request:;
 
         chat_stream cs;
         memset(&cs, 0, sizeof cs);
+        sess->last_in = -1;
+        sess->last_out = -1;
         cs.cb = cb;
         cs.user = user;
 
@@ -1360,6 +1421,8 @@ round_request:;
         }
 
         if (cs.ncalls == 0) { /* final answer: emit the buffered text */
+            sess->last_in = cs.prompt_eval_count;
+            sess->last_out = cs.eval_count;
             if (cs.text.len)
                 cb(user, LVC_AGENT_TOKEN, sbuf_cstr(&cs.text));
             cb(user, LVC_AGENT_DONE, "");
