@@ -26,7 +26,8 @@ static const char *SYSTEM_PROMPT =
     "You are predator_cli, a terminal coding agent on the user's macOS machine.\n"
     "Explanations: concise Korean. Code: clean, minimal, no dead weight.\n"
     "§ Tools\n"
-    "list_dir/read_file/edit_file/run_shell are sandboxed to the workspace.\n"
+    "list_dir/read_file/edit_file/run_shell/read_skill are sandboxed to the "
+    "workspace.\n"
     "MUST use edit_file for file edits. NEVER overwrite whole files via run_shell "
     "redirection. MUST read a file before editing it.\n"
     "§ Conversation\n"
@@ -34,6 +35,9 @@ static const char *SYSTEM_PROMPT =
     "§ Report\n"
     "State what you changed and how you verified it. Ground claims in tool "
     "results; never fabricate output.";
+
+/* best all-round chat default among small local models; /model marks it */
+static const char *DEFAULT_MODEL = "qwen2.5-coder:3b";
 
 static void on_sigint(int sig) { (void)sig; _exit(130); }
 
@@ -766,7 +770,7 @@ static void banner(const char *model, const char *host, const char *cwd) {
 }
 
 int main(int argc, char **argv) {
-    const char *model = "qwen2.5-coder:3b";
+    const char *model = DEFAULT_MODEL;
     const char *env_model = getenv("PREDATOR_MODEL");
     if (env_model && *env_model) model = env_model;
     const char *cwd = ".";
@@ -855,8 +859,11 @@ int main(int argc, char **argv) {
                     size_t cnt = 0;
                     if (lvc_agent_list_models(host, &names, &cnt) == 0 && cnt) {
                         if (isatty(0)) {
-                            char *sel = pred_picker(names, cnt,
-                                "model — ↑/↓ 이동 · Enter 선택 · Esc 취소");
+                            char title[512];
+                            snprintf(title, sizeof title,
+                                     "model — ↑/↓ 이동 · Enter 선택 · Esc 취소 · "
+                                     "대화 권장: %s", DEFAULT_MODEL);
+                            char *sel = pred_picker(names, cnt, title);
                             if (sel) {
                                 snprintf(g_model_buf, sizeof g_model_buf, "%s", sel);
                                 model = g_model_buf;
