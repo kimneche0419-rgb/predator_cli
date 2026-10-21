@@ -356,6 +356,7 @@ static char *pred_readline(const char *prompt, pred_hist *h) {
     }
 
     char buf[8192];
+    buf[0] = 0; /* uninitialized stack memory must never reach %s renders */
     size_t len = 0, cur = 0;
     size_t hpos = h->n;
     char draft[8192] = "";
@@ -396,6 +397,7 @@ static char *pred_readline(const char *prompt, pred_hist *h) {
                 memmove(buf + p, buf + cur, len - cur);
                 len -= cur - p;
                 cur = p;
+                buf[len] = 0;
                 RL_RENDER();
             }
             break;
@@ -404,6 +406,7 @@ static char *pred_readline(const char *prompt, pred_hist *h) {
             if (nx > cur) {
                 memmove(buf + cur, buf + nx, len - nx);
                 len -= nx - cur;
+                buf[len] = 0;
                 RL_RENDER();
             }
             break;
@@ -461,6 +464,7 @@ static char *pred_readline(const char *prompt, pred_hist *h) {
                 buf[cur++] = ch;
                 len++;
             }
+            buf[len] = 0; /* keep NUL-terminated: %s renders stop here */
             RL_RENDER(); /* multibyte chars redraw per byte; correct on the
                             final byte */
             break;
