@@ -786,6 +786,77 @@ static const char *jarg_str(const jval *args, const char *key) {
     return (v && v->t == J_STR) ? v->str : NULL;
 }
 
+/* resolve + read a skill body by name (candidates: name, name.md,
+ * name/SKILL.md — sandboxed to each registered dir). Front-matter is
+ * stripped; when_to_use / allowed-tools become a usage header, mirroring
+ * moai-adk's SKILL.md contract. Returns malloc'd text or NULL. */
+static char *skill_load(char **skill_dirs, int skill_dirs_n,
+                        const char *nm) {
+    if (!nm || !*nm) return NULL;
+    bool found = false;
+    char lasttry[PATH_MAX] = "";
+    char *body_out = NULL;
+    for (int i = 0; i < skill_dirs_n && !found; i++) {
+        const char *cands[3] = { nm, NULL, NULL };
+        char with_md[512], with_dir[512];
+        snprintf(with_md, sizeof with_md, "%s.md", nm);
+        snprintf(with_dir, sizeof with_dir, "%s/SKILL.md", nm);
+        cands[1] = with_md;
+        cands[2] = with_dir;
+        for (int t = 0; t < 3 && !found; t++) {
+            char fullc[PATH_MAX];
+            if (!resolve_path(skill_dirs[i], cands[t], fullc, sizeof fullc))
+                continue;
+            snprintf(lasttry, sizeof lasttry, "%s", fullc);
+            FILE *f = fopen(fullc, "r");
+            if (!f) continue;
+            found = true;
+            sbuf content;
+            sbuf_init(&content);
+            char chunk[2048];
+            size_t n;
+            while ((n = fread(chunk, 1, sizeof chunk, f)) > 0)
+                sbuf_append(&content, chunk, n);
+            fclose(f);
+            if (!content.len) { sbuf_free(&content); continue; }
+
+            char when_to_use[512] = "", allowed_tools[512] = "";
+            lvc_frontmatter_get(content.data, content.len, "when_to_use",
+                                when_to_use, sizeof when_to_use);
+            lvc_frontmatter_get(content.data, content.len, "allowed-tools",
+                                allowed_tools, sizeof allowed_tools);
+            long off = lvc_parse_frontmatter(content.data, content.len, NULL,
+                                             0, NULL, 0, NULL, 0, NULL);
+            const char *body = off > 0 ? content.data + off : content.data;
+
+            sbuf sb;
+            sbuf_init(&sb);
+            sapp(&sb, nm);
+            sapp(&sb, "\n");
+            if (*when_to_use) {
+                sapp(&sb, "when_to_use: ");
+                sapp(&sb, when_to_use);
+                sapp(&sb, "\n");
+            }
+            if (*allowed_tools) {
+                sapp(&sb, "allowed-tools: ");
+                sapp(&sb, allowed_tools);
+                sapp(&sb, "\n");
+            }
+            sapp(&sb, "\n");
+            sapp(&sb, body);
+            body_out = xstrdup(sbuf_cstr(&sb));
+            sbuf_free(&sb);
+            sbuf_free(&content);
+        }
+    }
+    if (!found)
+        body_out = tool_result_error(
+            "error: skill '%s' not found (dirs: %d, last tried: %s)", nm,
+            skill_dirs_n, lasttry);
+    return body_out;
+}
+
 static char *tool_exec(const char *base, const char *name, const char *args_json,
                        char **skill_dirs, int skill_dirs_n) {
     jval *args = json_parse(args_json ? args_json : "");
@@ -798,61 +869,8 @@ static char *tool_exec(const char *base, const char *name, const char *args_json
         const char *nm = jarg_str(args, "name");
         if (!nm || !*nm)
             res = xstrdup("error: read_skill requires string 'name'");
-        else {
-            bool found = false;
-            char lasttry[PATH_MAX] = "";
-            for (int i = 0; i < skill_dirs_n && !found; i++) {
-                const char *cands[3] = { nm, NULL, NULL };
-                char with_md[512], with_dir[512];
-                snprintf(with_md, sizeof with_md, "%s.md", nm);
-                snprintf(with_dir, sizeof with_dir, "%s/SKILL.md", nm);
-                cands[1] = with_md;
-                cands[2] = with_dir;
-                for (int t = 0; t < 3 && !found; t++) {
-                    char fullc[PATH_MAX];
-                    if (!resolve_path(skill_dirs[i], cands[t], fullc,
-                                      sizeof fullc))
-                        continue;
-                    snprintf(lasttry, sizeof lasttry, "%s", fullc);
-                    FILE *f = fopen(fullc, "r");
-                    if (!f) continue;
-                    found = true;
-                    sbuf sb;
-                    sbuf_init(&sb);
-                    sapp(&sb, nm);
-                    sapp(&sb, "\n");
-                    char chunk[2048];
-                    size_t total = 0, n;
-                    while (total < READ_FILE_MAX &&
-                           (n = fread(chunk, 1,
-                                      sizeof chunk < READ_FILE_MAX - total
-                                          ? sizeof chunk
-                                          : READ_FILE_MAX - total,
-                                      f)) > 0) {
-                        sbuf_append(&sb, chunk, n);
-                        total += n;
-                    }
-                    fclose(f);
-                    char sk_n[256], sk_d[512], sk_g[256];
-                    int sk_a = 0;
-                    long off = lvc_parse_frontmatter(sbuf_cstr(&sb), sb.len,
-                                                     sk_n, sizeof sk_n, sk_d,
-                                                     sizeof sk_d, sk_g,
-                                                     sizeof sk_g, &sk_a);
-                    if (off > 0) { /* present the body, not the front-matter */
-                        memmove(sb.data, sb.data + off, sb.len - (size_t)off);
-                        sb.len -= (size_t)off;
-                        sb.data[sb.len] = 0;
-                    }
-                    res = xstrdup(sbuf_cstr(&sb));
-                    sbuf_free(&sb);
-                }
-            }
-            if (!found)
-                res = tool_result_error(
-                    "error: skill '%s' not found (dirs: %d, last tried: %s)",
-                    nm, skill_dirs_n, lasttry);
-        }
+        else
+            res = skill_load(skill_dirs, skill_dirs_n, nm);
     } else if (strcmp(name, "run_shell") == 0) {
         const char *cmd = jarg_str(args, "cmd");
         if (!cmd) res = xstrdup("error: run_shell requires string 'cmd'");
@@ -1033,11 +1051,45 @@ void lvc_agent_session_set_tools(lvc_agent_session *s, int enabled) {
     if (s) s->tools_enabled = enabled ? 1 : 0;
 }
 
+int lvc_agent_read_skill(lvc_agent_session *s, const char *name, char **out) {
+    if (!s || !name || !out) return -1;
+    char *r = skill_load(s->skills_dirs, s->skills_dirs_n, name);
+    if (!r) return -1;
+    *out = r;
+    return 0;
+}
+
 void lvc_agent_session_add_skills_dir(lvc_agent_session *s, const char *dir) {
     if (!s || !dir || !*dir || s->skills_dirs_n >= 4) return;
     for (int i = 0; i < s->skills_dirs_n; i++)
         if (!strcmp(s->skills_dirs[i], dir)) return; /* dedup */
     s->skills_dirs[s->skills_dirs_n++] = strdup(dir);
+}
+
+void lvc_frontmatter_get(const char *text, size_t len, const char *key,
+                         char *out, size_t outn) {
+    if (out && outn) out[0] = 0;
+    if (!text || len < 4 || !key || !*key || !out || !outn) return;
+    size_t klen = strlen(key);
+    const char *p = text + 3; /* caller guarantees a front-matter block */
+    if (p < text + len && (*p == '\r' || *p == '\n')) p++;
+    while (p < text + len) {
+        if (p[0] == '-' && p[1] == '-' && p[2] == '-') return;
+        const char *eol = memchr(p, '\n', (size_t)(text + len - p));
+        size_t ll = eol ? (size_t)(eol - p) : (size_t)(text + len - p);
+        if (ll > klen && strncmp(p, key, klen) == 0 && p[klen] == ':') {
+            const char *v = p + klen + 1;
+            while ((size_t)(v - p) < ll && (*v == ' ' || *v == '\t')) v++;
+            size_t vlen = (size_t)(p + ll - v);
+            while (vlen && (v[vlen - 1] == ' ' || v[vlen - 1] == '\r')) vlen--;
+            if (vlen >= outn) vlen = outn - 1;
+            memcpy(out, v, vlen);
+            out[vlen] = 0;
+            return;
+        }
+        if (!eol) return;
+        p = eol + 1;
+    }
 }
 
 long lvc_parse_frontmatter(const char *text, size_t len, char *name,

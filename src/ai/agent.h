@@ -95,4 +95,14 @@ long lvc_parse_frontmatter(const char *text, size_t len, char *name,
                            size_t namesz, char *description, size_t descsz,
                            char *globs, size_t globsz, int *always);
 
+/* generic front-matter lookup: value of `key` ("when_to_use",
+ * "allowed-tools", "user-invocable", ...) into out. "" when absent. */
+void lvc_frontmatter_get(const char *text, size_t len, const char *key,
+                         char *out, size_t outn);
+
+/* resolve + read a skill body (front-matter stripped) by name from the
+ * session's registered skill dirs. returns 0 and *out (malloc'd) on hit,
+ * -1 when not found. */
+int lvc_agent_read_skill(lvc_agent_session *s, const char *name, char **out);
+
 #endif
