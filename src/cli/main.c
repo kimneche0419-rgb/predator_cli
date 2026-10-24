@@ -889,8 +889,12 @@ static void cfg_get(const char *key, char *out, size_t outn) {
     while (fgets(l, sizeof l, f)) {
         char *p = l;
         while (*p == ' ') p++;
-        if (strncmp(p, key, kl) == 0 && p[kl] == '=') {
-            char *v = p + kl + 1;
+        if (strncmp(p, key, kl) == 0) {
+            char *v = p + kl;
+            while (*v == ' ' || *v == '\t') v++;
+            if (*v != '=') continue;
+            v++;
+            while (*v == ' ' || *v == '\t') v++;
             char *e = v + strlen(v);
             while (e > v && (e[-1] == '\n' || e[-1] == '\r' || e[-1] == ' '))
                 *--e = 0;
@@ -928,7 +932,7 @@ static void cfg_set(const char *key, const char *value) {
                  (int)(eol ? (size_t)(eol - p) : strlen(p)), p);
         char *q = line;
         while (*q == ' ') q++;
-        if (strncmp(q, key, kl) == 0 && q[kl] == '=') {
+        if (strncmp(q, key, kl) == 0) {
             if (!written) { fprintf(w, "%s = %s\n", key, value); written = 1; }
         } else if (ll) {
             fwrite(p, 1, ll, w);
