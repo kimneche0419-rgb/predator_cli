@@ -481,9 +481,9 @@ static long g_ctx_len_cached = -1;
 static char g_ctx_for[256] = "";
 
 static const char *TIPS[] = {
-    "Try \"explain this codebase\"",
-    "Try \"hello.c의 함수를 요약해줘\"",
-    "Try \"edit hello.c to add error handling\"",
+    "explain this codebase",
+    "hello.c의 함수를 한국어 한 줄로 요약",
+    "edit hello.c to add error handling",
     "/model 모델 변경 · /tools 도구 목록",
     "/lang 응답 언어 변경 · /resume 세션 복원",
 };
@@ -986,47 +986,40 @@ static void cfg_set(const char *key, const char *value) {
     fclose(w);
 }
 
+/* abbreviate $HOME to ~ for display */
+static void cwd_short(const char *cwd, char *out, size_t outn) {
+    const char *home = getenv("HOME");
+    size_t hl = home ? strlen(home) : 0;
+    if (hl && strncmp(cwd, home, hl) == 0) {
+        snprintf(out, outn, "~%s", cwd + hl);
+    } else {
+        snprintf(out, outn, "%s", cwd);
+    }
+}
+
+/* Claude Code-style header: logo, name+version, model line, cwd, intro tip */
 static void banner(const char *model, const char *host, const char *cwd) {
+    char cwdbuf[1024];
+    cwd_short(cwd, cwdbuf, sizeof cwdbuf);
     if (!ui_color) {
-        fprintf(stderr, "predator_cli — model %s @ %s, cwd %s (/help)\n",
-                model, host, cwd);
+        fprintf(stderr,
+                "predator_cli v1.0\n"
+                "model %s · %s\n"
+                "%s\n\n"
+                "Get to finished work sooner. Switch anytime with /model.\n",
+                model, host, cwdbuf);
         return;
     }
-    char l1[256], l2[512];
-    snprintf(l1, sizeof l1, "✻ predator_cli");
-    snprintf(l2, sizeof l2, "%s · %s", model, cwd);
-    size_t w1 = line_width(l1, strlen(l1));
-    size_t w2 = line_width(l2, strlen(l2));
-    size_t w = (w1 > w2 ? w1 : w2);
-    if (w > 60) w = 60;
-    char edge[256];
-    size_t ew = 0;
-    while (ew / 3 < w + 4 && ew + 4 < sizeof edge) {
-        memcpy(edge + ew, "─", 3);
-        ew += 3;
-    }
-    edge[ew] = 0;
-    char pad1[96], pad2[96];
-    size_t p1 = w + 2 > w1 ? w + 2 - w1 : 0;
-    size_t p2 = w + 2 > w2 ? w + 2 - w2 : 0;
-    if (p1 > 90) p1 = 90;
-    if (p2 > 90) p2 = 90;
-    memset(pad1, ' ', p1);
-    pad1[p1] = 0;
-    memset(pad2, ' ', p2);
-    pad2[p2] = 0;
     fprintf(stderr,
-            "%s╭%s╮%s\n"
-            "%s│ %s%s%s│%s\n"
-            "%s│ %s%s%s│%s\n"
-            "%s╰%s╯%s\n"
-            "  %s/help%s for commands · ctrl-c to exit\n"
-            "\n",
-            C_ACCENT, edge, C_RESET,
-            C_ACCENT, C_BOLD, l1, pad1, C_RESET,
-            C_ACCENT, C_DIM, l2, pad2, C_RESET,
-            C_ACCENT, edge, C_RESET,
-            C_DIM, C_RESET);
+            "%s✻%s %spredator_cli%s %sv1.0%s\n"
+            "%s  %s · %s%s\n"
+            "%s  %s%s\n"
+            "\n"
+            "Get to finished work sooner. Switch anytime with %s/model%s.%s\n",
+            C_ACCENT, C_RESET, C_BOLD, C_RESET, C_DIM, C_RESET,
+            C_DIM, model, host, C_RESET,
+            C_DIM, cwdbuf, C_RESET,
+            C_RESET, C_CODE, C_RESET);
 }
 
 int main(int argc, char **argv) {
