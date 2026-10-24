@@ -471,7 +471,34 @@ static void hist_push(pred_hist *h, const char *s) {
 
 /* raw-mode editable line: history nav, utf-8 aware. returns malloc'd line
  * ("" on ctrl-c), NULL on EOF. */
-#define MENU_MAX 6 /* fixed-height menu frame below the input line */
+#define MENU_MAX 6 /* fixed-height frame below the input line */
+
+/* live UI state for the input-line footer (set by main) */
+static const lvc_agent_session *g_ui_sess = NULL;
+static const char *g_ui_model = "";
+static const char *g_ui_host = "";
+static long g_ctx_len_cached = -1;
+static char g_ctx_for[256] = "";
+
+static const char *TIPS[] = {
+    "Try \"explain this codebase\"",
+    "Try \"hello.c의 함수를 요약해줘\"",
+    "Try \"edit hello.c to add error handling\"",
+    "/model 모델 변경 · /tools 도구 목록",
+    "/lang 응답 언어 변경 · /resume 세션 복원",
+};
+
+static long ui_ctx_len(void) { /* cached per model */
+    if (!g_ui_model) return -1;
+    if (g_ctx_len_cached < 0 || strcmp(g_ctx_for, g_ui_model) != 0) {
+        long n = -1;
+        lvc_agent_model_context(g_ui_host, g_ui_model, &n);
+        g_ctx_len_cached = n;
+        snprintf(g_ctx_for, sizeof g_ctx_for, "%s", g_ui_model);
+    }
+    return g_ctx_len_cached;
+}
+
 static char *pred_readline(const char *prompt, pred_hist *h) {
     if (!isatty(0)) { /* piped: plain getline */
         char *line = NULL;
@@ -498,18 +525,32 @@ static char *pred_readline(const char *prompt, pred_hist *h) {
         size_t tw = line_width(buf + cur, len - cur);                  \
         if (tw) fprintf(stderr, "\033[%zuD", tw);                      \
         fflush(stderr);                                                \
-        if (menu_on && buf[0] == '/') { /* live command menu below */  \
-            char mout[8][192];                                         \
-            size_t mn = slash_menu(buf + 1, mout, 8);                  \
-            if (mn > MENU_MAX) mn = MENU_MAX;                          \
+        if (menu_on) { /* fixed frame below: slash menu or status */   \
+            char frame[MENU_MAX][192];                                 \
+            size_t fn = 0;                                             \
+            if (buf[0] == '/') {                                       \
+                fn = slash_menu(buf + 1, frame, MENU_MAX);             \
+            } else {                                                   \
+                static size_t tip = 0;                                 \
+                snprintf(frame[0], 192, "\u24f5 Try \"%s\"",           \
+                         TIPS[tip++ % (sizeof TIPS / sizeof TIPS[0])]);\
+                long tin = -1;                                         \
+                lvc_agent_session_last_usage(g_ui_sess, &tin, NULL);   \
+                long cl = ui_ctx_len();                                \
+                if (cl > 0)                                            \
+                    snprintf(frame[1], 192,                            \
+                             "context %ld / %ld tok (%.0f%% used)",    \
+                             tin > 0 ? tin : 0, cl,                    \
+                             tin > 0 ? (double)tin / cl * 100.0 : 0.0);\
+                fn = 2;                                                \
+            }                                                          \
             for (size_t i = 0; i < MENU_MAX; i++) {                    \
                 fprintf(stderr, "\n\033[K");                           \
-                if (i < mn) fprintf(stderr, "%s%s", C_DIM, mout[i]);   \
+                if (i < fn) fprintf(stderr, "%s%s", C_DIM, frame[i]);  \
             }                                                          \
             fprintf(stderr, "\033[%zuA\r", (size_t)MENU_MAX);          \
             fprintf(stderr, "%s%s", prompt, buf);                      \
             if (tw) fprintf(stderr, "\033[%zuD", tw);                  \
-            menu_shown = 1;                                            \
         }                                                              \
         fflush(stderr);                                                \
     } while (0)
@@ -1022,6 +1063,9 @@ int main(int argc, char **argv) {
     lvc_agent_session *sess = lvc_agent_session_create();
     if (!sess) return 1;
     rebuild_system(cwd, sess);
+    g_ui_sess = sess;
+    g_ui_model = model;
+    g_ui_host = host;
     int rc = 0;
 
     if (resume_path) {
@@ -1124,6 +1168,7 @@ int main(int argc, char **argv) {
                     fprintf(stderr, "[model: %s]\n", model);
                 }
                 cfg_set("model", model);
+                g_ui_model = model;
             } else if (!strncmp(line, "/lang", 5) &&
                        (line[5] == 0 || line[5] == ' ')) {
                 const char *arg = line[5] ? line + 6 : NULL;
