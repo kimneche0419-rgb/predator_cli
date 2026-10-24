@@ -62,11 +62,11 @@ static const struct { const char *cmd; const char *desc; } SLASH[] = {
     {"/quit",   "종료"},
 };
 
-static size_t slash_menu(const char *prefix, char out[][160], size_t maxn) {
+static size_t slash_menu(const char *prefix, char out[][192], size_t maxn) {
     size_t pl = strlen(prefix), mn = 0;
     for (size_t i = 0; i < sizeof SLASH / sizeof SLASH[0] && mn < maxn; i++)
         if (pl == 0 || strncmp(SLASH[i].cmd, prefix, pl) == 0)
-            snprintf(out[mn++], 160, "%s — %s", SLASH[i].cmd, SLASH[i].desc);
+            snprintf(out[mn++], 192, "%s — %s", SLASH[i].cmd, SLASH[i].desc);
     return mn;
 }
 
@@ -498,7 +498,7 @@ static char *pred_readline(const char *prompt, pred_hist *h) {
         if (tw) fprintf(stderr, "\033[%zuD", tw);                      \
         fflush(stderr);                                                \
         if (menu_on && buf[0] == '/') { /* live command menu below */  \
-            char mout[8][160];                                         \
+            char mout[8][192];                                         \
             size_t mn = slash_menu(buf + 1, mout, 8);                  \
             for (size_t i = 0; i < prev_mn; i++)                       \
                 fprintf(stderr, "\n\033[K");                           \
@@ -520,13 +520,12 @@ static char *pred_readline(const char *prompt, pred_hist *h) {
         if (k == K_EOF) {
             pred_raw(0);
             for (size_t i = 0; i < prev_mn; i++) fprintf(stderr, "\n\033[K");
-            fprintf(stderr, "\r\033[K\n");
+            fprintf(stderr, "\n");
             return NULL;
         }
         if (k == K_ENTER) {
             pred_raw(0);
             for (size_t i = 0; i < prev_mn; i++) fprintf(stderr, "\n\033[K");
-            fprintf(stderr, "\033[%zuA\r", prev_mn);
             fprintf(stderr, "\n"); /* leave the submitted line intact */
             break;
         }
@@ -534,8 +533,7 @@ static char *pred_readline(const char *prompt, pred_hist *h) {
             buf[0] = 0;
             pred_raw(0);
             for (size_t i = 0; i < prev_mn; i++) fprintf(stderr, "\n\033[K");
-            fprintf(stderr, "\033[%zuA\r", prev_mn);
-            fprintf(stderr, "\r\033[K\n");
+            fprintf(stderr, "\n");
             return strdup("");
         }
         switch (k) {
