@@ -471,6 +471,7 @@ static void hist_push(pred_hist *h, const char *s) {
 
 /* raw-mode editable line: history nav, utf-8 aware. returns malloc'd line
  * ("" on ctrl-c), NULL on EOF. */
+#define MENU_MAX 6 /* fixed-height menu frame below the input line */
 static char *pred_readline(const char *prompt, pred_hist *h) {
     if (!isatty(0)) { /* piped: plain getline */
         char *line = NULL;
@@ -488,7 +489,7 @@ static char *pred_readline(const char *prompt, pred_hist *h) {
     size_t hpos = h->n;
     char draft[8192] = "";
     int menu_on = isatty(2);
-    size_t prev_mn = 0; /* menu lines drawn by the previous render */
+    int menu_shown = 0; /* the fixed menu frame is currently on screen */
     pred_raw(1);
 
 #define RL_RENDER()                                                    \
@@ -500,15 +501,15 @@ static char *pred_readline(const char *prompt, pred_hist *h) {
         if (menu_on && buf[0] == '/') { /* live command menu below */  \
             char mout[8][192];                                         \
             size_t mn = slash_menu(buf + 1, mout, 8);                  \
-            for (size_t i = 0; i < prev_mn; i++)                       \
+            if (mn > MENU_MAX) mn = MENU_MAX;                          \
+            for (size_t i = 0; i < MENU_MAX; i++) {                    \
                 fprintf(stderr, "\n\033[K");                           \
-            if (prev_mn) fprintf(stderr, "\033[%zuA\r", prev_mn);      \
-            for (size_t i = 0; i < mn; i++)                            \
-                fprintf(stderr, "\n\033[K%s%s", C_DIM, mout[i]);       \
-            fprintf(stderr, "\033[%zuA\r", mn);                        \
+                if (i < mn) fprintf(stderr, "%s%s", C_DIM, mout[i]);   \
+            }                                                          \
+            fprintf(stderr, "\033[%zuA\r", (size_t)MENU_MAX);          \
             fprintf(stderr, "%s%s", prompt, buf);                      \
             if (tw) fprintf(stderr, "\033[%zuD", tw);                  \
-            prev_mn = mn;                                              \
+            menu_shown = 1;                                            \
         }                                                              \
         fflush(stderr);                                                \
     } while (0)
@@ -519,20 +520,25 @@ static char *pred_readline(const char *prompt, pred_hist *h) {
         int k = read_key(&ch);
         if (k == K_EOF) {
             pred_raw(0);
-            for (size_t i = 0; i < prev_mn; i++) fprintf(stderr, "\n\033[K");
+            if (menu_shown)
+                for (size_t i = 0; i < MENU_MAX; i++) fprintf(stderr, "\n\033[K");
             fprintf(stderr, "\n");
             return NULL;
         }
         if (k == K_ENTER) {
             pred_raw(0);
-            for (size_t i = 0; i < prev_mn; i++) fprintf(stderr, "\n\033[K");
+            if (menu_shown)
+                for (size_t i = 0; i < MENU_MAX; i++) fprintf(stderr, "\n\033[K");
+            fprintf(stderr, "\033[%zuA\r", (size_t)MENU_MAX);
             fprintf(stderr, "\n"); /* leave the submitted line intact */
             break;
         }
         if (k == K_CTRL_C) {
             buf[0] = 0;
             pred_raw(0);
-            for (size_t i = 0; i < prev_mn; i++) fprintf(stderr, "\n\033[K");
+            if (menu_shown)
+                for (size_t i = 0; i < MENU_MAX; i++) fprintf(stderr, "\n\033[K");
+            fprintf(stderr, "\033[%zuA\r", (size_t)MENU_MAX);
             fprintf(stderr, "\n");
             return strdup("");
         }
