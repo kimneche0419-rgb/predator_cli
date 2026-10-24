@@ -502,9 +502,9 @@ static char *pred_readline(const char *prompt, pred_hist *h) {
             size_t mn = slash_menu(buf + 1, mout, 8);                  \
             for (size_t i = 0; i < prev_mn; i++)                       \
                 fprintf(stderr, "\n\033[K");                           \
+            if (prev_mn) fprintf(stderr, "\033[%zuA\r", prev_mn);      \
             for (size_t i = 0; i < mn; i++)                            \
-                fprintf(stderr, "%s\033[K%s%s\n", i == 0 ? "\n" : "",  \
-                        C_DIM, mout[i]);                               \
+                fprintf(stderr, "\n\033[K%s%s", C_DIM, mout[i]);       \
             fprintf(stderr, "\033[%zuA\r", mn);                        \
             fprintf(stderr, "%s%s", prompt, buf);                      \
             if (tw) fprintf(stderr, "\033[%zuD", tw);                  \
