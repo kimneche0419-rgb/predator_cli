@@ -45,6 +45,19 @@ static char g_model_buf[256]; /* /model selection storage */
 static char g_cwd_buf[1024];  /* /cwd selection storage */
 static char g_mem_src[1024] = ""; /* project memory source path */
 static char g_lang[32] = "ko";    /* response language */
+static char g_session_file[600] = ""; /* current conversation transcript */
+
+/* ~/.predator/sessions dir + a new timestamped transcript path */
+static void new_session_file(char *out, size_t outn) {
+    const char *home = getenv("HOME");
+    char dir[512];
+    snprintf(dir, sizeof dir, "%s/.predator/sessions", home ? home : ".");
+    mkdir(dir, 0700);
+    char ts[32];
+    time_t now = time(NULL);
+    strftime(ts, sizeof ts, "%Y%m%d-%H%M%S", localtime(&now));
+    snprintf(out, outn, "%s/%s.jsonl", dir, ts);
+}
 
 /* live slash-command menu shown while typing "/" */
 static const struct { const char *cmd; const char *desc; } SLASH[] = {
@@ -1062,11 +1075,16 @@ int main(int argc, char **argv) {
     int rc = 0;
 
     if (resume_path) {
-        if (lvc_agent_session_load(sess, resume_path) == 0)
+        if (lvc_agent_session_load(sess, resume_path) == 0) {
             fprintf(stderr, "[resumed %zu messages from %s]\n",
                     lvc_agent_session_len(sess), resume_path);
-        else
-            fprintf(stderr, "[resume failed: %s]\n", resume_path);
+            snprintf(g_session_file, sizeof g_session_file, "%s", resume_path);
+        } else {
+            fprintf(stderr, "[resume failed: %s — 새 세션 시작]\n", resume_path);
+            new_session_file(g_session_file, sizeof g_session_file);
+        }
+    } else {
+        new_session_file(g_session_file, sizeof g_session_file);
     }
 
     if (oneshot) {
@@ -1105,11 +1123,12 @@ int main(int argc, char **argv) {
             }
             else if (!strcmp(line, "/help"))
                 fprintf(stderr,
-                    "/model [name|#] /cwd dir /reset /stat /tools /skills /memory /reload /resume [file] /quit\n");
+                    "/model [name|#] /lang [code] /cwd dir /reset /stat /tools /skills /rules /memory /reload /log /sessions /resume [file] /context /quit\n");
             else if (!strcmp(line, "/reset")) {
                 lvc_agent_session_clear(sess);
+                new_session_file(g_session_file, sizeof g_session_file);
                 rebuild_system(cwd, sess);
-                fprintf(stderr, "[session cleared]\n");
+                fprintf(stderr, "[session cleared — 새 대화 기록 시작]\n");
             } else if (!strcmp(line, "/stat")) {
                 fprintf(stderr, "[messages: %zu]\n",
                         lvc_agent_session_len(sess));
@@ -1241,6 +1260,40 @@ int main(int argc, char **argv) {
                             lvc_agent_session_len(sess), p);
                 else
                     fprintf(stderr, "[resume failed: %s]\n", p);
+            } else if (!strcmp(line, "/log")) {
+                char dump[12288];
+                lvc_agent_session_dump_readable(sess, dump, sizeof dump);
+                if (*dump)
+                    fprintf(stderr, "--- conversation log ---\n%s", dump);
+                else
+                    fprintf(stderr, "conversation log is empty\n");
+            } else if (!strcmp(line, "/sessions")) {
+                const char *home = getenv("HOME");
+                char sdir[512];
+                snprintf(sdir, sizeof sdir, "%s/.predator/sessions",
+                         home ? home : ".");
+                DIR *sd = opendir(sdir);
+                if (!sd) {
+                    fprintf(stderr, "no saved sessions\n");
+                } else {
+                    fprintf(stderr, "saved sessions (%s):\n", sdir);
+                    struct dirent *e;
+                    int n = 0;
+                    while ((e = readdir(sd))) {
+                        if (!strstr(e->d_name, ".jsonl")) continue;
+                        char fpath[1200];
+                        snprintf(fpath, sizeof fpath, "%s/%s", sdir, e->d_name);
+                        struct stat st;
+                        long fsize = stat(fpath, &st) == 0 ? (long)st.st_size : 0;
+                        fprintf(stderr, "  %s  (%ld bytes)%s\n", e->d_name,
+                                fsize,
+                                strcmp(fpath, g_session_file) == 0 ? "  ← current" : "");
+                        n++;
+                    }
+                    closedir(sd);
+                    if (!n) fprintf(stderr, "  (none)\n");
+                    fprintf(stderr, "resume: /resume <file> or restart with -r <file>\n");
+                }
             } else if (!strncmp(line, "/cwd ", 5)) {
                 snprintf(g_cwd_buf, sizeof g_cwd_buf, "%s", line + 5);
                 cwd = g_cwd_buf; /* takes effect on the next turn */
@@ -1257,13 +1310,17 @@ int main(int argc, char **argv) {
             rc = 1;
         free(goal);
         if (line[0] != '/') hist_push(&hist, line);
-        { /* omp-style persistence: autosave the transcript after each turn */
+        { /* omp-style persistence: autosave transcript to the session file
+             and the last_session mirror after each turn */
             const char *home = getenv("HOME");
             if (home && *home) {
                 char ap[512], dp[512];
                 snprintf(dp, sizeof dp, "%s/.predator", home);
                 snprintf(ap, sizeof ap, "%s/.predator/last_session.jsonl", home);
                 mkdir(dp, 0700);
+                if (!g_session_file[0]) new_session_file(g_session_file,
+                                                         sizeof g_session_file);
+                lvc_agent_session_save(sess, g_session_file);
                 lvc_agent_session_save(sess, ap);
             }
         }

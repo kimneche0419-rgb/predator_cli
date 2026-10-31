@@ -77,6 +77,10 @@ void lvc_agent_session_set_system(lvc_agent_session *s, const char *text);
 int lvc_agent_session_save(const lvc_agent_session *s, const char *path);
 int lvc_agent_session_load(lvc_agent_session *s, const char *path);
 
+/* human-readable transcript ("role: content" per line) into out (capped) */
+void lvc_agent_session_dump_readable(const lvc_agent_session *s, char *out,
+                                     size_t outn);
+
 /* GET /api/tags: installed model names. out_names is a malloc'd array of
  * malloc'd strings — free with lvc_agent_free_models. returns 0/-1. */
 int lvc_agent_list_models(const char *host, char ***out_names,

@@ -1236,6 +1236,34 @@ int lvc_agent_session_load(lvc_agent_session *s, const char *path) {
     return 0;
 }
 
+void lvc_agent_session_dump_readable(const lvc_agent_session *s, char *out,
+                                     size_t outn) {
+    if (out && outn) out[0] = 0;
+    if (!s || !out || !outn) return;
+    char wrapped[12288];
+    snprintf(wrapped, sizeof wrapped, "[%s]", s->msgs.data ? s->msgs.data : "");
+    jval *root = json_parse(wrapped);
+    if (!root || root->t != J_ARR) return;
+    size_t w = 0;
+    for (size_t i = 0; i < root->nitems && w + 8 < outn; i++) {
+        const jval *item = root->items[i];
+        if (!item || item->t != J_OBJ) continue;
+        const jval *role = jobj_get(item, "role");
+        const jval *content = jobj_get(item, "content");
+        if (!role || !content || role->t != J_STR || content->t != J_STR)
+            continue;
+        const char *rn = role->str;
+        const char *rl = strcmp(rn, "user") == 0     ? "user"
+                         : strcmp(rn, "assistant")   ? "assistant"
+                         : strcmp(rn, "tool")        ? "tool"
+                                                     : rn;
+        size_t cl = strlen(content->str);
+        if (w + cl + strlen(rl) + 16 >= outn) break;
+        w += (size_t)snprintf(out + w, outn - w, "%s: %s\n", rl, content->str);
+    }
+    jval_free(root);
+}
+
 void lvc_agent_session_free(lvc_agent_session *s) {
     if (!s) return;
     sbuf_free(&s->msgs);

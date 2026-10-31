@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>우리 반 시간표 | 토평중학교 1-2</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --primary-light: #eff6ff;
+      --accent: #f59e0b;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-sub: #64748b;
+      --text-muted: #94a3b8;
+      --border: #e2e8f0;
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+      --shadow-lg: 0 20px 30px -10px rgba(59, 130, 246, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(224, 242, 254, 0.7) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(254, 243, 199, 0.6) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(240, 253, 244, 0.8) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 20px 16px 40px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 540px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* 헤더 */
+    .header {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 22px 20px 18px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .school-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid #bfdbfe;
+    }
+
+    .school-badge .dot {
+      width: 8px;
+      height: 8px;
+      background: #3b82f6;
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    .live-tag {
+      font-size: 12px;
+      font-weight: 600;
+      color: #059669;
+      background: #ecfdf5;
+      padding: 4px 10px;
+      border-radius: 8px;
+    }
+
+    .app-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* 날짜 선택 섹션 */
+    .date-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .date-nav-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .nav-btn {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      color: var(--text-main);
+      font-size: 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+    }
+
+    .nav-btn:active {
+      transform: scale(0.95);
+    }
+
+    .date-picker-wrapper {
+      flex: 1;
+      position: relative;
+    }
+
+    .date-display-btn {
+      width: 100%;
+      height: 48px;
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: var(--radius-md);
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .date-display-btn:hover {
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    }
+
+    .native-date-input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    /* 퀵 칩 (오늘, 요일, 예시) */
+    .quick-chips-row {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+    .quick-chips-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip-btn {
+      flex-shrink: 0;
+      border: 1px solid #e2e8f0;
+      background: #ffffff;
+      color: #475569;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 7px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .chip-btn:hover {
+      background: #f1f5f9;
+      color: var(--text-main);
+    }
+
+    .chip-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+    }
+
+    .chip-btn.highlight {
+      border-color: #f59e0b;
+      color: #b45309;
+      background: #fffbeb;
+    }
+
+    .chip-btn.highlight:hover {
+      background: #fef3c7;
+    }
+
+    /* 주간 요일 스트립 */
+    .week-strip {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      background: #f1f5f9;
+      padding: 5px;
+      border-radius: 14px;
+    }
+
+    .week-day-btn {
+      border: none;
+      background: transparent;
+      padding: 8px 4px;
+      border-radius: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .week-day-btn .day-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    .week-day-btn .day-number {
+      font-size: 15px;
+      font-weight: 800;
+      color: #1e293b;
+    }
+
+    .week-day-btn.active {
+      background: #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .week-day-btn.active .day-label,
+    .week-day-btn.active .day-number {
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    /* 본문 콘텐츠 영역 */
+    .content-area {
+      min-height: 320px;
+      position: relative;
+    }
+
+    /* 로딩 인디케이터 */
+    .loading-box {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 50px 20px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #e2e8f0;
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-sub);
+    }
+
+    /* 상태 1: 시간표 표 */
+    .timetable-wrapper {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 22px 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .timetable-header-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 12px;
+    }
+
+    .info-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .info-count {
+      font-size: 14px;
+      font-weight: 700;
+      color: #3b82f6;
+      background: #eff6ff;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    /* 시간표 테이블 */
+    .timetable-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 10px;
+    }
+
+    .timetable-table th {
+      font-size: 13px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-align: left;
+      padding: 0 14px 6px;
+      letter-spacing: -0.01em;
+    }
+
+    .timetable-table th:last-child {
+      text-align: right;
+    }
+
+    .timetable-row {
+      background: #f8fafc;
+      border-radius: var(--radius-md);
+      transition: all 0.2s ease;
+      cursor: default;
+    }
+
+    .timetable-row:hover {
+      background: #f1f5f9;
+      transform: translateY(-1px);
+    }
+
+    .timetable-row td {
+      padding: 16px 14px;
+    }
+
+    .timetable-row td:first-child {
+      border-top-left-radius: var(--radius-md);
+      border-bottom-left-radius: var(--radius-md);
+      width: 90px;
+    }
+
+    .timetable-row td:last-child {
+      border-top-right-radius: var(--radius-md);
+      border-bottom-right-radius: var(--radius-md);
+      text-align: right;
+      width: 60px;
+    }
+
+    .period-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      color: #334155;
+      font-size: 16px;
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    }
+
+    .subject-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .subject-icon {
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .subject-name {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+
+    .subject-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-left: 6px;
+    }
+
+    /* 상태 2: 수업이 없는 날 (모든 교시 동일) */
+    .holiday-card {
+      background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 50%, #fef9c3 100%);
+      border: 2px solid #fde68a;
+      border-radius: var(--radius-lg);
+      padding: 44px 24px;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .holiday-icon {
+      font-size: 68px;
+      margin-bottom: 4px;
+      animation: float 2.5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .holiday-badge {
+      background: #d97706;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 800;
+      padding: 6px 18px;
+      border-radius: 999px;
+      box-shadow: 0 3px 8px rgba(217, 119, 6, 0.3);
+    }
+
+    .holiday-title {
+      font-size: 26px;
+      font-weight: 900;
+      color: #92400e;
+      letter-spacing: -0.02em;
+    }
+
+    .holiday-reason-box {
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px dashed #f59e0b;
+      border-radius: var(--radius-md);
+      padding: 12px 24px;
+      margin-top: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .holiday-reason-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #b45309;
+    }
+
+    .holiday-reason-value {
+      font-size: 20px;
+      font-weight: 800;
+      color: #78350f;
+    }
+
+    .holiday-desc {
+      font-size: 15px;
+      color: #b45309;
+      font-weight: 500;
+    }
+
+    /* 상태 3: 시간표 정보가 없을 때 */
+    .empty-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 48px 24px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      border: 2px dashed #cbd5e1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      animation: popIn 0.3s ease-out;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .empty-icon {
+      font-size: 60px;
+      color: #94a3b8;
+    }
+
+    .empty-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #334155;
+    }
+
+    .empty-desc {
+      font-size: 15px;
+      color: #64748b;
+      line-height: 1.5;
+    }
+
+    .empty-action-btn {
+      margin-top: 6px;
+      background: #eff6ff;
+      color: #2563eb;
+      border: 1px solid #bfdbfe;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .empty-action-btn:hover {
+      background: #dbeafe;
+    }
+
+    /* 하단 푸터 */
+    .footer {
+      text-align: center;
+      font-size: 13px;
+      color: #94a3b8;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 8px 0;
+    }
+
+    .footer a {
+      color: #64748b;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* 모바일 맞춤 최적화 */
+    @media (max-width: 480px) {
+      body {
+        padding: 14px 10px 30px;
+      }
+      .app-title {
+        font-size: 22px;
+      }
+      .school-badge {
+        font-size: 13px;
+        padding: 5px 12px;
+      }
+      .date-display-btn {
+        font-size: 15px;
+      }
+      .subject-name {
+        font-size: 18px;
+      }
+      .holiday-title {
+        font-size: 22px;
+      }
+      .empty-title {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- 헤더 -->
+    <header class="header">
+      <div class="header-top">
+        <div class="school-badge">
+          <span class="dot"></span>
+          <span>토평중학교 1학년 2반</span>
+        </div>
+        <div class="live-tag">실시간 연동</div>
+      </div>
+      <h1 class="app-title">
+        <span>🎒 우리 반 시간표</span>
+      </h1>
+    </header>
+
+    <!-- 날짜 선택 영역 -->
+    <section class="date-card">
+      <div class="date-nav-row">
+        <button type="button" class="nav-btn" id="prevDayBtn" aria-label="이전 날짜">◀</button>
+        <div class="date-picker-wrapper">
+          <button type="button" class="date-display-btn" id="dateDisplayBtn">
+            <span>📅</span>
+            <span id="dateDisplayText">2026. 10. 13 (화)</span>
+          </button>
+          <input type="date" id="nativeDateInput" class="native-date-input" aria-label="날짜 선택" />
+        </div>
+        <button type="button" class="nav-btn" id="nextDayBtn" aria-label="다음 날짜">▶</button>
+      </div>
+
+      <!-- 이번 주 월~금 요일 빠른 선택 -->
+      <div class="week-strip" id="weekStrip">
+        <!-- JS로 동적 생성 -->
+      </div>
+
+      <!-- 퀵 액션 칩 -->
+      <div class="quick-chips-row">
+        <button type="button" class="chip-btn" id="todayBtn">☀️ 오늘</button>
+        <button type="button" class="chip-btn" id="yesterdayBtn">어제</button>
+        <button type="button" class="chip-btn" id="tomorrowBtn">내일</button>
+        <button type="button" class="chip-btn highlight" id="sampleDateBtn">⭐️ 10월 13일 (화) 예시</button>
+        <button type="button" class="chip-btn" id="refreshBtn">🔄 새로고침</button>
+      </div>
+    </section>
+
+    <!-- 시간표 본문 영역 -->
+    <main class="content-area" id="contentArea">
+      <!-- 상태에 따라 JS에서 동적으로 렌더링 -->
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+      <div>데이터 제공: 교육부 NEIS 열린보안포털 나이스 시간표 API</div>
+      <div>토평중학교 (경기도교육청 J10 / 학교코드 7652129)</div>
+    </footer>
+  </div>
+
+  <script>
+    // ==========================================
+    // 상수 및 설정
+    // ==========================================
+    const API_CONFIG = {
+      ENDPOINT: "https://open.neis.go.kr/hub/misTimetable",
+      PARAMS: {
+        Type: "json",
+        pIndex: "1",
+        pSize: "50",
+        ATPT_OFCDC_SC_CODE: "J10",
+        SD_SCHUL_CODE: "7652129",
+        GRADE: "1",
+        CLASS_NM: "2"
+      }
+    };
+
+    // 과목별 이모지 및 색상 테마 정의
+    const SUBJECT_METAS = {
+      "국어": { icon: "📕", color: "#ef4444", bg: "#fef2f2" },
+      "수학": { icon: "📐", color: "#3b82f6", bg: "#eff6ff" },
+      "영어": { icon: "🔤", color: "#f59e0b", bg: "#fffbeb" },
+      "사회": { icon: "🌍", color: "#059669", bg: "#ecfdf5" },
+      "역사": { icon: "🏛️", color: "#0d9488", bg: "#f0fdfa" },
+      "도덕": { icon: "🤝", color: "#14b8a6", bg: "#f0fdfa" },
+      "과학": { icon: "🔬", color: "#8b5cf6", bg: "#f5f3ff" },
+      "기술·가정": { icon: "🛠️", color: "#d97706", bg: "#fffbeb" },
+      "체육": { icon: "⚽", color: "#10b981", bg: "#ecfdf5" },
+      "음악": { icon: "🎵", color: "#ec4899", bg: "#fdf2f8" },
+      "미술": { icon: "🎨", color: "#f97316", bg: "#fff7ed" },
+      "정보": { icon: "💻", color: "#06b6d4", bg: "#ecfeff" },
+      "한문": { icon: "📜", color: "#6366f1", bg: "#eef2ff" },
+      "진로와직업": { icon: "🧭", color: "#8b5cf6", bg: "#f5f3ff" },
+      "동아리활동": { icon: "👥", color: "#a855f7", bg: "#faf5ff" },
+      "자율활동": { icon: "🌱", color: "#10b981", bg: "#ecfdf5" },
+      "봉사활동": { icon: "🧡", color: "#f97316", bg: "#fff7ed" }
+    };
+
+    const DAY_NAMES = ["일", "월", "화", "수", "목", "금", "토"];
+
+    // ==========================================
+    // 상태 관리
+    // ==========================================
+    // 사용자가 질문에서 명시한 예시 날짜가 20261013이므로, 기본 초기 날짜를 2026-10-13으로 설정하거나 오늘을 지원
+    let currentDate = new Date(2026, 9, 13); // 2026년 10월 13일 (화) 기본값
+
+    // URL 파라미터로 ?date=YYYYMMDD 가 있으면 해당 날짜 사용
+    const urlParams = new URLSearchParams(window.location.search);
+    const dateParam = urlParams.get("date");
+    if (dateParam && /^\d{8}$/.test(dateParam)) {
+      const y = parseInt(dateParam.slice(0, 4), 10);
+      const m = parseInt(dateParam.slice(4, 6), 10) - 1;
+      const d = parseInt(dateParam.slice(6, 8), 10);
+      currentDate = new Date(y, m, d);
+    }
+
+    // ==========================================
+    // DOM 요소
+    // ==========================================
+    const nativeDateInput = document.getElementById("nativeDateInput");
+    const dateDisplayText = document.getElementById("dateDisplayText");
+    const prevDayBtn = document.getElementById("prevDayBtn");
+    const nextDayBtn = document.getElementById("nextDayBtn");
+    const todayBtn = document.getElementById("todayBtn");
+    const yesterdayBtn = document.getElementById("yesterdayBtn");
+    const tomorrowBtn = document.getElementById("tomorrowBtn");
+    const sampleDateBtn = document.getElementById("sampleDateBtn");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const weekStrip = document.getElementById("weekStrip");
+    const contentArea = document.getElementById("contentArea");
+
+    // ==========================================
+    // 날짜 도우미 함수
+    // ==========================================
+    function formatDateToYYYYMMDD(d) {
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${year}${month}${day}`;
+    }
+
+    function formatDateToISO(d) {
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    function formatDateDisplay(d) {
+      const year = d.getFullYear();
+      const month = d.getMonth() + 1;
+      const day = d.getDate();
+      const dayName = DAY_NAMES[d.getDay()];
+      return `${year}. ${month}. ${day} (${dayName})`;
+    }
+
+    function isSameDay(d1, d2) {
+      return (
+        d1.getFullYear() === d2.getFullYear() &&
+        d1.getMonth() === d2.getMonth() &&
+        d1.getDate() === d2.getDate()
+      );
+    }
+
+    // ==========================================
+    // 주간 요일 스트립 렌더링 (월~금)
+    // ==========================================
+    function renderWeekStrip() {
+      weekStrip.innerHTML = "";
+      
+      // 현재 날짜가 속한 주의 월요일 찾기
+      const dayOfWeek = currentDate.getDay(); // 0(일) ~ 6(토)
+      // 월요일 기준으로 보정: 월=1 -> offset=0, 일=0 -> offset=-6
+      const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+      const monday = new Date(currentDate);
+      monday.setDate(currentDate.getDate() + mondayOffset);
+
+      for (let i = 0; i < 5; i++) {
+        const targetDate = new Date(monday);
+        targetDate.setDate(monday.getDate() + i);
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "week-day-btn";
+        if (isSameDay(targetDate, currentDate)) {
+          btn.classList.add("active");
+        }
+
+        const dayName = DAY_NAMES[targetDate.getDay()];
+        const dayNumber = targetDate.getDate();
+
+        btn.innerHTML = `
+          <span class="day-label">${dayName}</span>
+          <span class="day-number">${dayNumber}</span>
+        `;
+
+        btn.addEventListener("click", () => {
+          currentDate = new Date(targetDate);
+          updateDateUIAndFetch();
+        });
+
+        weekStrip.appendChild(btn);
+      }
+    }
+
+    // ==========================================
+    // UI 업데이트 및 API 호출
+    // ==========================================
+    function updateDateUIAndFetch() {
+      // 1. 디스플레이 텍스트 및 Native Input 업데이트
+      dateDisplayText.textContent = formatDateDisplay(currentDate);
+      nativeDateInput.value = formatDateToISO(currentDate);
+
+      // 2. 주간 스트립 업데이트
+      renderWeekStrip();
+
+      // 3. 오늘 버튼 활성화 여부
+      const realToday = new Date();
+      if (isSameDay(currentDate, realToday)) {
+        todayBtn.classList.add("active");
+      } else {
+        todayBtn.classList.remove("active");
+      }
+
+      // 4. API 호출
+      fetchTimetable();
+    }
+
+    // ==========================================
+    // API 호출 및 렌더링
+    // ==========================================
+    async function fetchTimetable() {
+      const ymd = formatDateToYYYYMMDD(currentDate);
+
+      // 로딩 화면 표시
+      contentArea.innerHTML = `
+        <div class="loading-box">
+          <div class="spinner"></div>
+          <div class="loading-text">${formatDateDisplay(currentDate)} 시간표 불러오는 중...</div>
+        </div>
+      `;
+
+      const params = new URLSearchParams({
+        ...API_CONFIG.PARAMS,
+        ALL_TI_YMD: ymd
+      });
+
+      const url = `${API_CONFIG.ENDPOINT}?${params.toString()}`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP Error: ${response.status}`);
+        }
+        const data = await response.json();
+        handleTimetableResponse(data, ymd);
+      } catch (error) {
+        console.error("API 요청 실패:", error);
+        renderErrorState(error.message);
+      }
+    }
+
+    // ==========================================
+    // API 결과 판별 로직
+    // ==========================================
+    function handleTimetableResponse(data, ymd) {
+      // 1. 데이터가 아예 없거나 RESULT 에러인 경우
+      // 예: {"RESULT":{"CODE":"INFO-200","MESSAGE":"해당하는 데이터가 없습니다."}}
+      const timetableData = data.misTimetable;
+      if (!timetableData || !timetableData[1] || !timetableData[1].row || timetableData[1].row.length === 0) {
+        renderEmptyState();
+        return;
+      }
+
+      const rows = timetableData[1].row;
+
+      // 교시(PERIO) 순으로 오름차순 정렬
+      rows.sort((a, b) => parseInt(a.PERIO, 10) - parseInt(b.PERIO, 10));
+
+      // 2. 모든 교시 과목이 같은 이름인지 확인 (예: 토요휴업일, 개천절, 한글날 등)
+      // 요구사항: 모든 교시 과목이 같은 이름(예: 토요휴업일)이면 "수업이 없는 날이에요"와 그 이름을 보여 줘.
+      const firstSubject = (rows[0].ITRT_CNTNT || "").trim();
+      const isAllSame = rows.every(r => (r.ITRT_CNTNT || "").trim() === firstSubject);
+
+      if (isAllSame && firstSubject) {
+        renderHolidayState(firstSubject, rows.length);
+        return;
+      }
+
+      // 3. 정상 교시별 시간표 렌더링
+      renderTimetableTable(rows);
+    }
+
+    // ==========================================
+    // 렌더링: 1) 시간표 표
+    // ==========================================
+    function renderTimetableTable(rows) {
+      const rowHtml = rows.map(r => {
+        const perio = r.PERIO;
+        const rawSubject = (r.ITRT_CNTNT || "미정").trim();
+        // 과목명 정제 및 메타데이터 찾기
+        const meta = SUBJECT_METAS[rawSubject] || { icon: "📘", color: "#3b82f6", bg: "#eff6ff" };
+
+        return `
+          <tr class="timetable-row">
+            <td>
+              <div class="period-badge">${perio}교시</div>
+            </td>
+            <td>
+              <div class="subject-cell">
+                <span class="subject-icon">${meta.icon}</span>
+                <span class="subject-name">${escapeHtml(rawSubject)}</span>
+              </div>
+            </td>
+            <td>
+              <span class="subject-tag" style="background:${meta.bg}; color:${meta.color}; border: 1px solid ${meta.color}40;">
+                정규
+              </span>
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      contentArea.innerHTML = `
+        <div class="timetable-wrapper">
+          <div class="timetable-header-info">
+            <span class="info-title">오늘의 수업 일정</span>
+            <span class="info-count">총 ${rows.length}교시 수업</span>
+          </div>
+
+          <table class="timetable-table">
+            <thead>
+              <tr>
+                <th>교시</th>
+                <th>과목</th>
+                <th>구분</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowHtml}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    // ==========================================
+    // 렌더링: 2) 모든 교시 동일 (수업이 없는 날)
+    // ==========================================
+    function renderHolidayState(holidayName, perioCount) {
+      // 휴일 유형에 따른 이모지 선택
+      let emoji = "🏖️";
+      if (holidayName.includes("토요") || holidayName.includes("휴업")) emoji = "🎈";
+      if (holidayName.includes("절") || holidayName.includes("날")) emoji = "🇰🇷";
+      if (holidayName.includes("재량")) emoji = "🌿";
+      if (holidayName.includes("방학")) emoji = "⛺";
+
+      contentArea.innerHTML = `
+        <div class="holiday-card">
+          <div class="holiday-icon">${emoji}</div>
+          <div class="holiday-badge">공지</div>
+          <div class="holiday-title">수업이 없는 날이에요</div>
+          
+          <div class="holiday-reason-box">
+            <span class="holiday-reason-label">사유:</span>
+            <span class="holiday-reason-value">${escapeHtml(holidayName)}</span>
+          </div>
+
+          <div class="holiday-desc">
+            오늘은 전 교시(${perioCount}시간) <strong>${escapeHtml(holidayName)}</strong>로 등록되어 수업이 없습니다. 즐겁고 알찬 하루 보내세요! ✨
+          </div>
+        </div>
+      `;
+    }
+
+    // ==========================================
+    // 렌더링: 3) 시간표 정보가 없을 때
+    // ==========================================
+    function renderEmptyState() {
+      contentArea.innerHTML = `
+        <div class="empty-card">
+          <div class="empty-icon">📂</div>
+          <div class="empty-title">시간표 정보가 없어요</div>
+          <div class="empty-desc">
+            선택하신 날짜(${formatDateDisplay(currentDate)})에<br>등록된 시간표 데이터가 없습니다.
+          </div>
+          <button type="button" class="empty-action-btn" id="goSampleBtn">
+            ⭐️ 10월 13일 시간표 보러가기
+          </button>
+        </div>
+      `;
+
+      const goSampleBtn = document.getElementById("goSampleBtn");
+      if (goSampleBtn) {
+        goSampleBtn.addEventListener("click", () => {
+          currentDate = new Date(2026, 9, 13);
+          updateDateUIAndFetch();
+        });
+      }
+    }
+
+    // ==========================================
+    // 렌더링: 4) 에러 상태
+    // ==========================================
+    function renderErrorState(msg) {
+      contentArea.innerHTML = `
+        <div class="empty-card">
+          <div class="empty-icon">⚠️</div>
+          <div class="empty-title">시간표를 불러오지 못했어요</div>
+          <div class="empty-desc">
+            네트워크 연결 상태를 확인하시거나 잠시 후 다시 시도해 주세요.<br>
+            <span style="font-size:12px; color:#ef4444;">(${escapeHtml(msg)})</span>
+          </div>
+          <button type="button" class="empty-action-btn" onclick="updateDateUIAndFetch()">
+            🔄 다시 시도하기
+          </button>
+        </div>
+      `;
+    }
+
+    // XSS 방지 escape
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, function (m) {
+        return {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        }[m];
+      });
+    }
+
+    // ==========================================
+    // 이벤트 바인딩
+    // ==========================================
+    // 날짜 선택기 변경
+    nativeDateInput.addEventListener("change", (e) => {
+      if (e.target.value) {
+        const [y, m, d] = e.target.value.split("-").map(Number);
+        currentDate = new Date(y, m - 1, d);
+        updateDateUIAndFetch();
+      }
+    });
+
+    // 이전 날 버튼
+    prevDayBtn.addEventListener("click", () => {
+      currentDate.setDate(currentDate.getDate() - 1);
+      updateDateUIAndFetch();
+    });
+
+    // 다음 날 버튼
+    nextDayBtn.addEventListener("click", () => {
+      currentDate.setDate(currentDate.getDate() + 1);
+      updateDateUIAndFetch();
+    });
+
+    // 오늘 버튼
+    todayBtn.addEventListener("click", () => {
+      currentDate = new Date();
+      updateDateUIAndFetch();
+    });
+
+    // 어제 버튼
+    yesterdayBtn.addEventListener("click", () => {
+      const d = new Date();
+      d.setDate(d.getDate() - 1);
+      currentDate = d;
+      updateDateUIAndFetch();
+    });
+
+    // 내일 버튼
+    tomorrowBtn.addEventListener("click", () => {
+      const d = new Date();
+      d.setDate(d.getDate() + 1);
+      currentDate = d;
+      updateDateUIAndFetch();
+    });
+
+    // 10월 13일 예시 버튼
+    sampleDateBtn.addEventListener("click", () => {
+      currentDate = new Date(2026, 9, 13);
+      updateDateUIAndFetch();
+    });
+
+    // 새로고침 버튼
+    refreshBtn.addEventListener("click", () => {
+      updateDateUIAndFetch();
+    });
+
+    // ==========================================
+    // 초기 실행
+    // ==========================================
+    updateDateUIAndFetch();
+  </script>
+</body>
+</html>
