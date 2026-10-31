@@ -918,7 +918,7 @@ static void usage(const char *prog) {
     fprintf(stderr,
             "usage: %s [-m model] [-C dir] [-H host:port] [-r session.jsonl] [prompt]\n"
             "  prompt가 있으면 원샷 실행, 없으면 대화형 REPL\n"
-            "  REPL 명령: /help /model [name|#] /cwd dir /reset /stat /tools /resume [file] /quit\n",
+            "  REPL 명령: /help /model [name|#] /lang [code] /cwd dir /reset /stat /context /tools /skills /rules /memory /diff /undo /sessions /log /reload /resume [file] /quit\n",
             prog);
 }
 
@@ -999,6 +999,87 @@ static void cfg_set(const char *key, const char *value) {
     fclose(w);
 }
 
+/* ---- aider-style git integration: auto-commit, /undo, /diff ---- */
+
+/* popen capture; trailing newline trimmed; "" on failure */
+static char *run_cap(const char *cmd, size_t cap) {
+    FILE *f = popen(cmd, "r");
+    if (!f) return NULL;
+    char *out = malloc(cap + 1);
+    if (!out) { pclose(f); return NULL; }
+    size_t n = fread(out, 1, cap, f);
+    int rc = pclose(f);
+    (void)rc;
+    out[n] = 0;
+    while (n > 0 && (out[n - 1] == '\n' || out[n - 1] == '\r')) out[--n] = 0;
+    return out;
+}
+
+static int git_inside(void) {
+    char *r = run_cap("git rev-parse --is-inside-work-tree 2>/dev/null", 16);
+    int ok = r && strstr(r, "true") != NULL;
+    free(r);
+    return ok;
+}
+
+static int git_dirty(void) {
+    char *r = run_cap("git status --porcelain 2>/dev/null", 64);
+    int dirty = r && *r;
+    free(r);
+    return dirty;
+}
+
+static int git_has_head_parent(void) {
+    char *r = run_cap("git rev-parse --verify -q HEAD~1 2>/dev/null", 8);
+    int ok = r && *r;
+    free(r);
+    return ok;
+}
+
+/* ---- Claude Code-style @file mentions: attach file contents to the goal ---- */
+
+static char *goal_attach(const char *input, const char *cwd) {
+    char base_real[4096] = "";
+    {
+        char t[4096];
+        if (realpath(cwd && *cwd ? cwd : ".", t))
+            snprintf(base_real, sizeof base_real, "%s", t);
+    }
+    size_t bl = strlen(base_real);
+    char *out = malloc(strlen(input) + 32768 + 8);
+    if (!out) return strdup(input);
+    size_t w = 0;
+    const char *p = input;
+    int attached = 0;
+    while (*p) {
+        if (*p == '@' && attached < 4 && p[1] && p[1] != ' ' && p[1] != '/') {
+            const char *s = p + 1, *e = s;
+            while (*e && *e != ' ' && *e != '\t' && *e != ',') e++;
+            size_t pl = (size_t)(e - s);
+            char rel[512];
+            snprintf(rel, sizeof rel, "%.*s", (int)pl, s);
+            char cand[4200];
+            snprintf(cand, sizeof cand, "%s/%s", base_real, rel);
+            char rp[4096];
+            char *content = NULL;
+            if (realpath(cand, rp) && strncmp(rp, base_real, bl) == 0)
+                content = read_file_capped(rp, 8192);
+            if (content) {
+                attached++;
+                if (w < 32768)
+                    w += (size_t)snprintf(out + w, 32768 - w,
+                                          "\n\n[@%s]\n%s", rel, content);
+                free(content);
+                p = e;
+                continue;
+            }
+        }
+        out[w++] = *p++;
+    }
+    out[w] = 0;
+    return out;
+}
+
 /* abbreviate $HOME to ~ for display */
 static void cwd_short(const char *cwd, char *out, size_t outn) {
     const char *home = getenv("HOME");
@@ -1046,6 +1127,12 @@ int main(int argc, char **argv) {
     const char *cwd = ".";
     const char *host = *cfg_host ? cfg_host : "127.0.0.1:11434";
     if (*cfg_lang) snprintf(g_lang, sizeof g_lang, "%s", cfg_lang);
+    int autocommit = 1;
+    {
+        char ac[16] = "";
+        cfg_get("autocommit", ac, sizeof ac);
+        if (strcmp(ac, "off") == 0) autocommit = 0;
+    }
     const char *oneshot = NULL;
     const char *resume_path = NULL;
     ui_color = isatty(1) && isatty(2);
@@ -1088,13 +1175,25 @@ int main(int argc, char **argv) {
     }
 
     if (oneshot) {
-        char *goal = strdup(oneshot);
+        char *goal = goal_attach(oneshot, cwd);
         if (!goal) return 1;
         lvc_agent_session_set_tools(sess, !casual_input(oneshot));
         spin_start();
         rc = lvc_agent_run_session(sess, host, model, goal, cwd,
                                    on_event, NULL) == 0 ? 0 : 1;
         free(goal);
+        if (autocommit && git_inside() && git_dirty()) {
+            char msg[160];
+            snprintf(msg, sizeof msg, "predator_cli: %.60s", oneshot);
+            for (char *q = msg; *q; q++)
+                if (*q == '\'') *q = '`';
+            char cmd[760];
+            snprintf(cmd, sizeof cmd,
+                "git -C '%s' add -A 2>/dev/null && "
+                "git -C '%s' commit -q -m '%s' 2>/dev/null", cwd, cwd, msg);
+            system(cmd);
+            fprintf(stderr, "%s⏺ committed%s %s\n", C_DIM, msg, C_RESET);
+        }
         lvc_agent_session_free(sess);
         return rc;
     }
@@ -1123,7 +1222,7 @@ int main(int argc, char **argv) {
             }
             else if (!strcmp(line, "/help"))
                 fprintf(stderr,
-                    "/model [name|#] /lang [code] /cwd dir /reset /stat /tools /skills /rules /memory /reload /log /sessions /resume [file] /context /quit\n");
+                    "/model [name|#] /lang [code] /cwd dir /reset /stat /context /tools /skills /rules /memory /diff /undo /sessions /log /reload /resume [file] /quit · @파일경로 첨부\n");
             else if (!strcmp(line, "/reset")) {
                 lvc_agent_session_clear(sess);
                 new_session_file(g_session_file, sizeof g_session_file);
@@ -1203,6 +1302,32 @@ int main(int argc, char **argv) {
                         lvc_agent_session_len(sess));
                 else
                     fprintf(stderr, "context: unknown (model %s)\n", model);
+            } else if (!strcmp(line, "/undo")) {
+                if (!git_inside())
+                    fprintf(stderr, "git 저장소가 아님\n");
+                else if (!git_has_head_parent())
+                    fprintf(stderr, "되돌릴 커밋이 없다 (HEAD~1 없음)\n");
+                else {
+                    char cmd[560];
+                    snprintf(cmd, sizeof cmd,
+                             "git -C '%s' reset --hard -q HEAD~1 2>/dev/null",
+                             cwd);
+                    system(cmd);
+                    fprintf(stderr, "[undo: 이전 커밋으로 되돌림]\n");
+                }
+            } else if (!strcmp(line, "/diff")) {
+                if (!git_inside()) {
+                    fprintf(stderr, "git 저장소가 아님\n");
+                } else {
+                    char cmd[560];
+                    snprintf(cmd, sizeof cmd,
+                             "git -C '%s' --no-pager diff --stat HEAD 2>/dev/null",
+                             cwd);
+                    char *r = run_cap(cmd, 4096);
+                    fprintf(stderr, "HEAD 대비 변경:\n%s\n",
+                            (r && *r) ? r : "(변경 없음)");
+                    free(r);
+                }
             } else if (!strcmp(line, "/tools")) {
                 fprintf(stderr,
                     "tools (workspace-sandboxed):\n"
@@ -1301,7 +1426,7 @@ int main(int argc, char **argv) {
                 fprintf(stderr, "unknown command %s (/help)\n", line);
             continue;
         }
-        char *goal = strdup(line);
+        char *goal = goal_attach(line, cwd);
         if (!goal) continue;
         lvc_agent_session_set_tools(sess, !casual_input(line));
         spin_start();
@@ -1310,6 +1435,20 @@ int main(int argc, char **argv) {
             rc = 1;
         free(goal);
         if (line[0] != '/') hist_push(&hist, line);
+        { /* aider-style auto-commit: agent edits land as a git commit */
+            if (autocommit && git_inside() && git_dirty()) {
+                char msg[160];
+                snprintf(msg, sizeof msg, "predator_cli: %.60s", line);
+                for (char *q = msg; *q; q++)
+                    if (*q == '\'') *q = '`';
+                char cmd[760];
+                snprintf(cmd, sizeof cmd,
+                    "git -C '%s' add -A 2>/dev/null && "
+                    "git -C '%s' commit -q -m '%s' 2>/dev/null", cwd, cwd, msg);
+                system(cmd);
+                fprintf(stderr, "%s⏺ committed%s %s\n", C_DIM, msg, C_RESET);
+            }
+        }
         { /* omp-style persistence: autosave transcript to the session file
              and the last_session mirror after each turn */
             const char *home = getenv("HOME");
