@@ -92,6 +92,19 @@ make accept-report   # 또는 python3 scripts/accept_report.py
 - 교훈: 학습 전에 반드시 토크나이저로 행 길이 분포를 검사할 것. mlx-lm의 truncation 경고는 무해해 보이지만
   mask_prompt 조합에서는 치명적이다.
 
+## 2차 NaN — 시드 무시 버그와 결정론 재학습 (2026-11)
+- all-masked 제거 후에도 iter 230에서 NaN 재발. mlx-lm 소스 확인 결과:
+  - `iterate_batches`의 `if seed:`는 **seed 0이 falsy라 시딩을 건너뛰고**, 학습 루프는 애초에 seed를 넘기지 않는다
+    → 설정의 `seed`는 무시되고 배치 순서가 매번 무작위 → poison 행이 무작위 시점에 노출.
+- 해결: 전역 numpy 시드를 고정한 래퍼로 학습 (설정 seed와 무관하게 결정론적 순열):
+  ```bash
+  python3 -c "import numpy as np; np.random.seed(42); import sys; \
+    sys.argv=['lora','--config','finetune/lora_config.json']; \
+    from mlx_lm.lora import main; main()"
+  ```
+  NaN이 나면 `finetune/reproduce_perm.py <iter> <iter>`로 정확한 배치 행을 역산한다.
+- 진단 도구: `finetune/scan_losses.py`(전 행 순방향 손실 스캔), `finetune/reproduce_perm.py`(배치 순열 재현).
+
 ## 속도 향상 파인튜닝 — GitHub 참고 (2026-09 조사)
 
 ### 기법 → LVC 적용
