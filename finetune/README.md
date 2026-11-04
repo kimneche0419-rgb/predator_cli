@@ -103,6 +103,10 @@ make accept-report   # 또는 python3 scripts/accept_report.py
     from mlx_lm.lora import main; main()"
   ```
   NaN이 나면 `finetune/reproduce_perm.py <iter> <iter>`로 정확한 배치 행을 역산한다.
+- **최종 원인 (결정론 재현으로 특정)**: NaN 배치에서 `Tokens/sec 0.000` → 타깃 토큰 0개(all-masked).
+  필터는 raw 프롬프트 <1024토큰 기준이었지만 트레이너는 **챗 템플릿 포함** 시퀀스를 1024로 잘라
+  오버헤드(~10토큰)만으로 completion이 통째로 잘리는 행이 추가로 136개 있었다.
+  템플릿 의미론 그대로(`apply_chat_template` → `len(tokens) <= offset`) 재검사해 제거 → NaN 소멸.
 - 진단 도구: `finetune/scan_losses.py`(전 행 순방향 손실 스캔), `finetune/reproduce_perm.py`(배치 순열 재현).
 
 ## 속도 향상 파인튜닝 — GitHub 참고 (2026-09 조사)

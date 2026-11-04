@@ -1,7 +1,7 @@
 {
   "model": "mlx-community/Qwen2.5-Coder-1.5B-4bit",
   "data": "finetune/data_clean",
-  "adapter_path": "finetune/adapters_v4",
+  "adapter_path": "finetune/adapters_v6",
   "fine_tune_type": "lora",
   "mask_prompt": true,
   "num_layers": 16,
@@ -20,7 +20,7 @@
   "seed": 42,
   "save_every": 300,
   "steps_per_eval": 300,
-  "steps_per_report": 10,
+  "steps_per_report": 1,
   "val_batches": 25,
   "test": false,
   "train": true,

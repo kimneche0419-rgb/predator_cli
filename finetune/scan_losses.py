@@ -32,7 +32,8 @@ for bi in range(0, len(order), B):
     ov = mx.abs(logits).max()
     tgt = mx.array(x[:, 1:])
     idx = tgt[..., None]
-    logp = mx.take_along_axis(logits[:, :-1], idx, axis=-1)[..., 0]
+    lp = mx.log_softmax(logits[:, :-1], axis=-1)
+    logp = mx.take_along_axis(lp, idx, axis=-1)[..., 0]
     tm = mx.array(mask[:, 1:])
     cnt = tm.sum(axis=1)
     tot = mx.where(tm, logp, mx.array(0.0)).sum(axis=1)

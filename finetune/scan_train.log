@@ -1,0 +1,6 @@
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 3088.59it/s]
+tokenized 19705 rows
+0/19705 1s bad=0
+200/19705 38s bad=0
+400/19705 99s bad=0
+600/19705 165s bad=0

@@ -20,3 +20,33 @@ Iter 40: Train loss 1.092, Learning Rate 5.000e-05, It/sec 0.146, Tokens/sec 10.
 [WARNING] Some sequences are longer than 1024 tokens. The longest sentence 1194 will be truncated to 1024. Consider pre-splitting your data to save memory.
 Iter 50: Train loss 0.826, Learning Rate 5.000e-05, It/sec 0.162, Tokens/sec 15.607, Trained Tokens 4725, Peak mem 2.141 GB
 Iter 60: Train loss 0.954, Learning Rate 5.000e-05, It/sec 0.184, Tokens/sec 22.103, Trained Tokens 5926, Peak mem 2.144 GB
+Iter 70: Train loss 0.659, Learning Rate 5.000e-05, It/sec 0.192, Tokens/sec 16.020, Trained Tokens 6760, Peak mem 2.146 GB
+Iter 80: Train loss 0.950, Learning Rate 5.000e-05, It/sec 0.178, Tokens/sec 22.178, Trained Tokens 8009, Peak mem 2.146 GB
+Iter 90: Train loss 0.868, Learning Rate 5.000e-05, It/sec 0.212, Tokens/sec 20.736, Trained Tokens 8987, Peak mem 2.146 GB
+[WARNING] Some sequences are longer than 1024 tokens. The longest sentence 1055 will be truncated to 1024. Consider pre-splitting your data to save memory.
+Iter 100: Train loss 0.971, Learning Rate 5.000e-05, It/sec 0.189, Tokens/sec 13.090, Trained Tokens 9679, Peak mem 2.188 GB
+[WARNING] Some sequences are longer than 1024 tokens. The longest sentence 1041 will be truncated to 1024. Consider pre-splitting your data to save memory.
+Iter 110: Train loss 0.966, Learning Rate 5.000e-05, It/sec 0.213, Tokens/sec 22.872, Trained Tokens 10751, Peak mem 2.188 GB
+Iter 120: Train loss 0.789, Learning Rate 5.000e-05, It/sec 0.218, Tokens/sec 18.073, Trained Tokens 11581, Peak mem 2.188 GB
+Iter 130: Train loss 0.941, Learning Rate 5.000e-05, It/sec 0.226, Tokens/sec 13.726, Trained Tokens 12189, Peak mem 2.188 GB
+[WARNING] Some sequences are longer than 1024 tokens. The longest sentence 1123 will be truncated to 1024. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 1024 tokens. The longest sentence 1106 will be truncated to 1024. Consider pre-splitting your data to save memory.
+Iter 140: Train loss 0.909, Learning Rate 5.000e-05, It/sec 0.207, Tokens/sec 13.618, Trained Tokens 12848, Peak mem 2.188 GB
+Iter 150: Train loss 0.976, Learning Rate 5.000e-05, It/sec 0.206, Tokens/sec 9.689, Trained Tokens 13318, Peak mem 2.188 GB
+Iter 160: Train loss 0.999, Learning Rate 5.000e-05, It/sec 0.199, Tokens/sec 15.005, Trained Tokens 14073, Peak mem 2.188 GB
+[WARNING] Some sequences are longer than 1024 tokens. The longest sentence 1080 will be truncated to 1024. Consider pre-splitting your data to save memory.
+Iter 170: Train loss 0.791, Learning Rate 5.000e-05, It/sec 0.176, Tokens/sec 16.258, Trained Tokens 14997, Peak mem 2.188 GB
+Iter 180: Train loss 1.283, Learning Rate 5.000e-05, It/sec 0.202, Tokens/sec 17.579, Trained Tokens 15866, Peak mem 2.188 GB
+Iter 190: Train loss 0.946, Learning Rate 5.000e-05, It/sec 0.195, Tokens/sec 10.203, Trained Tokens 16388, Peak mem 2.188 GB
+[WARNING] Some sequences are longer than 1024 tokens. The longest sentence 1056 will be truncated to 1024. Consider pre-splitting your data to save memory.
+Iter 200: Train loss 1.089, Learning Rate 5.000e-05, It/sec 0.210, Tokens/sec 18.317, Trained Tokens 17262, Peak mem 2.188 GB
+[WARNING] Some sequences are longer than 1024 tokens. The longest sentence 1033 will be truncated to 1024. Consider pre-splitting your data to save memory.
+Iter 210: Train loss 1.018, Learning Rate 5.000e-05, It/sec 0.187, Tokens/sec 22.059, Trained Tokens 18441, Peak mem 2.188 GB
+Iter 220: Train loss 0.752, Learning Rate 5.000e-05, It/sec 0.187, Tokens/sec 15.755, Trained Tokens 19283, Peak mem 2.188 GB
+[WARNING] Some sequences are longer than 1024 tokens. The longest sentence 1054 will be truncated to 1024. Consider pre-splitting your data to save memory.
+Iter 230: Train loss nan, Learning Rate 5.000e-05, It/sec 0.185, Tokens/sec 9.333, Trained Tokens 19788, Peak mem 2.188 GB
+Iter 240: Train loss nan, Learning Rate 5.000e-05, It/sec 0.210, Tokens/sec 22.388, Trained Tokens 20853, Peak mem 2.188 GB
+Iter 250: Train loss nan, Learning Rate 5.000e-05, It/sec 0.260, Tokens/sec 19.409, Trained Tokens 21599, Peak mem 2.188 GB
+[WARNING] Some sequences are longer than 1024 tokens. The longest sentence 1050 will be truncated to 1024. Consider pre-splitting your data to save memory.
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/multiprocessing/resource_tracker.py:475: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/mp-4njvba3_'}
+  warnings.warn(

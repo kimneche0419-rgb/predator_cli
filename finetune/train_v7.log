@@ -1,0 +1,8 @@
+Loading configuration file finetune/lora_config.json
+Loading pretrained model
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 5028.47it/s]
+Loading datasets
+Training
+Trainable parameters: 0.342% (5.276M/1543.714M)
+Starting training..., iters: 1200
+Calculating loss...:   0%|          | 0/25 [00:00<?, ?it/s]Calculating loss...:   4%|▍         | 1/25 [00:01<00:36,  1.51s/it]Calculating loss...:   8%|▊         | 2/25 [00:03<00:36,  1.60s/it]Calculating loss...:  12%|█▏        | 3/25 [00:05<00:38,  1.74s/it]Calculating loss...:  16%|█▌        | 4/25 [00:05<00:29,  1.40s/it]Calculating loss...:  20%|██        | 5/25 [00:06<00:25,  1.25s/it]Calculating loss...:  24%|██▍       | 6/25 [00:09<00:33,  1.77s/it]Calculating loss...:  28%|██▊       | 7/25 [00:11<00:31,  1.73s/it]Calculating loss...:  32%|███▏      | 8/25 [00:12<00:27,  1.62s/it]Calculating loss...:  36%|███▌      | 9/25 [00:13<00:23,  1.47s/it]Calculating loss...:  40%|████      | 10/25 [00:16<00:29,  1.95s/it]Calculating loss...:  44%|████▍     | 11/25 [00:17<00:21,  1.51s/it]Calculating loss...:  48%|████▊     | 12/25 [00:20<00:25,  1.99s/it]Calculating loss...:  52%|█████▏    | 13/25 [00:22<00:24,  2.01s/it]Calculating loss...:  56%|█████▌    | 14/25 [00:24<00:23,  2.13s/it]

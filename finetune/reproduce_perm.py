@@ -5,6 +5,7 @@ trained in the iters window where NaN appeared. Usage:
 import json, sys
 import numpy as np
 np.random.seed(42)  # match the seeded wrapper BEFORE any loads
+from mlx_lm.utils import load
 from mlx_lm.tokenizer_utils import TokenizerWrapper
 
 model, tok = load("mlx-community/Qwen2.5-Coder-1.5B-4bit")
