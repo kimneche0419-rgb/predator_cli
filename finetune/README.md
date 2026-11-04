@@ -82,6 +82,16 @@ make accept-report   # 또는 python3 scripts/accept_report.py
 - OOM 시: `--lora-r 8`, `--bs 1 --grad-accum 8`.
 - 제안 채택률(acceptance rate)로 개선 측정: `grep -c '"accepted":true' log` 비율 추적.
 
+## NaN 장애 기록 (2026-11, 21.6k GitHub 데이터셋)
+- 증상: 학습 시작 후 수십~수백 iter 사이 train/val loss가 NaN. lr 하향(1e-4→5e-5), `grad_clip: 1.0`으로도 재발.
+- 원인: **프롬프트만으로 ≥1024토큰인 행**(902개). `max_seq_length` 1024로 잘리면 completion이 통째로 잘려
+  라벨이 전부 -100(all-masked)이 되고 손실이 0/0 = NaN이 된다. 밀집 코드(압축 JS 등)는 글자당 토큰이
+  ~3개라 PREFIX_MAX_CHARS 2400(≈700토큰)을 초과하기 쉽다.
+- 해결: 데이터에서 prompt 토큰 ≥1024 행 제거(`finetune/data_clean/`) + 채굴기 cap 2400→1600 +
+  `grad_clip: 1.0` + lr 5e-5. 이후 NaN 없음.
+- 교훈: 학습 전에 반드시 토크나이저로 행 길이 분포를 검사할 것. mlx-lm의 truncation 경고는 무해해 보이지만
+  mask_prompt 조합에서는 치명적이다.
+
 ## 속도 향상 파인튜닝 — GitHub 참고 (2026-09 조사)
 
 ### 기법 → LVC 적용
