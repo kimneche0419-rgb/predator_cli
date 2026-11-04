@@ -72,6 +72,10 @@ void lvc_agent_session_set_tools(lvc_agent_session *s, int enabled);
  * (never stored in the transcript). NULL clears it. */
 void lvc_agent_session_set_system(lvc_agent_session *s, const char *text);
 
+/* append an arbitrary message to the transcript (compaction/context injection) */
+void lvc_agent_session_add_message(lvc_agent_session *s, const char *role,
+                                   const char *content);
+
 /* persist the transcript as a JSON array file, and load one back
  * (replacing this session's transcript). returns 0/-1. */
 int lvc_agent_session_save(const lvc_agent_session *s, const char *path);

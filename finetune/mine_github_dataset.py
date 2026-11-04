@@ -46,7 +46,7 @@ MAX_FILE_BYTES = 400_000
 MIDDLE_MAX_LINES = 40
 MIDDLE_MAX_CHARS = 1200
 MIN_MIDDLE_CHARS = 16
-PREFIX_MAX_CHARS = 2400
+PREFIX_MAX_CHARS = 1600  # dense code can be ~3 chars/token; keep prompt < 1024 tokens (all-masked rows NaN the run)
 SUFFIX_MAX_CHARS = 800
 
 FIM_PREFIX = "<|fim_prefix|>"

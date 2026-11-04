@@ -1055,6 +1055,18 @@ void lvc_agent_session_set_system(lvc_agent_session *s, const char *text) {
     if (text && *text) sapp(&s->system, text);
 }
 
+void lvc_agent_session_add_message(lvc_agent_session *s, const char *role,
+                                   const char *content) {
+    if (!s || !role || !content || !*content) return;
+    if (s->nmsgs > 0) sapp(&s->msgs, ",");
+    sapp(&s->msgs, "{\"role\":\"");
+    sapp(&s->msgs, role);
+    sapp(&s->msgs, "\",\"content\":");
+    json_escape(&s->msgs, content);
+    sapp(&s->msgs, "}");
+    s->nmsgs++;
+}
+
 void lvc_agent_session_last_usage(const lvc_agent_session *s, long *in_tokens,
                                   long *out_tokens) {
     if (in_tokens) *in_tokens = s ? s->last_in : -1;
@@ -1297,15 +1309,14 @@ int lvc_agent_run_session(lvc_agent_session *sess, const char *host,
     }
 
     /* seed this user turn; the transcript persists across turns */
-    sbuf *msgs = &sess->msgs;
-    if ((sess->nmsgs > 0 && !sapp(msgs, ",")) ||
-        !sapp(msgs, "{\"role\":\"user\",\"content\":") ||
-        !json_escape(msgs, goal) || !sapp(msgs, "}")) {
+    size_t before = sess->nmsgs;
+    lvc_agent_session_add_message(sess, "user", goal);
+    if (sess->nmsgs == before) {
         cb(user, LVC_AGENT_ERROR, "out of memory");
         curl_unref();
         return -1;
     }
-    sess->nmsgs++;
+    sbuf *msgs = &sess->msgs;
 
     char *last_sig = NULL;  /* "name args" of the previous tool round */
     char *prev_sig = NULL;  /* two rounds back: catches A-B-A oscillation */

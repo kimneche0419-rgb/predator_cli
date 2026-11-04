@@ -2,7 +2,7 @@
  *
  * One-shot:  lvcli [-m model] [-C dir] [-H host:port] "task"
  * REPL:      lvcli [-m model] [-C dir] [-H host:port]
- * REPL commands: /help /model [name] /cwd dir /reset /stat /quit
+ * REPL commands: /help /model [name] /cwd dir /reset /stat /memory /remember /compact /quit
  *
  * Multi-turn memory lives in an lvc_agent_session; tools (list_dir,
  * read_file, edit_file, run_shell) are sandboxed to the working directory.
@@ -67,6 +67,8 @@ static const struct { const char *cmd; const char *desc; } SLASH[] = {
     {"/skills", "스킬 목록"},
     {"/rules",  "룰 나열"},
     {"/memory", "프로젝트 메모리 보기"},
+    {"/remember", "메모를 기억에 저장"},
+    {"/compact", "대화 요약 후 기억에 저장"},
     {"/reload", "메모리·스킬 재스캔"},
     {"/resume", "세션 복원"},
     {"/reset",  "대화 초기화"},
@@ -137,6 +139,46 @@ static char *find_project_memory(const char *cwd) {
         }
     }
     return w ? strdup(out) : NULL;
+}
+
+/* ---- persistent conversation memory (accumulating .predator/MEMORY.md) ---- */
+
+/* append arbitrary text as a block to project memory, creating dirs */
+static void mem_append(const char *cwd, const char *text) {
+    char dir[4200], path[4400];
+    snprintf(dir, sizeof dir, "%s/.predator", cwd);
+    mkdir(dir, 0700); /* exists → ignore */
+    snprintf(path, sizeof path, "%s/MEMORY.md", dir);
+    FILE *f = fopen(path, "a");
+    if (!f) return;
+    fputs(text, f);
+    fputc('\n', f);
+    fclose(f);
+}
+
+/* combined persistent memory for the system prompt: global then project */
+static char *find_persistent_memory(const char *cwd) {
+    const char *home = getenv("HOME");
+    char out[8192];
+    size_t w = 0;
+    out[0] = 0;
+    if (home && *home) {
+        char path[4200];
+        snprintf(path, sizeof path, "%s/.predator/MEMORY.md", home);
+        char *b = read_file_capped(path, 3072);
+        if (b && *b)
+            w += (size_t)snprintf(out + w, sizeof out - w,
+                                  "[global %s]\n%s\n", path, b);
+        free(b);
+    }
+    char path[4200];
+    snprintf(path, sizeof path, "%s/.predator/MEMORY.md", cwd);
+    char *b = read_file_capped(path, 3072);
+    if (b && *b)
+        w += (size_t)snprintf(out + w, sizeof out - w,
+                              "[project %s]\n%s\n", path, b);
+    free(b);
+    return out[0] ? strdup(out) : NULL;
 }
 
 /* ---- omp-style skills: scan .predator/skills dirs, build the catalog ---- */
@@ -307,6 +349,11 @@ static void rebuild_system(const char *cwd, lvc_agent_session *sess) {
         fprintf(f,
             "\n§ Project instructions (CLAUDE.md/AGENTS.md — MUST follow)\n%s\n",
             mem);
+    char *pmem = find_persistent_memory(cwd);
+    if (pmem)
+        fprintf(f,
+            "\n§ Memory notes (past sessions, accumulated — MUST respect)\n%s\n",
+            pmem);
     char cat[8192];
     scan_skills(cwd, sess, cat, sizeof cat);
     if (*cat)
@@ -870,6 +917,26 @@ static void tool_key(const char *json, char *out, size_t outn) {
     snprintf(out, outn, "%s", json ? json : "");
 }
 
+/* /compact: collect summary tokens into a growing buffer instead of streaming */
+static char *g_compact_buf = NULL;
+static size_t g_compact_len = 0, g_compact_cap = 0;
+static void on_compact(void *user, lvc_agent_event ev, const char *text) {
+    (void)user;
+    if (ev != LVC_AGENT_TOKEN || !text) return;
+    size_t n = strlen(text);
+    if (g_compact_len + n + 1 > g_compact_cap) {
+        size_t nc = g_compact_cap ? g_compact_cap * 2 : 4096;
+        while (nc < g_compact_len + n + 1) nc *= 2;
+        char *p = realloc(g_compact_buf, nc);
+        if (!p) return;
+        g_compact_buf = p;
+        g_compact_cap = nc;
+    }
+    memcpy(g_compact_buf + g_compact_len, text, n);
+    g_compact_len += n;
+    g_compact_buf[g_compact_len] = 0;
+}
+
 static void on_event(void *user, lvc_agent_event ev, const char *text) {
     (void)user;
     spin_stop();
@@ -918,7 +985,7 @@ static void usage(const char *prog) {
     fprintf(stderr,
             "usage: %s [-m model] [-C dir] [-H host:port] [-r session.jsonl] [prompt]\n"
             "  prompt가 있으면 원샷 실행, 없으면 대화형 REPL\n"
-            "  REPL 명령: /help /model [name|#] /lang [code] /cwd dir /reset /stat /context /tools /skills /rules /memory /diff /undo /sessions /log /reload /resume [file] /quit\n",
+            "  REPL 명령: /help /model [name|#] /lang [code] /cwd dir /reset /stat /context /tools /skills /rules /memory /remember /compact /diff /undo /sessions /log /reload /resume [file] /quit\n",
             prog);
 }
 
@@ -1015,15 +1082,35 @@ static char *run_cap(const char *cmd, size_t cap) {
     return out;
 }
 
-static int git_inside(void) {
-    char *r = run_cap("git rev-parse --is-inside-work-tree 2>/dev/null", 16);
+/* shell-quote a path for git -C '...' (single quotes, escape internals) */
+static void shq(const char *s, char *out, size_t n) {
+    size_t w = 0;
+    if (w < n - 1) out[w++] = '\'';
+    for (const char *p = s; *p && w + 6 < n; p++) {
+        if (*p == '\'') { out[w++] = '\''; out[w++] = '\\'; out[w++] = '\'';
+                          out[w++] = '\''; out[w++] = '\''; }
+        else out[w++] = *p;
+    }
+    if (w < n - 1) out[w++] = '\'';
+    out[w] = 0;
+}
+
+static int git_inside(const char *cwd) {
+    char q[4200], cmd[4400];
+    shq(cwd, q, sizeof q);
+    snprintf(cmd, sizeof cmd,
+             "git -C %s rev-parse --is-inside-work-tree 2>/dev/null", q);
+    char *r = run_cap(cmd, 16);
     int ok = r && strstr(r, "true") != NULL;
     free(r);
     return ok;
 }
 
-static int git_dirty(void) {
-    char *r = run_cap("git status --porcelain 2>/dev/null", 64);
+static int git_dirty(const char *cwd) {
+    char q[4200], cmd[4400];
+    shq(cwd, q, sizeof q);
+    snprintf(cmd, sizeof cmd, "git -C %s status --porcelain 2>/dev/null", q);
+    char *r = run_cap(cmd, 64);
     int dirty = r && *r;
     free(r);
     return dirty;
@@ -1182,7 +1269,7 @@ int main(int argc, char **argv) {
         rc = lvc_agent_run_session(sess, host, model, goal, cwd,
                                    on_event, NULL) == 0 ? 0 : 1;
         free(goal);
-        if (autocommit && git_inside() && git_dirty()) {
+        if (autocommit && git_inside(cwd) && git_dirty(cwd)) {
             char msg[160];
             snprintf(msg, sizeof msg, "predator_cli: %.60s", oneshot);
             for (char *q = msg; *q; q++)
@@ -1191,7 +1278,7 @@ int main(int argc, char **argv) {
             snprintf(cmd, sizeof cmd,
                 "git -C '%s' add -A 2>/dev/null && "
                 "git -C '%s' commit -q -m '%s' 2>/dev/null", cwd, cwd, msg);
-            system(cmd);
+            if (system(cmd) == 0)
             fprintf(stderr, "%s⏺ committed%s %s\n", C_DIM, msg, C_RESET);
         }
         lvc_agent_session_free(sess);
@@ -1222,7 +1309,7 @@ int main(int argc, char **argv) {
             }
             else if (!strcmp(line, "/help"))
                 fprintf(stderr,
-                    "/model [name|#] /lang [code] /cwd dir /reset /stat /context /tools /skills /rules /memory /diff /undo /sessions /log /reload /resume [file] /quit · @파일경로 첨부\n");
+                    "/model [name|#] /lang [code] /cwd dir /reset /stat /context /tools /skills /rules /memory /remember /compact /diff /undo /sessions /log /reload /resume [file] /quit · @파일경로 첨부\n");
             else if (!strcmp(line, "/reset")) {
                 lvc_agent_session_clear(sess);
                 new_session_file(g_session_file, sizeof g_session_file);
@@ -1303,7 +1390,7 @@ int main(int argc, char **argv) {
                 else
                     fprintf(stderr, "context: unknown (model %s)\n", model);
             } else if (!strcmp(line, "/undo")) {
-                if (!git_inside())
+                if (!git_inside(cwd))
                     fprintf(stderr, "git 저장소가 아님\n");
                 else if (!git_has_head_parent())
                     fprintf(stderr, "되돌릴 커밋이 없다 (HEAD~1 없음)\n");
@@ -1316,7 +1403,7 @@ int main(int argc, char **argv) {
                     fprintf(stderr, "[undo: 이전 커밋으로 되돌림]\n");
                 }
             } else if (!strcmp(line, "/diff")) {
-                if (!git_inside()) {
+                if (!git_inside(cwd)) {
                     fprintf(stderr, "git 저장소가 아님\n");
                 } else {
                     char cmd[560];
@@ -1365,6 +1452,75 @@ int main(int argc, char **argv) {
                     fprintf(stderr,
                         "no project memory — CLAUDE.md/AGENTS.md를 작업 디렉터리에 "
                         "만들면 매 세션 자동 주입된다\n");
+                char *pmem = find_persistent_memory(cwd);
+                if (pmem) {
+                    fprintf(stderr, "persistent memory:\n%.*s\n", 1200, pmem);
+                    free(pmem);
+                } else
+                    fprintf(stderr,
+                        "persistent memory 비어 있음 — /remember <메모>로 쌓거나 "
+                        "/compact로 대화를 요약 저장\n");
+            } else if (!strncmp(line, "/remember ", 10)) {
+                const char *note = line + 10;
+                while (*note == ' ') note++;
+                if (!*note) {
+                    fprintf(stderr, "usage: /remember <메모>\n");
+                } else {
+                    time_t rt = time(NULL);
+                    struct tm rtm;
+                    localtime_r(&rt, &rtm);
+                    char rd[32];
+                    strftime(rd, sizeof rd, "%Y-%m-%d", &rtm);
+                    char row[1024];
+                    snprintf(row, sizeof row, "- %s %s", rd, note);
+                    mem_append(cwd, row);
+                    fprintf(stderr, "saved → %s/.predator/MEMORY.md\n", cwd);
+                }
+            } else if (!strcmp(line, "/compact")) {
+                if (lvc_agent_session_len(sess) == 0) {
+                    fprintf(stderr, "대화가 비어 있다 — 압축할 내용 없음\n");
+                } else {
+                    char dump[12288];
+                    lvc_agent_session_dump_readable(sess, dump, sizeof dump);
+                    lvc_agent_session *sum = lvc_agent_session_create();
+                    lvc_agent_session_set_system(sum,
+                        "너는 대화 요약기다. 도구를 쓰지 않고, 대화 기록을 "
+                        "핵심 결정·사실·할 일 위주의 간결한 한국어 메모로 "
+                        "요약해서만 답한다.");
+                    lvc_agent_session_set_tools(sum, 0);
+                    char goal[14336];
+                    snprintf(goal, sizeof goal,
+                        "다음 대화 기록을 간결한 한국어 메모(10줄 내외)로 "
+                        "요약해라:\n\n%s", dump);
+                    g_compact_len = 0;
+                    spin_start();
+                    int crc = lvc_agent_run_session(sum, host, model, goal,
+                                                    cwd, on_compact, NULL);
+                    spin_stop();
+                    if (crc == 0 && g_compact_len > 0) {
+                        time_t ct = time(NULL);
+                        struct tm ctm;
+                        localtime_r(&ct, &ctm);
+                        char cts[64];
+                        strftime(cts, sizeof cts, "%Y-%m-%d %H:%M", &ctm);
+                        char block[10240];
+                        snprintf(block, sizeof block,
+                                 "## %s 대화 요약\n%s", cts, g_compact_buf);
+                        mem_append(cwd, block);
+                        char ctx[10240];
+                        snprintf(ctx, sizeof ctx,
+                                 "이전 대화 요약 (세션 압축):\n%s\n\n이어서 진행해라.",
+                                 g_compact_buf);
+                        lvc_agent_session_clear(sess);
+                        lvc_agent_session_add_message(sess, "user", ctx);
+                        fprintf(stderr,
+                            "[compact] 요약을 .predator/MEMORY.md에 저장하고 "
+                            "대화를 압축했다 (현재 %zu msg)\n",
+                            lvc_agent_session_len(sess));
+                    } else
+                        fprintf(stderr, "요약 실패 — 대화는 그대로 유지된다\n");
+                    lvc_agent_session_free(sum);
+                }
             } else if (!strcmp(line, "/reload")) {
                 rebuild_system(cwd, sess);
                 fprintf(stderr, "[reloaded: memory %s, skills scanned]\n",
@@ -1436,7 +1592,7 @@ int main(int argc, char **argv) {
         free(goal);
         if (line[0] != '/') hist_push(&hist, line);
         { /* aider-style auto-commit: agent edits land as a git commit */
-            if (autocommit && git_inside() && git_dirty()) {
+            if (autocommit && git_inside(cwd) && git_dirty(cwd)) {
                 char msg[160];
                 snprintf(msg, sizeof msg, "predator_cli: %.60s", line);
                 for (char *q = msg; *q; q++)
@@ -1445,7 +1601,7 @@ int main(int argc, char **argv) {
                 snprintf(cmd, sizeof cmd,
                     "git -C '%s' add -A 2>/dev/null && "
                     "git -C '%s' commit -q -m '%s' 2>/dev/null", cwd, cwd, msg);
-                system(cmd);
+                if (system(cmd) == 0)
                 fprintf(stderr, "%s⏺ committed%s %s\n", C_DIM, msg, C_RESET);
             }
         }
