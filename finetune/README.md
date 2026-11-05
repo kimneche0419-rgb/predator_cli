@@ -1,6 +1,10 @@
 # LVC Fine-tuning Pipeline
 
-> **상태: 파크 (2026-10-12)** — 파인튜닝 라인 중단, `lvc-coder` 모델 삭제됨.
+> **상태: 재가동 (2026-11-05)** — 21.6k GitHub 마이닝 데이터셋으로 `lvc-coder` 재학습 완료.
+> MLX 로컬 경로: `mlx_lm lora`(어댑터) → `mlx_lm fuse --dequantize`(HF 병합) →
+> `vendor/llama.cpp/convert_hf_to_gguf.py --outtype q8_0`(GGUF) → `ollama create lvc-coder`.
+> 주의: `mlx_lm fuse --export-gguf`는 qwen2 미지원, 반드시 llama.cpp 변환 경로를 쓸 것.
+> 학습은 반드시 시드 고정 래퍼로(아래 NaN 장애 기록 참고). val loss 1.646 → 0.924 (1200 iter, NaN 0건).
 > 파이프라인/데이터/평가 하네스는 재현 가능하게 보존. 재개 시 아래 순서대로.
 > 현재 주력은 `lvcli` (일반 instruct 모델 + 도구 루프) — `src/cli/main.c`.
 

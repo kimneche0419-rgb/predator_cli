@@ -1,0 +1,7 @@
+Loading configuration file /tmp/test_config.json
+Loading pretrained model
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 4061.19it/s]
+Loading datasets
+Testing
+Calculating loss...:   0%|          | 0/500 [00:00<?, ?it/s]Calculating loss...:   0%|          | 1/500 [00:00<07:41,  1.08it/s]Calculating loss...:   0%|          | 2/500 [00:01<07:55,  1.05it/s][WARNING] Some sequences are longer than 1024 tokens. The longest sentence 1038 will be truncated to 1024. Consider pre-splitting your data to save memory.
+Calculating loss...:   1%|          | 3/500 [00:04<15:23,  1.86s/it]Calculating loss...:   1%|          | 4/500 [00:06<13:36,  1.65s/it]Calculating loss...:   1%|          | 5/500 [00:07<11:35,  1.40s/it]Calculating loss...:   1%|          | 6/500 [00:09<13:26,  1.63s/it]Calculating loss...:   1%|▏         | 7/500 [00:11<15:14,  1.85s/it]Calculating loss...:   2%|▏         | 8/500 [00:12<14:02,  1.71s/it][WARNING] Some sequences are longer than 1024 tokens. The longest sentence 1196 will be truncated to 1024. Consider pre-splitting your data to save memory.
