@@ -385,6 +385,7 @@ static int ui_truecolor = 0;      /* COLORTERM=truecolor */
 #define C_BOLD    (ui_color ? "\033[1m" : "")
 #define C_CODE    (ui_color ? "\033[36m" : "")
 #define C_ERR     (ui_color ? "\033[31m" : "")
+#define C_WARNING (ui_color ? "\033[33m" : "")
 
 static void sleep_ms(int ms) {
     struct timespec ts = { ms / 1000, (long)(ms % 1000) * 1000000L };
@@ -1185,6 +1186,7 @@ static void cwd_short(const char *cwd, char *out, size_t outn) {
 static void banner(const char *model, const char *host, const char *cwd) {
     char cwdbuf[1024];
     cwd_short(cwd, cwdbuf, sizeof cwdbuf);
+    fprintf(stderr, "\r\033[K"); /* wipe a stale partial line under us */
     if (!ui_color) {
         fprintf(stderr,
                 "predator_cli v1.0\n"
@@ -1192,18 +1194,23 @@ static void banner(const char *model, const char *host, const char *cwd) {
                 "%s\n\n"
                 "Get to finished work sooner. Switch anytime with /model.\n",
                 model, host, cwdbuf);
-        return;
+    } else {
+        fprintf(stderr,
+                "%s✻%s %spredator_cli%s %sv1.0%s\n"
+                "%s  %s · %s%s\n"
+                "%s  %s%s\n"
+                "\n"
+                "Get to finished work sooner. Switch anytime with %s/model%s.%s\n",
+                C_ACCENT, C_RESET, C_BOLD, C_RESET, C_DIM, C_RESET,
+                C_DIM, model, host, C_RESET,
+                C_DIM, cwdbuf, C_RESET,
+                C_RESET, C_CODE, C_RESET);
     }
-    fprintf(stderr,
-            "%s✻%s %spredator_cli%s %sv1.0%s\n"
-            "%s  %s · %s%s\n"
-            "%s  %s%s\n"
-            "\n"
-            "Get to finished work sooner. Switch anytime with %s/model%s.%s\n",
-            C_ACCENT, C_RESET, C_BOLD, C_RESET, C_DIM, C_RESET,
-            C_DIM, model, host, C_RESET,
-            C_DIM, cwdbuf, C_RESET,
-            C_RESET, C_CODE, C_RESET);
+    if (lvc_agent_model_is_fim(host, model))
+        fprintf(stderr,
+                "%s⚠ %s는 FIM 전용 (코드 이어쓰기용) — 대화에는 %s 권장 "
+                "(/model)%s\n",
+                C_WARNING, model, DEFAULT_MODEL, C_RESET);
 }
 
 int main(int argc, char **argv) {
