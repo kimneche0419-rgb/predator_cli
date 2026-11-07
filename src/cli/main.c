@@ -732,10 +732,11 @@ static char *pred_readline(const char *prompt, pred_hist *h) {
     return strdup(buf);
 }
 
-/* arrow-key picker: returns malloc'd selection, NULL on cancel */
-static char *pred_picker(char **items, size_t n, const char *title) {
+/* arrow-key picker: renders items, returns chosen index (NULL-out on cancel) */
+static char *pred_picker(char **items, size_t n, const char *title,
+                         size_t start, size_t *out_idx) {
     if (!isatty(0) || !ui_color || n == 0) return NULL;
-    size_t idx = 0;
+    size_t idx = start < n ? start : n - 1;
     size_t printed = 0; /* total rendered lines (title + items) */
     pred_raw(1);
     for (;;) {
@@ -746,6 +747,7 @@ static char *pred_picker(char **items, size_t n, const char *title) {
                     i == idx ? C_ACCENT : C_DIM,
                     i == idx ? "❯ " : "  ", C_RESET, items[i],
                     i == idx ? "  ←" : "");
+        fprintf(stderr, "\033[J"); /* erase stale output below the menu */
         printed = n + 1;
         fflush(stderr);
         char ch;
@@ -756,6 +758,7 @@ static char *pred_picker(char **items, size_t n, const char *title) {
             if (idx + 1 < n) idx++;
         } else if (k == K_ENTER) {
             pred_raw(0);
+            if (out_idx) *out_idx = idx;
             return strdup(items[idx]);
         } else if (k == K_ESC || k == K_CTRL_C ||
                    (k == K_CHAR && ch == 'q')) {
@@ -1269,7 +1272,8 @@ int main(int argc, char **argv) {
         rc = lvc_agent_run_session(sess, host, model, goal, cwd,
                                    on_event, NULL) == 0 ? 0 : 1;
         free(goal);
-        if (autocommit && git_inside(cwd) && git_dirty(cwd)) {
+        if (autocommit && !casual_input(oneshot) && git_inside(cwd) &&
+            git_dirty(cwd)) {
             char msg[160];
             snprintf(msg, sizeof msg, "predator_cli: %.60s", oneshot);
             for (char *q = msg; *q; q++)
@@ -1279,7 +1283,7 @@ int main(int argc, char **argv) {
                 "git -C '%s' add -A 2>/dev/null && "
                 "git -C '%s' commit -q -m '%s' 2>/dev/null", cwd, cwd, msg);
             if (system(cmd) == 0)
-            fprintf(stderr, "%s⏺ committed%s %s\n", C_DIM, msg, C_RESET);
+            fprintf(stderr, "%s⏺ committed %s%s\n", C_DIM, msg, C_RESET);
         }
         lvc_agent_session_free(sess);
         return rc;
@@ -1329,13 +1333,38 @@ int main(int argc, char **argv) {
                             snprintf(title, sizeof title,
                                      "model — ↑/↓ 이동 · Enter 선택 · Esc 취소 · "
                                      "대화 권장: %s", DEFAULT_MODEL);
-                            char *sel = pred_picker(names, cnt, title);
+                            char **disp = malloc(cnt * sizeof(char *));
+                            size_t rec = 0;
+                            if (!disp) cnt = 0;
+                            for (size_t i = 0; i < cnt; i++) {
+                                int fim = lvc_agent_model_is_fim(host, names[i]);
+                                const char *suffix = fim ? "  · FIM 전용 (대화 비추천)" : "";
+                                size_t need = strlen(names[i]) + strlen(suffix) + 1;
+                                disp[i] = malloc(need);
+                                if (!disp[i]) { cnt = i; break; }
+                                snprintf(disp[i], need, "%s%s", names[i], suffix);
+                                if (fim && rec == (size_t)i) rec = (i + 1 < cnt) ? i + 1 : i;
+                            }
+                            /* preselect the chat-recommended model */
+                            for (size_t i = 0; i < cnt; i++)
+                                if (strcmp(names[i], DEFAULT_MODEL) == 0) { rec = i; break; }
+                            size_t pick = 0;
+                            char *sel = pred_picker(disp, cnt, title, rec, &pick);
                             if (sel) {
-                                snprintf(g_model_buf, sizeof g_model_buf, "%s", sel);
+                                snprintf(g_model_buf, sizeof g_model_buf, "%s",
+                                         names[pick]);
                                 model = g_model_buf;
-                                fprintf(stderr, "[model: %s]\n", model);
+                                if (lvc_agent_model_is_fim(host, model))
+                                    fprintf(stderr,
+                                        "[model: %s — FIM 전용: 채팅 대신 코드 "
+                                        "이어쓰기용. 대화는 %s 권장]\n",
+                                        model, DEFAULT_MODEL);
+                                else
+                                    fprintf(stderr, "[model: %s]\n", model);
                                 free(sel);
                             }
+                            for (size_t i = 0; i < cnt; i++) free(disp[i]);
+                            free(disp);
                         } else {
                             for (size_t i = 0; i < cnt; i++)
                                 fprintf(stderr, "  %zu. %s\n", i + 1, names[i]);
@@ -1591,8 +1620,10 @@ int main(int argc, char **argv) {
             rc = 1;
         free(goal);
         if (line[0] != '/') hist_push(&hist, line);
-        { /* aider-style auto-commit: agent edits land as a git commit */
-            if (autocommit && git_inside(cwd) && git_dirty(cwd)) {
+        { /* aider-style auto-commit: agent edits land as a git commit.
+           * casual turns run with tools off — no edits possible, skip. */
+            int was_casual = casual_input(line);
+            if (autocommit && !was_casual && git_inside(cwd) && git_dirty(cwd)) {
                 char msg[160];
                 snprintf(msg, sizeof msg, "predator_cli: %.60s", line);
                 for (char *q = msg; *q; q++)
@@ -1602,7 +1633,7 @@ int main(int argc, char **argv) {
                     "git -C '%s' add -A 2>/dev/null && "
                     "git -C '%s' commit -q -m '%s' 2>/dev/null", cwd, cwd, msg);
                 if (system(cmd) == 0)
-                fprintf(stderr, "%s⏺ committed%s %s\n", C_DIM, msg, C_RESET);
+                fprintf(stderr, "%s⏺ committed %s%s\n", C_DIM, msg, C_RESET);
             }
         }
         { /* omp-style persistence: autosave transcript to the session file

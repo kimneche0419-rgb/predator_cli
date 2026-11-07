@@ -1026,6 +1026,49 @@ void lvc_agent_free_models(char **names, size_t count) {
     free(names);
 }
 
+int lvc_agent_model_is_fim(const char *host, const char *name) {
+    if (!host || !name) return 0;
+    if (curl_ref() != 0) return 0;
+    int rc = 0;
+    CURL *c = curl_easy_init();
+    sbuf body;
+    sbuf_init(&body);
+    if (!c) { curl_unref(); return 0; }
+    char url[512];
+    snprintf(url, sizeof url, "http://%s/api/show", host);
+    curl_easy_setopt(c, CURLOPT_URL, url);
+    curl_easy_setopt(c, CURLOPT_WRITEFUNCTION, sbuf_write);
+    curl_easy_setopt(c, CURLOPT_WRITEDATA, &body);
+    curl_easy_setopt(c, CURLOPT_CONNECTTIMEOUT, 3L);
+    curl_easy_setopt(c, CURLOPT_TIMEOUT, 15L);
+    char req[256];
+    snprintf(req, sizeof req, "{\"model\":\"%s\"}", name);
+    struct curl_slist *hdrs = curl_slist_append(NULL, "Content-Type: application/json");
+    curl_easy_setopt(c, CURLOPT_HTTPHEADER, hdrs);
+    curl_easy_setopt(c, CURLOPT_POSTFIELDS, req);
+    CURLcode cr = curl_easy_perform(c);
+    long http_code = 0;
+    curl_easy_getinfo(c, CURLINFO_RESPONSE_CODE, &http_code);
+    curl_easy_cleanup(c);
+    curl_slist_free_all(hdrs);
+    if (cr == CURLE_OK && http_code == 200) {
+        jval *root = json_parse(sbuf_cstr(&body));
+        const jval *tpl = root ? jobj_get(root, "template") : NULL;
+        if (tpl && tpl->t == J_STR) {
+            /* FIM-only = has fim tokens AND no chat branch. Coder chat
+             * templates (qwen2.5-coder etc.) embed an fim clause for
+             * /api/generate completions but still handle .Messages. */
+            rc = (strstr(tpl->str, "fim_prefix") != NULL ||
+                  strstr(tpl->str, "<|fim_") != NULL) &&
+                 strstr(tpl->str, ".Messages") == NULL;
+        }
+        jval_free(root);
+    }
+    sbuf_free(&body);
+    curl_unref();
+    return rc;
+}
+
 /* ---- the loop ---- */
 
 struct lvc_agent_session {

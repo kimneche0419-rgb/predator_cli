@@ -89,6 +89,8 @@ void lvc_agent_session_dump_readable(const lvc_agent_session *s, char *out,
  * malloc'd strings — free with lvc_agent_free_models. returns 0/-1. */
 int lvc_agent_list_models(const char *host, char ***out_names,
                           size_t *out_count);
+/* 1 if the model's Modelfile template looks FIM-only (fim tokens, no chat) */
+int lvc_agent_model_is_fim(const char *host, const char *name);
 void lvc_agent_free_models(char **names, size_t count);
 
 /* register a directory the read_skill tool may load skills from
